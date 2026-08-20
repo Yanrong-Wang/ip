@@ -5,7 +5,7 @@ import java.util.Scanner;
  */
 public class Lizzy {
     /**
-     * Greets the user, stores tasks, marks them done, lists them, and ends on {@code bye}.
+     * Greets the user, stores tasks, updates their status, lists them, and ends on {@code bye}.
      *
      * @param args command-line arguments, which are not used
      */
@@ -38,6 +38,7 @@ public class Lizzy {
             }
 
             if (command.equals("list")) {
+                System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < numberOfTasks; i++) {
                     String statusIcon = isDone[i] ? "X" : " ";
                     System.out.println((i + 1) + ".[" + statusIcon + "] " + tasks[i]);
@@ -47,6 +48,11 @@ public class Lizzy {
                 isDone[taskNumber - 1] = true;
                 System.out.println("Very good! That is one matter settled:");
                 System.out.println("  [X] " + tasks[taskNumber - 1]);
+            } else if (command.startsWith("unmark ")) {
+                int taskNumber = Integer.parseInt(command.substring(7));
+                isDone[taskNumber - 1] = false;
+                System.out.println("Ah, it seems this matter is not quite settled:");
+                System.out.println("  [ ] " + tasks[taskNumber - 1]);
             } else {
                 tasks[numberOfTasks] = command;
                 numberOfTasks++;
