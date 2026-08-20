@@ -23,8 +23,7 @@ public class Lizzy {
         System.out.println("What brings you here today?");
         System.out.println(divider);
 
-        String[] tasks = new String[100];
-        boolean[] isDone = new boolean[100];
+        Task[] tasks = new Task[100];
         int numberOfTasks = 0;
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
@@ -40,21 +39,20 @@ public class Lizzy {
             if (command.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < numberOfTasks; i++) {
-                    String statusIcon = isDone[i] ? "X" : " ";
-                    System.out.println((i + 1) + ".[" + statusIcon + "] " + tasks[i]);
+                    System.out.println((i + 1) + "." + tasks[i]);
                 }
             } else if (command.startsWith("mark ")) {
                 int taskNumber = Integer.parseInt(command.substring(5));
-                isDone[taskNumber - 1] = true;
+                tasks[taskNumber - 1].markAsDone();
                 System.out.println("Very good! That is one matter settled:");
-                System.out.println("  [X] " + tasks[taskNumber - 1]);
+                System.out.println("  " + tasks[taskNumber - 1]);
             } else if (command.startsWith("unmark ")) {
                 int taskNumber = Integer.parseInt(command.substring(7));
-                isDone[taskNumber - 1] = false;
+                tasks[taskNumber - 1].markAsNotDone();
                 System.out.println("Ah, it seems this matter is not quite settled:");
-                System.out.println("  [ ] " + tasks[taskNumber - 1]);
+                System.out.println("  " + tasks[taskNumber - 1]);
             } else {
-                tasks[numberOfTasks] = command;
+                tasks[numberOfTasks] = new Task(command);
                 numberOfTasks++;
                 System.out.println("added: " + command);
             }
