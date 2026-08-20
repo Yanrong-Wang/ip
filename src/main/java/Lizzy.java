@@ -52,14 +52,14 @@ public class Lizzy {
                 System.out.println("Ah, it seems this matter is not quite settled:");
                 System.out.println("  " + tasks[taskNumber - 1]);
             } else if (command.startsWith("todo ")) {
-                tasks[numberOfTasks] = new Task("T", command.substring(5), "");
+                tasks[numberOfTasks] = new Todo(command.substring(5));
                 numberOfTasks++;
-                System.out.println("Another matter to keep track of:");
+                System.out.println("Here comes another matter to keep track of:");
                 System.out.println("  " + tasks[numberOfTasks - 1]);
                 System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
             } else if (command.startsWith("deadline ")) {
                 String[] deadlineParts = command.substring(9).split(" /by ", 2);
-                tasks[numberOfTasks] = new Task("D", deadlineParts[0], " (by: " + deadlineParts[1] + ")");
+                tasks[numberOfTasks] = new Deadline(deadlineParts[0], deadlineParts[1]);
                 numberOfTasks++;
                 System.out.println("A deadline, then. We'd better not keep it waiting.");
                 System.out.println("  " + tasks[numberOfTasks - 1]);
@@ -67,14 +67,13 @@ public class Lizzy {
             } else if (command.startsWith("event ")) {
                 String[] eventParts = command.substring(6).split(" /from ", 2);
                 String[] timeParts = eventParts[1].split(" /to ", 2);
-                String timeDetails = " (from: " + timeParts[0] + " to: " + timeParts[1] + ")";
-                tasks[numberOfTasks] = new Task("E", eventParts[0], timeDetails);
+                tasks[numberOfTasks] = new Event(eventParts[0], timeParts[0], timeParts[1]);
                 numberOfTasks++;
                 System.out.println("An engagement! I've added it to your list:");
                 System.out.println("  " + tasks[numberOfTasks - 1]);
                 System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
             } else {
-                tasks[numberOfTasks] = new Task("T", command, "");
+                tasks[numberOfTasks] = new Todo(command);
                 numberOfTasks++;
                 System.out.println("Another matter to keep track of:");
                 System.out.println("  " + tasks[numberOfTasks - 1]);

@@ -1,30 +1,20 @@
 /**
- * Represents a task with a description and a completion status.
+ * Represents common data and behavior shared by all task types.
  */
 public class Task {
-    /** The one-letter code that identifies this task as a todo, deadline, or event. */
-    private final String taskType;
-
     /** The text describing the task. */
     private final String description;
-
-    /** Extra display information such as a deadline or an event's start and end times. */
-    private final String timeDetails;
 
     /** Whether the task has been completed. */
     private boolean isDone;
 
     /**
-     * Creates an incomplete todo, deadline, or event task.
+     * Creates an incomplete task with the given description.
      *
-     * @param taskType the one-letter task type code
      * @param description the text describing the task
-     * @param timeDetails the date/time information to show after the description, if any
      */
-    public Task(String taskType, String description, String timeDetails) {
-        this.taskType = taskType;
+    public Task(String description) {
         this.description = description;
-        this.timeDetails = timeDetails;
         this.isDone = false;
     }
 
@@ -49,11 +39,11 @@ public class Task {
     /**
      * Returns a display-ready representation of this task.
      *
-     * @return the task type, status icon, description, and any date/time details
+     * @return the task status icon followed by the task description
      */
     @Override
     public String toString() {
-        return "[" + taskType + "][" + getStatusIcon() + "] " + description + timeDetails;
+        return "[" + getStatusIcon() + "] " + description;
     }
 
     /** Marks this task as complete. */

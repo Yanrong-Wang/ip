@@ -63,7 +63,7 @@ The command in each case compiles the current sources into a temporary, ignored 
   What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Another matter to keep track of:
+  Here comes another matter to keep track of:
     [T][ ] read book
   Now you have 1 tasks in the list.
   ____________________________________________________________
