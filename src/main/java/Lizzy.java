@@ -51,10 +51,34 @@ public class Lizzy {
                 tasks[taskNumber - 1].markAsNotDone();
                 System.out.println("Ah, it seems this matter is not quite settled:");
                 System.out.println("  " + tasks[taskNumber - 1]);
-            } else {
-                tasks[numberOfTasks] = new Task(command);
+            } else if (command.startsWith("todo ")) {
+                tasks[numberOfTasks] = new Task("T", command.substring(5), "");
                 numberOfTasks++;
-                System.out.println("added: " + command);
+                System.out.println("Another matter to keep track of:");
+                System.out.println("  " + tasks[numberOfTasks - 1]);
+                System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
+            } else if (command.startsWith("deadline ")) {
+                String[] deadlineParts = command.substring(9).split(" /by ", 2);
+                tasks[numberOfTasks] = new Task("D", deadlineParts[0], " (by: " + deadlineParts[1] + ")");
+                numberOfTasks++;
+                System.out.println("A deadline, then. We'd better not keep it waiting.");
+                System.out.println("  " + tasks[numberOfTasks - 1]);
+                System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
+            } else if (command.startsWith("event ")) {
+                String[] eventParts = command.substring(6).split(" /from ", 2);
+                String[] timeParts = eventParts[1].split(" /to ", 2);
+                String timeDetails = " (from: " + timeParts[0] + " to: " + timeParts[1] + ")";
+                tasks[numberOfTasks] = new Task("E", eventParts[0], timeDetails);
+                numberOfTasks++;
+                System.out.println("An engagement! I've added it to your list:");
+                System.out.println("  " + tasks[numberOfTasks - 1]);
+                System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
+            } else {
+                tasks[numberOfTasks] = new Task("T", command, "");
+                numberOfTasks++;
+                System.out.println("Another matter to keep track of:");
+                System.out.println("  " + tasks[numberOfTasks - 1]);
+                System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
             }
             System.out.println(divider);
         }

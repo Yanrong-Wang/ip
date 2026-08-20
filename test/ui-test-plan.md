@@ -38,15 +38,15 @@ The command in each case compiles the current sources into a temporary, ignored 
   ____________________________________________________________
   ```
 
-### Add and list a task
-- Aim: Verify that a task can be added and shown as incomplete in the list.
+### Add and list a todo
+- Aim: Verify that a todo receives the T type marker and can be listed as incomplete.
 - Command:
   ```sh
   javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
-  read book
+  todo read book
   list
   bye
   ```
@@ -63,26 +63,29 @@ The command in each case compiles the current sources into a temporary, ignored 
   What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  added: read book
+  Another matter to keep track of:
+    [T][ ] read book
+  Now you have 1 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
-  1.[ ] read book
+  1.[T][ ] read book
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
   ____________________________________________________________
   ```
 
-### Mark and unmark a task
-- Aim: Verify that completion status changes are reflected in Lizzy's responses and task list.
+### Add, update, and list dated tasks
+- Aim: Verify that deadlines and events retain their date/time text and task type markers after status updates.
 - Command:
   ```sh
   javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
-  submit assignment
+  deadline submit report /by Sunday
+  event project meeting /from Mon 2pm /to 4pm
   mark 1
   unmark 1
   list
@@ -101,19 +104,27 @@ The command in each case compiles the current sources into a temporary, ignored 
   What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  added: submit assignment
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] submit report (by: Sunday)
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement! I've added it to your list:
+    [E][ ] project meeting (from: Mon 2pm to: 4pm)
+  Now you have 2 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   Very good! That is one matter settled:
-    [X] submit assignment
+    [D][X] submit report (by: Sunday)
   ____________________________________________________________
   ____________________________________________________________
   Ah, it seems this matter is not quite settled:
-    [ ] submit assignment
+    [D][ ] submit report (by: Sunday)
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
-  1.[ ] submit assignment
+  1.[D][ ] submit report (by: Sunday)
+  2.[E][ ] project meeting (from: Mon 2pm to: 4pm)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
