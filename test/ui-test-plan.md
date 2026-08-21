@@ -326,7 +326,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   I'm afraid "blah" is quite beyond my acquaintance.
-  Try todo, deadline, event, list, mark, unmark, or bye.
+  Try todo, deadline, event, list, mark, unmark, delete, or bye.
   ____________________________________________________________
   ____________________________________________________________
   A task with nothing to do is hardly a task at all.
@@ -390,6 +390,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Inputs:
   ```text
   mark 1
+  unmark 1
   todo write report
   unmark
   unmark 0
@@ -414,6 +415,10 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Add a task first.
   ____________________________________________________________
   ____________________________________________________________
+  There is very little to unmark when the list is entirely empty.
+  Add a task first.
+  ____________________________________________________________
+  ____________________________________________________________
   Here comes another matter to keep track of:
     [T][ ] write report
   Now you have 1 tasks in the list.
@@ -433,6 +438,151 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][X] write report
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Delete tasks and retain the reindexed list
+- Aim: Verify that delete removes the requested task, preserves the remaining task state, reindexes later tasks, and rejects invalid deletion requests.
+- Command:
+  ```sh
+  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  delete 1
+  todo read book
+  deadline submit report /by Friday
+  event project meeting /from Aug 6th 2pm /to 4pm
+  mark 3
+  delete 2
+  list
+  delete 3
+  delete first
+  delete 1
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  There is very little to delete when the list is entirely empty.
+  Add a task first.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] read book
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] submit report (by: Friday)
+  Now you have 2 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement! I've added it to your list:
+    [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  Now you have 3 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Very good! That is one matter settled:
+    [E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+  ____________________________________________________________
+  ____________________________________________________________
+  That matter is off the list:
+    [D][ ] submit report (by: Friday)
+  You now have 2 tasks on your list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[T][ ] read book
+  2.[E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+  ____________________________________________________________
+  ____________________________________________________________
+  That task seems to exist only in your imagination.
+  Choose a task number from 1 to 2.
+  ____________________________________________________________
+  ____________________________________________________________
+  I'm afraid that will not quite do; I need a proper task number.
+  Use: delete <task number>.
+  ____________________________________________________________
+  ____________________________________________________________
+  That matter is off the list:
+    [T][ ] read book
+  You now have 1 tasks on your list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Accept flexible whitespace in dated commands
+- Aim: Verify that extra spaces around command arguments and date markers are accepted, while deletion still leaves a correctly reindexed list.
+- Command:
+  ```sh
+  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  todo   read book
+  deadline   submit report    /by    Friday
+  event   project meeting   /from    Monday 2pm   /to    4pm
+  delete 2
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] read book
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] submit report (by: Friday)
+  Now you have 2 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement! I've added it to your list:
+    [E][ ] project meeting (from: Monday 2pm to: 4pm)
+  Now you have 3 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  That matter is off the list:
+    [D][ ] submit report (by: Friday)
+  You now have 2 tasks on your list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[T][ ] read book
+  2.[E][ ] project meeting (from: Monday 2pm to: 4pm)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.

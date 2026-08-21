@@ -1,10 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * The entry point for the Lizzy chatbot application.
  */
 public class Lizzy {
-    private static final int TASK_CAPACITY = 100;
     private static final String DIVIDER = "____________________________________________________________";
     private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
             + "Try: todo <description>, list, or another command.";
@@ -14,8 +15,6 @@ public class Lizzy {
             + "Use: deadline <description> /by <date>.";
     private static final String INVALID_EVENT_ERROR = "This event appears to be missing part of its arrangement.\n"
             + "Use: event <description> /from <start> /to <end>.";
-    private static final String TASK_LIST_FULL_ERROR = "I think the list has quite enough to occupy itself already.\n"
-            + "No more tasks can be added.";
 
     /**
      * Greets the user, stores tasks, updates their status, lists them, and ends on {@code bye}.
@@ -35,8 +34,7 @@ public class Lizzy {
         System.out.println("What brings you here today?");
         System.out.println(DIVIDER);
 
-        Task[] tasks = new Task[TASK_CAPACITY];
-        int numberOfTasks = 0;
+        List<Task> tasks = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().strip();
@@ -49,7 +47,7 @@ public class Lizzy {
             }
 
             try {
-                numberOfTasks = processCommand(command, tasks, numberOfTasks);
+                processCommand(command, tasks);
             } catch (LizzyException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -61,12 +59,10 @@ public class Lizzy {
      * Validates and processes one command without changing the task list on invalid input.
      *
      * @param command the trimmed command entered by the user
-     * @param tasks the task storage array
-     * @param numberOfTasks the number of occupied entries in {@code tasks}
-     * @return the updated number of tasks
+     * @param tasks the task list to inspect or modify
      * @throws LizzyException if the command cannot be processed
      */
-    private static int processCommand(String command, Task[] tasks, int numberOfTasks) throws LizzyException {
+    private static void processCommand(String command, List<Task> tasks) throws LizzyException {
         if (command.isEmpty()) {
             throw new LizzyException(EMPTY_INPUT_ERROR);
         }
@@ -77,43 +73,48 @@ public class Lizzy {
         switch (action) {
         case "list":
             validateNoArgument(argument, "A list requires no further instruction.", "list");
-            printTaskList(tasks, numberOfTasks);
-            return numberOfTasks;
+            printTaskList(tasks);
+            return;
         case "todo":
             validateTodo(argument);
-            validateTaskCapacity(numberOfTasks);
-            tasks[numberOfTasks] = new Todo(argument);
-            printAddedTodo(tasks[numberOfTasks], numberOfTasks + 1);
-            return numberOfTasks + 1;
+            tasks.add(new Todo(argument));
+            printAddedTodo(tasks.getLast(), tasks.size());
+            return;
         case "deadline":
-            String[] deadlineParts = splitExactly(argument, " /by ", INVALID_DEADLINE_ERROR);
+            String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
             validateDeadline(deadlineParts[0], deadlineParts[1]);
-            validateTaskCapacity(numberOfTasks);
-            tasks[numberOfTasks] = new Deadline(deadlineParts[0].strip(), deadlineParts[1].strip());
-            printAddedDeadline(tasks[numberOfTasks], numberOfTasks + 1);
-            return numberOfTasks + 1;
+            tasks.add(new Deadline(deadlineParts[0].strip(), deadlineParts[1].strip()));
+            printAddedDeadline(tasks.getLast(), tasks.size());
+            return;
         case "event":
-            String[] eventParts = splitExactly(argument, " /from ", INVALID_EVENT_ERROR);
-            String[] timeParts = splitExactly(eventParts[1], " /to ", INVALID_EVENT_ERROR);
+            String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
+            String[] timeParts = splitExactly(eventParts[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
             validateEvent(eventParts[0], timeParts[0], timeParts[1]);
-            validateTaskCapacity(numberOfTasks);
-            tasks[numberOfTasks] = new Event(eventParts[0].strip(), timeParts[0].strip(), timeParts[1].strip());
-            printAddedEvent(tasks[numberOfTasks], numberOfTasks + 1);
-            return numberOfTasks + 1;
+            tasks.add(new Event(eventParts[0].strip(), timeParts[0].strip(), timeParts[1].strip()));
+            printAddedEvent(tasks.getLast(), tasks.size());
+            return;
         case "mark":
             int markedTaskNumber = parseTaskNumber(argument, "mark");
-            validateTaskIndex(markedTaskNumber, numberOfTasks);
-            tasks[markedTaskNumber - 1].markAsDone();
+            validateTaskIndex(markedTaskNumber, tasks, "mark");
+            tasks.get(markedTaskNumber - 1).markAsDone();
             System.out.println("Very good! That is one matter settled:");
-            System.out.println("  " + tasks[markedTaskNumber - 1]);
-            return numberOfTasks;
+            System.out.println("  " + tasks.get(markedTaskNumber - 1));
+            return;
         case "unmark":
             int unmarkedTaskNumber = parseTaskNumber(argument, "unmark");
-            validateTaskIndex(unmarkedTaskNumber, numberOfTasks);
-            tasks[unmarkedTaskNumber - 1].markAsNotDone();
+            validateTaskIndex(unmarkedTaskNumber, tasks, "unmark");
+            tasks.get(unmarkedTaskNumber - 1).markAsNotDone();
             System.out.println("Ah, it seems this matter is not quite settled:");
-            System.out.println("  " + tasks[unmarkedTaskNumber - 1]);
-            return numberOfTasks;
+            System.out.println("  " + tasks.get(unmarkedTaskNumber - 1));
+            return;
+        case "delete":
+            int deletedTaskNumber = parseTaskNumber(argument, "delete");
+            validateTaskIndex(deletedTaskNumber, tasks, "delete");
+            Task deletedTask = tasks.remove(deletedTaskNumber - 1);
+            System.out.println("That matter is off the list:");
+            System.out.println("  " + deletedTask);
+            System.out.println("You now have " + tasks.size() + " tasks on your list.");
+            return;
         case "bye":
             throw new LizzyException("One farewell at a time, if you please.\nUse: bye.");
         default:
@@ -122,10 +123,10 @@ public class Lizzy {
     }
 
     /** Prints every task in the current task list. */
-    private static void printTaskList(Task[] tasks, int numberOfTasks) {
+    private static void printTaskList(List<Task> tasks) {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < numberOfTasks; i++) {
-            System.out.println((i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
 
@@ -180,20 +181,21 @@ public class Lizzy {
      * Splits an argument around one required separator.
      *
      * @param argument the argument to split
-     * @param separator the required separator
+     * @param separatorPattern the regular expression for the required separator
      * @param errorMessage the error message for a missing or repeated separator
      * @return exactly two parts surrounding the separator
      * @throws LizzyException if the separator does not occur exactly once
      */
-    private static String[] splitExactly(String argument, String separator, String errorMessage) throws LizzyException {
-        String[] parts = argument.split(separator, -1);
+    private static String[] splitExactly(String argument, String separatorPattern, String errorMessage)
+            throws LizzyException {
+        String[] parts = argument.split(separatorPattern, -1);
         if (parts.length != 2) {
             throw new LizzyException(errorMessage);
         }
         return parts;
     }
 
-    /** Parses a task number supplied to {@code mark} or {@code unmark}. */
+    /** Parses a task number supplied to {@code mark}, {@code unmark}, or {@code delete}. */
     private static int parseTaskNumber(String argument, String command) throws LizzyException {
         if (argument.isBlank()) {
             throw invalidTaskNumber(command);
@@ -206,20 +208,14 @@ public class Lizzy {
     }
 
     /** Validates that a task number refers to an existing task. */
-    private static void validateTaskIndex(int taskNumber, int numberOfTasks) throws LizzyException {
-        if (numberOfTasks == 0) {
-            throw new LizzyException("There is very little to mark when the list is entirely empty.\nAdd a task first.");
+    private static void validateTaskIndex(int taskNumber, List<Task> tasks, String command) throws LizzyException {
+        if (tasks.isEmpty()) {
+            throw new LizzyException("There is very little to " + command
+                    + " when the list is entirely empty.\nAdd a task first.");
         }
-        if (taskNumber < 1 || taskNumber > numberOfTasks) {
+        if (taskNumber < 1 || taskNumber > tasks.size()) {
             throw new LizzyException("That task seems to exist only in your imagination.\n"
-                    + "Choose a task number from 1 to " + numberOfTasks + ".");
-        }
-    }
-
-    /** Validates that the fixed-size task array has room for another task. */
-    private static void validateTaskCapacity(int numberOfTasks) throws LizzyException {
-        if (numberOfTasks >= TASK_CAPACITY) {
-            throw new LizzyException(TASK_LIST_FULL_ERROR);
+                    + "Choose a task number from 1 to " + tasks.size() + ".");
         }
     }
 
@@ -233,7 +229,7 @@ public class Lizzy {
     /** Creates an exception for an unrecognised command. */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
-                + "Try todo, deadline, event, list, mark, unmark, or bye.");
+                + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
     }
 
     /** Creates an exception for a missing or malformed task number. */
