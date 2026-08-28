@@ -1,3 +1,4 @@
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,6 +8,8 @@ import java.util.Scanner;
  */
 public class Lizzy {
     private static final String DIVIDER = "____________________________________________________________";
+    private static final Path DATA_FILE_PATH = Path.of(
+            System.getProperty("lizzy.data.path", "data/lizzy.txt"));
     private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
             + "Try: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
@@ -35,6 +38,7 @@ public class Lizzy {
         System.out.println(DIVIDER);
 
         List<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage(DATA_FILE_PATH);
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().strip();
@@ -47,7 +51,7 @@ public class Lizzy {
             }
 
             try {
-                processCommand(command, tasks);
+                processCommand(command, tasks, storage);
             } catch (LizzyException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -60,9 +64,10 @@ public class Lizzy {
      *
      * @param command the trimmed command entered by the user
      * @param tasks the task list to inspect or modify
-     * @throws LizzyException if the command cannot be processed
+     * @param storage the storage used to persist task-list changes
+     * @throws LizzyException if the command cannot be processed or saved
      */
-    private static void processCommand(String command, List<Task> tasks) throws LizzyException {
+    private static void processCommand(String command, List<Task> tasks, Storage storage) throws LizzyException {
         if (command.isEmpty()) {
             throw new LizzyException(EMPTY_INPUT_ERROR);
         }
@@ -78,12 +83,14 @@ public class Lizzy {
         case "todo":
             validateTodo(argument);
             tasks.add(new Todo(argument));
+            storage.save(tasks);
             printAddedTodo(tasks.getLast(), tasks.size());
             return;
         case "deadline":
             String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
             validateDeadline(deadlineParts[0], deadlineParts[1]);
             tasks.add(new Deadline(deadlineParts[0].strip(), deadlineParts[1].strip()));
+            storage.save(tasks);
             printAddedDeadline(tasks.getLast(), tasks.size());
             return;
         case "event":
@@ -91,12 +98,14 @@ public class Lizzy {
             String[] timeParts = splitExactly(eventParts[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
             validateEvent(eventParts[0], timeParts[0], timeParts[1]);
             tasks.add(new Event(eventParts[0].strip(), timeParts[0].strip(), timeParts[1].strip()));
+            storage.save(tasks);
             printAddedEvent(tasks.getLast(), tasks.size());
             return;
         case "mark":
             int markedTaskNumber = parseTaskNumber(argument, "mark");
             validateTaskIndex(markedTaskNumber, tasks, "mark");
             tasks.get(markedTaskNumber - 1).markAsDone();
+            storage.save(tasks);
             System.out.println("Very good! That is one matter settled:");
             System.out.println("  " + tasks.get(markedTaskNumber - 1));
             return;
@@ -104,6 +113,7 @@ public class Lizzy {
             int unmarkedTaskNumber = parseTaskNumber(argument, "unmark");
             validateTaskIndex(unmarkedTaskNumber, tasks, "unmark");
             tasks.get(unmarkedTaskNumber - 1).markAsNotDone();
+            storage.save(tasks);
             System.out.println("Ah, it seems this matter is not quite settled:");
             System.out.println("  " + tasks.get(unmarkedTaskNumber - 1));
             return;
@@ -111,6 +121,7 @@ public class Lizzy {
             int deletedTaskNumber = parseTaskNumber(argument, "delete");
             validateTaskIndex(deletedTaskNumber, tasks, "delete");
             Task deletedTask = tasks.remove(deletedTaskNumber - 1);
+            storage.save(tasks);
             System.out.println("That matter is off the list:");
             System.out.println("  " + deletedTask);
             System.out.println("You now have " + tasks.size() + " tasks on your list.");

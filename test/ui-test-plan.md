@@ -17,7 +17,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that Lizzy starts, recognises `bye`, and prints its farewell.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -44,7 +44,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that a todo receives the T type marker and can be listed as incomplete.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -82,7 +82,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that deadlines and events retain their date/time text and task type markers after status updates.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -137,7 +137,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that listing before any task is added is safe and does not display phantom tasks.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -168,7 +168,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that a valid status update is retained while an intervening out-of-range task number is rejected without changing the task list.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -221,7 +221,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that malformed deadline and event commands are rejected and do not consume task-list positions between valid commands.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -283,7 +283,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that blank, unknown, malformed task-creation, malformed status, and extra-argument commands are all rejected without changing valid tasks added before or after them.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -385,7 +385,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that missing task numbers, empty-list updates, and out-of-range updates do not prevent a later valid status update.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -448,7 +448,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that delete removes the requested task, preserves the remaining task state, reindexes later tasks, and rejects invalid deletion requests.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -536,7 +536,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that extra spaces around command arguments and date markers are accepted, while deletion still leaves a correctly reindexed list.
 - Command:
   ```sh
-  javac -d _temp/ui-test-classes src/main/java/*.java && java -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -587,4 +587,43 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
   ____________________________________________________________
+  ```
+
+### Save task changes to disk
+- Aim: Verify that adding and marking a task rewrites the data file with its latest state.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy && sed -n '1,$p' _temp/ui-test-data/current.txt
+  ```
+- Inputs:
+  ```text
+  todo read book
+  mark 1
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] read book
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Very good! That is one matter settled:
+    [T][X] read book
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  T | 1 | cmVhZCBib29r
   ```
