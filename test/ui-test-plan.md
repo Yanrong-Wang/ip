@@ -627,3 +627,141 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   T | 1 | cmVhZCBib29r
   ```
+
+### Load saved tasks after restarting
+- Aim: Verify that todos, deadlines, events, and completion state survive a restart.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && printf 'todo read book\ndeadline return book /by June 6th\nevent project meeting /from Aug 6th 2pm /to 4pm\nmark 1\nbye\n' | java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy >/dev/null && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[T][X] read book
+  2.[D][ ] return book (by: June 6th)
+  3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Create a missing data folder
+- Aim: Verify that the first task change creates both a missing parent folder and its data file.
+- Command:
+  ```sh
+  rm -rf _temp/ui-test-data/missing-parent && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/missing-parent/nested/lizzy.txt -cp _temp/ui-test-classes Lizzy && test -f _temp/ui-test-data/missing-parent/nested/lizzy.txt && printf 'Data file created.\n'
+  ```
+- Inputs:
+  ```text
+  todo first run
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] first run
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  Data file created.
+  ```
+
+### Recover from malformed saved data
+- Aim: Verify that Lizzy explains an invalid storage record and continues with an empty task list.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && printf 'not valid\n' > _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  I couldn't understand the saved task data at line 1.
+  Starting with an empty task list for this session.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Continue after a save failure
+- Aim: Verify that a file-system error is explained without ending the session or losing the in-memory task.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/not-a-folder && printf 'block' > _temp/ui-test-data/not-a-folder && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/not-a-folder/lizzy.txt -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  todo keep working
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  I updated your task list, but couldn't save it to _temp/ui-test-data/not-a-folder/lizzy.txt.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[T][ ] keep working
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```

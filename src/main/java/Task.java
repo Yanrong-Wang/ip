@@ -14,8 +14,18 @@ public class Task {
      * @param description the text describing the task
      */
     public Task(String description) {
+        this(description, false);
+    }
+
+    /**
+     * Restores a task with its saved completion state.
+     *
+     * @param description the text describing the task
+     * @param isDone whether the task has been completed
+     */
+    protected Task(String description, boolean isDone) {
         this.description = description;
-        this.isDone = false;
+        this.isDone = isDone;
     }
 
     /**

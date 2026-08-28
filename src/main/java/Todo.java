@@ -12,6 +12,16 @@ public class Todo extends Task {
     }
 
     /**
+     * Restores a todo with its saved completion state.
+     *
+     * @param description the text describing the todo
+     * @param isDone whether the todo has been completed
+     */
+    public Todo(String description, boolean isDone) {
+        super(description, isDone);
+    }
+
+    /**
      * Returns this todo with its type marker.
      *
      * @return the todo's display-ready representation

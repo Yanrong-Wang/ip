@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class Storage {
     private static final String FIELD_SEPARATOR = " | ";
+    private static final String FIELD_SEPARATOR_PATTERN = "\\s*\\|\\s*";
 
     /** The relative or user-configured path of the task data file. */
     private final Path filePath;
@@ -22,6 +23,32 @@ public class Storage {
      */
     public Storage(Path filePath) {
         this.filePath = filePath;
+    }
+
+    /**
+     * Loads all tasks from disk, or returns an empty list when the file does not yet exist.
+     *
+     * @return the tasks stored in the data file
+     * @throws LizzyException if the file cannot be read or contains an invalid record
+     */
+    public List<Task> load() throws LizzyException {
+        if (!Files.exists(filePath)) {
+            return new ArrayList<>();
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+            List<Task> tasks = new ArrayList<>();
+            for (int i = 0; i < lines.size(); i++) {
+                if (!lines.get(i).isBlank()) {
+                    tasks.add(deserialize(lines.get(i), i + 1));
+                }
+            }
+            return tasks;
+        } catch (IOException exception) {
+            throw new LizzyException("I couldn't read your saved tasks from " + filePath + ".\n"
+                    + "Starting with an empty task list for this session.");
+        }
     }
 
     /**
@@ -62,8 +89,50 @@ public class Storage {
         return String.join(FIELD_SEPARATOR, "T", status, description);
     }
 
+    /** Restores one task from a storage record. */
+    private static Task deserialize(String line, int lineNumber) throws LizzyException {
+        String[] fields = line.split(FIELD_SEPARATOR_PATTERN, -1);
+        try {
+            validateRecord(fields);
+            boolean isDone = fields[1].equals("1");
+            String description = decode(fields[2]);
+            return switch (fields[0]) {
+            case "T" -> new Todo(description, isDone);
+            case "D" -> new Deadline(description, decode(fields[3]), isDone);
+            case "E" -> new Event(description, decode(fields[3]), decode(fields[4]), isDone);
+            default -> throw new IllegalArgumentException("Unknown task type");
+            };
+        } catch (IllegalArgumentException exception) {
+            throw new LizzyException("I couldn't understand the saved task data at line " + lineNumber + ".\n"
+                    + "Starting with an empty task list for this session.");
+        }
+    }
+
+    /** Validates the type, completion state, and field count of a storage record. */
+    private static void validateRecord(String[] fields) {
+        if (fields.length < 2 || !(fields[1].equals("0") || fields[1].equals("1"))) {
+            throw new IllegalArgumentException("Invalid task status");
+        }
+
+        int expectedFieldCount = switch (fields[0]) {
+        case "T" -> 3;
+        case "D" -> 4;
+        case "E" -> 5;
+        default -> throw new IllegalArgumentException("Unknown task type");
+        };
+        if (fields.length != expectedFieldCount) {
+            throw new IllegalArgumentException("Invalid field count");
+        }
+    }
+
     /** Encodes user-entered text so it cannot be confused with file delimiters. */
     private static String encode(String text) {
         return Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /** Decodes one Base64-encoded text field from the data file. */
+    private static String decode(String text) {
+        byte[] decodedBytes = Base64.getDecoder().decode(text);
+        return new String(decodedBytes, StandardCharsets.UTF_8);
     }
 }

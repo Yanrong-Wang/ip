@@ -37,8 +37,15 @@ public class Lizzy {
         System.out.println("What brings you here today?");
         System.out.println(DIVIDER);
 
-        List<Task> tasks = new ArrayList<>();
         Storage storage = new Storage(DATA_FILE_PATH);
+        List<Task> tasks;
+        try {
+            tasks = storage.load();
+        } catch (LizzyException exception) {
+            tasks = new ArrayList<>();
+            System.out.println(exception.getMessage());
+            System.out.println(DIVIDER);
+        }
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().strip();

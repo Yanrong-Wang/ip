@@ -16,7 +16,19 @@ public class Event extends Task {
      * @param to the event end text
      */
     public Event(String description, String from, String to) {
-        super(description);
+        this(description, from, to, false);
+    }
+
+    /**
+     * Restores an event with its saved completion state.
+     *
+     * @param description the text describing the event
+     * @param from the event start text
+     * @param to the event end text
+     * @param isDone whether the event has been completed
+     */
+    public Event(String description, String from, String to, boolean isDone) {
+        super(description, isDone);
         this.from = from;
         this.to = to;
     }

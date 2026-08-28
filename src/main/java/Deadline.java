@@ -12,7 +12,18 @@ public class Deadline extends Task {
      * @param by the deadline text
      */
     public Deadline(String description, String by) {
-        super(description);
+        this(description, by, false);
+    }
+
+    /**
+     * Restores a deadline with its saved completion state.
+     *
+     * @param description the text describing the deadline
+     * @param by the deadline text
+     * @param isDone whether the deadline has been completed
+     */
+    public Deadline(String description, String by, boolean isDone) {
+        super(description, isDone);
         this.by = by;
     }
 
