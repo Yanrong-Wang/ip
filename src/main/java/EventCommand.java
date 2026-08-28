@@ -1,0 +1,18 @@
+/** Adds one parsed event to the task list. */
+public class EventCommand extends Command {
+    /** The event to add. */
+    private final Event event;
+
+    /** Creates a command that adds the supplied event. */
+    public EventCommand(Event event) {
+        this.event = event;
+    }
+
+    /** Adds, saves, and confirms the event. */
+    @Override
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
+        tasks.add(event);
+        storage.save(tasks.asList());
+        ui.showEventAdded(event, tasks.size());
+    }
+}
