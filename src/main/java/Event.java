@@ -41,6 +41,12 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /** Returns whether the date falls within this event's inclusive date range. */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        return !date.isBefore(from) && !date.isAfter(to);
+    }
+
     /**
      * Returns this event with its type marker and time range.
      *

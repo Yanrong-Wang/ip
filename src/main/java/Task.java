@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 /**
  * Represents common data and behavior shared by all task types.
  */
@@ -53,6 +55,17 @@ public class Task {
      */
     public boolean isDone() {
         return isDone;
+    }
+
+    /**
+     * Returns whether this task is scheduled on the given date.
+     * Tasks without dates are never included in date-based searches.
+     *
+     * @param date the date to check
+     * @return {@code true} if the task occurs on that date
+     */
+    public boolean occursOn(LocalDate date) {
+        return false;
     }
 
     /**

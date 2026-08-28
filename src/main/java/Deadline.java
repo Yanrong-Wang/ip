@@ -35,6 +35,12 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /** Returns whether this deadline falls on the given date. */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        return by.equals(date);
+    }
+
     /**
      * Returns this deadline with its type marker and deadline text.
      *

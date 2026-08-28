@@ -326,7 +326,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   I'm afraid "blah" is quite beyond my acquaintance.
-  Try todo, deadline, event, list, mark, unmark, delete, or bye.
+  Try todo, deadline, event, list, on, mark, unmark, delete, or bye.
   ____________________________________________________________
   ____________________________________________________________
   A task with nothing to do is hardly a task at all.
@@ -820,6 +820,82 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Here are the tasks in your list:
   1.[D][ ] return book (by: Dec 2 2019)
   2.[E][ ] workshop (from: Dec 2 2019 to: Dec 3 2019)
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Find scheduled tasks on a date
+- Aim: Verify date-based lookup for deadlines and inclusive event ranges, while excluding todos and retaining original task numbers.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  todo buy milk
+  deadline submit report /by 2026-09-01
+  event conference /from 2026-09-01 /to 2026-09-03
+  deadline pay bill /by 2026-09-04
+  on
+  on 09/01/2026
+  on 2026-09-01
+  on 2026-09-02
+  on 2026-09-05
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] buy milk
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] submit report (by: Sep 1 2026)
+  Now you have 2 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement! I've added it to your list:
+    [E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
+  Now you have 3 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] pay bill (by: Sep 4 2026)
+  Now you have 4 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A date is needed to consult the schedule.
+  Use: on <yyyy-MM-dd>.
+  ____________________________________________________________
+  ____________________________________________________________
+  I couldn't understand that date.
+  Use dates in yyyy-MM-dd format, for example 2019-10-15.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the deadlines and events scheduled on Sep 1 2026:
+  2.[D][ ] submit report (by: Sep 1 2026)
+  3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the deadlines and events scheduled on Sep 2 2026:
+  3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
+  ____________________________________________________________
+  ____________________________________________________________
+  There are no deadlines or events scheduled on Sep 5 2026.
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.

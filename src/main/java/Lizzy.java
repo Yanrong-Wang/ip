@@ -1,8 +1,10 @@
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -12,6 +14,8 @@ public class Lizzy {
     private static final String DIVIDER = "____________________________________________________________";
     private static final Path DATA_FILE_PATH = Path.of(
             System.getProperty("lizzy.data.path", "data/lizzy.txt"));
+    private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
     private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
             + "Try: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
@@ -91,6 +95,13 @@ public class Lizzy {
             validateNoArgument(argument, "A list requires no further instruction.", "list");
             printTaskList(tasks);
             return;
+        case "on":
+            if (argument.isBlank()) {
+                throw new LizzyException("A date is needed to consult the schedule.\n"
+                        + "Use: on <yyyy-MM-dd>.");
+            }
+            printTasksOnDate(tasks, parseDate(argument));
+            return;
         case "todo":
             validateTodo(argument);
             tasks.add(new Todo(argument));
@@ -156,6 +167,25 @@ public class Lizzy {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /** Prints deadlines and events scheduled on a date, retaining their task-list numbers. */
+    private static void printTasksOnDate(List<Task> tasks, LocalDate date) {
+        boolean foundTask = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).occursOn(date)) {
+                if (!foundTask) {
+                    System.out.println("Here are the deadlines and events scheduled on "
+                            + date.format(DISPLAY_DATE_FORMAT) + ":");
+                    foundTask = true;
+                }
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
+        }
+        if (!foundTask) {
+            System.out.println("There are no deadlines or events scheduled on "
+                    + date.format(DISPLAY_DATE_FORMAT) + ".");
         }
     }
 
@@ -267,7 +297,7 @@ public class Lizzy {
     /** Creates an exception for an unrecognised command. */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
-                + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+                + "Try todo, deadline, event, list, on, mark, unmark, delete, or bye.");
     }
 
     /** Creates an exception for a missing or malformed task number. */
