@@ -27,17 +27,15 @@ public class Lizzy {
             ui.showDivider();
         }
 
-        while (ui.hasNextCommand()) {
+        boolean isExit = false;
+        while (ui.hasNextCommand() && !isExit) {
             String command = ui.readCommand();
             ui.showDivider();
-            if (command.equals("bye")) {
-                ui.showGoodbye();
-                ui.showDivider();
-                break;
-            }
 
             try {
-                processCommand(command, tasks, storage, ui);
+                Command parsedCommand = Parser.parse(command);
+                parsedCommand.execute(tasks, ui, storage);
+                isExit = parsedCommand.isExit();
             } catch (LizzyException exception) {
                 ui.showError(exception.getMessage());
             }
@@ -50,58 +48,4 @@ public class Lizzy {
         new Lizzy().run();
     }
 
-    /** Validates and processes one command without changing the task list on invalid input. */
-    private static void processCommand(String command, TaskList tasks, Storage storage, Ui ui)
-            throws LizzyException {
-        ParsedCommand parsedCommand = Parser.parse(command);
-        switch (parsedCommand.action()) {
-        case "list":
-            Parser.requireNoArgument(parsedCommand.argument(), "A list requires no further instruction.", "list");
-            ui.showTaskList(tasks);
-            return;
-        case "on":
-            ui.showTasksOnDate(tasks, Parser.parseOnDate(parsedCommand.argument()));
-            return;
-        case "todo":
-            tasks.add(Parser.parseTodo(parsedCommand.argument()));
-            storage.save(tasks.asList());
-            ui.showTodoAdded(tasks.getLast(), tasks.size());
-            return;
-        case "deadline":
-            tasks.add(Parser.parseDeadline(parsedCommand.argument()));
-            storage.save(tasks.asList());
-            ui.showDeadlineAdded(tasks.getLast(), tasks.size());
-            return;
-        case "event":
-            tasks.add(Parser.parseEvent(parsedCommand.argument()));
-            storage.save(tasks.asList());
-            ui.showEventAdded(tasks.getLast(), tasks.size());
-            return;
-        case "mark":
-            int markedTaskNumber = Parser.parseTaskNumber(parsedCommand.argument(), "mark");
-            Task markedTask = tasks.getTask(markedTaskNumber, "mark");
-            markedTask.markAsDone();
-            storage.save(tasks.asList());
-            ui.showTaskMarked(markedTask);
-            return;
-        case "unmark":
-            int unmarkedTaskNumber = Parser.parseTaskNumber(parsedCommand.argument(), "unmark");
-            Task unmarkedTask = tasks.getTask(unmarkedTaskNumber, "unmark");
-            unmarkedTask.markAsNotDone();
-            storage.save(tasks.asList());
-            ui.showTaskUnmarked(unmarkedTask);
-            return;
-        case "delete":
-            int deletedTaskNumber = Parser.parseTaskNumber(parsedCommand.argument(), "delete");
-            Task deletedTask = tasks.deleteTask(deletedTaskNumber, "delete");
-            storage.save(tasks.asList());
-            ui.showTaskDeleted(deletedTask, tasks.size());
-            return;
-        case "bye":
-            Parser.requireNoArgument(parsedCommand.argument(), "One farewell at a time, if you please.", "bye");
-            throw new LizzyException("One farewell at a time, if you please.\nUse: bye.");
-        default:
-            throw new IllegalStateException("Parser produced an unsupported command.");
-        }
-    }
 }

@@ -24,10 +24,10 @@ public class Parser {
      * Separates a supported command word from its argument.
      *
      * @param fullCommand the complete line entered by the user
-     * @return the parsed command word and its trimmed argument
+     * @return the command ready to execute
      * @throws LizzyException if the line is empty or the command word is unknown
      */
-    public static ParsedCommand parse(String fullCommand) throws LizzyException {
+    public static Command parse(String fullCommand) throws LizzyException {
         if (fullCommand.isEmpty()) {
             throw new LizzyException(EMPTY_INPUT_ERROR);
         }
@@ -35,10 +35,24 @@ public class Parser {
         String[] commandParts = fullCommand.split("\\s+", 2);
         String action = commandParts[0];
         String argument = commandParts.length == 2 ? commandParts[1].strip() : "";
-        if (!isSupportedAction(action)) {
-            throw unknownCommand(action);
+        return switch (action) {
+        case "list" -> {
+            requireNoArgument(argument, "A list requires no further instruction.", "list");
+            yield new ListCommand();
         }
-        return new ParsedCommand(action, argument);
+        case "on" -> new OnCommand(parseOnDate(argument));
+        case "todo" -> new TodoCommand(parseTodo(argument));
+        case "deadline" -> new DeadlineCommand(parseDeadline(argument));
+        case "event" -> new EventCommand(parseEvent(argument));
+        case "mark" -> new MarkCommand(parseTaskNumber(argument, "mark"));
+        case "unmark" -> new UnmarkCommand(parseTaskNumber(argument, "unmark"));
+        case "delete" -> new DeleteCommand(parseTaskNumber(argument, "delete"));
+        case "bye" -> {
+            requireNoArgument(argument, "One farewell at a time, if you please.", "bye");
+            yield new ExitCommand();
+        }
+        default -> throw unknownCommand(action);
+        };
     }
 
     /**
@@ -48,7 +62,7 @@ public class Parser {
      * @return a new incomplete todo
      * @throws LizzyException if the description is blank
      */
-    public static Todo parseTodo(String description) throws LizzyException {
+    private static Todo parseTodo(String description) throws LizzyException {
         if (description.isBlank()) {
             throw new LizzyException(INVALID_TODO_ERROR);
         }
@@ -62,7 +76,7 @@ public class Parser {
      * @return a new incomplete deadline
      * @throws LizzyException if the argument is incomplete or its date is invalid
      */
-    public static Deadline parseDeadline(String argument) throws LizzyException {
+    private static Deadline parseDeadline(String argument) throws LizzyException {
         String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
         if (deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
             throw new LizzyException(INVALID_DEADLINE_ERROR);
@@ -77,7 +91,7 @@ public class Parser {
      * @return a new incomplete event
      * @throws LizzyException if the argument is incomplete, invalid, or ends before it begins
      */
-    public static Event parseEvent(String argument) throws LizzyException {
+    private static Event parseEvent(String argument) throws LizzyException {
         String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
         String[] timeParts = splitExactly(eventParts[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
         if (eventParts[0].isBlank() || timeParts[0].isBlank() || timeParts[1].isBlank()) {
@@ -99,7 +113,7 @@ public class Parser {
      * @return the requested date
      * @throws LizzyException if the date is missing or malformed
      */
-    public static LocalDate parseOnDate(String argument) throws LizzyException {
+    private static LocalDate parseOnDate(String argument) throws LizzyException {
         if (argument.isBlank()) {
             throw new LizzyException("A date is needed to consult the schedule.\n"
                     + "Use: on <yyyy-MM-dd>.");
@@ -115,7 +129,7 @@ public class Parser {
      * @return the parsed task number
      * @throws LizzyException if the number is missing or malformed
      */
-    public static int parseTaskNumber(String argument, String command) throws LizzyException {
+    private static int parseTaskNumber(String argument, String command) throws LizzyException {
         if (argument.isBlank()) {
             throw invalidTaskNumber(command);
         }
@@ -134,19 +148,11 @@ public class Parser {
      * @param command the command's name
      * @throws LizzyException if an argument was supplied
      */
-    public static void requireNoArgument(String argument, String firstSentence, String command)
+    private static void requireNoArgument(String argument, String firstSentence, String command)
             throws LizzyException {
         if (!argument.isBlank()) {
             throw new LizzyException(firstSentence + "\nUse: " + command + ".");
         }
-    }
-
-    /** Returns whether a command word belongs to Lizzy's command language. */
-    private static boolean isSupportedAction(String action) {
-        return switch (action) {
-        case "list", "on", "todo", "deadline", "event", "mark", "unmark", "delete", "bye" -> true;
-        default -> false;
-        };
     }
 
     /** Parses one strictly formatted ISO date for a deadline, event, or schedule search. */
