@@ -1,6 +1,10 @@
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -10,14 +14,18 @@ public class Lizzy {
     private static final String DIVIDER = "____________________________________________________________";
     private static final Path DATA_FILE_PATH = Path.of(
             System.getProperty("lizzy.data.path", "data/lizzy.txt"));
+    private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
     private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
             + "Try: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
             + "Use: todo <description>.";
     private static final String INVALID_DEADLINE_ERROR = "Something seems to be missing from this deadline.\n"
-            + "Use: deadline <description> /by <date>.";
+            + "Use: deadline <description> /by <yyyy-MM-dd>.";
     private static final String INVALID_EVENT_ERROR = "This event appears to be missing part of its arrangement.\n"
-            + "Use: event <description> /from <start> /to <end>.";
+            + "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+    private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
+            + "Use dates in yyyy-MM-dd format, for example 2019-10-15.";
 
     /**
      * Greets the user, stores tasks, updates their status, lists them, and ends on {@code bye}.
@@ -87,6 +95,13 @@ public class Lizzy {
             validateNoArgument(argument, "A list requires no further instruction.", "list");
             printTaskList(tasks);
             return;
+        case "on":
+            if (argument.isBlank()) {
+                throw new LizzyException("A date is needed to consult the schedule.\n"
+                        + "Use: on <yyyy-MM-dd>.");
+            }
+            printTasksOnDate(tasks, parseDate(argument));
+            return;
         case "todo":
             validateTodo(argument);
             tasks.add(new Todo(argument));
@@ -96,7 +111,8 @@ public class Lizzy {
         case "deadline":
             String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
             validateDeadline(deadlineParts[0], deadlineParts[1]);
-            tasks.add(new Deadline(deadlineParts[0].strip(), deadlineParts[1].strip()));
+            LocalDate deadlineDate = parseDate(deadlineParts[1]);
+            tasks.add(new Deadline(deadlineParts[0].strip(), deadlineDate));
             storage.save(tasks);
             printAddedDeadline(tasks.getLast(), tasks.size());
             return;
@@ -104,7 +120,13 @@ public class Lizzy {
             String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
             String[] timeParts = splitExactly(eventParts[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
             validateEvent(eventParts[0], timeParts[0], timeParts[1]);
-            tasks.add(new Event(eventParts[0].strip(), timeParts[0].strip(), timeParts[1].strip()));
+            LocalDate eventStartDate = parseDate(timeParts[0]);
+            LocalDate eventEndDate = parseDate(timeParts[1]);
+            if (eventEndDate.isBefore(eventStartDate)) {
+                throw new LizzyException("An event cannot end before it begins.\n"
+                        + "Use an end date on or after the start date.");
+            }
+            tasks.add(new Event(eventParts[0].strip(), eventStartDate, eventEndDate));
             storage.save(tasks);
             printAddedEvent(tasks.getLast(), tasks.size());
             return;
@@ -145,6 +167,25 @@ public class Lizzy {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /** Prints deadlines and events scheduled on a date, retaining their task-list numbers. */
+    private static void printTasksOnDate(List<Task> tasks, LocalDate date) {
+        boolean foundTask = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).occursOn(date)) {
+                if (!foundTask) {
+                    System.out.println("Here are the deadlines and events scheduled on "
+                            + date.format(DISPLAY_DATE_FORMAT) + ":");
+                    foundTask = true;
+                }
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
+        }
+        if (!foundTask) {
+            System.out.println("There are no deadlines or events scheduled on "
+                    + date.format(DISPLAY_DATE_FORMAT) + ".");
         }
     }
 
@@ -192,6 +233,15 @@ public class Lizzy {
     private static void validateEvent(String description, String start, String end) throws LizzyException {
         if (description.isBlank() || start.isBlank() || end.isBlank()) {
             throw new LizzyException(INVALID_EVENT_ERROR);
+        }
+    }
+
+    /** Parses one strictly formatted ISO date for a deadline or event. */
+    private static LocalDate parseDate(String dateText) throws LizzyException {
+        try {
+            return LocalDate.parse(dateText.strip());
+        } catch (DateTimeParseException exception) {
+            throw new LizzyException(INVALID_DATE_ERROR);
         }
     }
 
@@ -247,7 +297,7 @@ public class Lizzy {
     /** Creates an exception for an unrecognised command. */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
-                + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+                + "Try todo, deadline, event, list, on, mark, unmark, delete, or bye.");
     }
 
     /** Creates an exception for a missing or malformed task number. */
