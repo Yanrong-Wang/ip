@@ -1,21 +1,15 @@
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
 
 /**
- * The entry point for the Lizzy chatbot application.
+ * The entry point and application coordinator for the Lizzy chatbot.
  */
 public class Lizzy {
-    private static final String DIVIDER = "____________________________________________________________";
     private static final Path DATA_FILE_PATH = Path.of(
             System.getProperty("lizzy.data.path", "data/lizzy.txt"));
-    private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
     private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
             + "Try: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
@@ -27,62 +21,53 @@ public class Lizzy {
     private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
             + "Use dates in yyyy-MM-dd format, for example 2019-10-15.";
 
-    /**
-     * Greets the user, stores tasks, updates their status, lists them, and ends on {@code bye}.
-     *
-     * @param args command-line arguments, which are not used
-     */
-    public static void main(String[] args) {
-        String banner = "    __    _\n"
-                + "   / /   (_)_______  __  __\n"
-                + "  / /   / /_  /_  / / / / /\n"
-                + " / /___/ / / /_/ /_/ /_/ /\n"
-                + "/_____/_/ /___/___/\\__, /\n"
-                + "                  /____/\n";
-        System.out.println(DIVIDER);
-        System.out.print(banner);
-        System.out.println("Hello! I'm Lizzy.");
-        System.out.println("What brings you here today?");
-        System.out.println(DIVIDER);
+    /** The component responsible for all console interaction. */
+    private final Ui ui;
 
+    /** Creates Lizzy with its standard console UI. */
+    public Lizzy() {
+        ui = new Ui();
+    }
+
+    /** Runs Lizzy until the user enters {@code bye} or closes standard input. */
+    public void run() {
+        ui.showWelcome();
         Storage storage = new Storage(DATA_FILE_PATH);
         List<Task> tasks;
         try {
             tasks = storage.load();
         } catch (LizzyException exception) {
             tasks = new ArrayList<>();
-            System.out.println(exception.getMessage());
-            System.out.println(DIVIDER);
+            ui.showError(exception.getMessage());
+            ui.showDivider();
         }
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine()) {
-            String command = scanner.nextLine().strip();
-            System.out.println(DIVIDER);
 
+        while (ui.hasNextCommand()) {
+            String command = ui.readCommand();
+            ui.showDivider();
             if (command.equals("bye")) {
-                System.out.println("Bye! I hope our next conversation will be just as agreeable.");
-                System.out.println(DIVIDER);
+                ui.showGoodbye();
+                ui.showDivider();
                 break;
             }
 
             try {
-                processCommand(command, tasks, storage);
+                processCommand(command, tasks, storage, ui);
             } catch (LizzyException exception) {
-                System.out.println(exception.getMessage());
+                ui.showError(exception.getMessage());
             }
-            System.out.println(DIVIDER);
+            ui.showDivider();
         }
     }
 
-    /**
-     * Validates and processes one command without changing the task list on invalid input.
-     *
-     * @param command the trimmed command entered by the user
-     * @param tasks the task list to inspect or modify
-     * @param storage the storage used to persist task-list changes
-     * @throws LizzyException if the command cannot be processed or saved
-     */
-    private static void processCommand(String command, List<Task> tasks, Storage storage) throws LizzyException {
+    /** Starts the Lizzy application. */
+    public static void main(String[] args) {
+        new Lizzy().run();
+    }
+
+    /** Validates and processes one command without changing the task list on invalid input. */
+    private static void processCommand(String command, List<Task> tasks, Storage storage, Ui ui)
+            throws LizzyException {
         if (command.isEmpty()) {
             throw new LizzyException(EMPTY_INPUT_ERROR);
         }
@@ -93,28 +78,27 @@ public class Lizzy {
         switch (action) {
         case "list":
             validateNoArgument(argument, "A list requires no further instruction.", "list");
-            printTaskList(tasks);
+            ui.showTaskList(tasks);
             return;
         case "on":
             if (argument.isBlank()) {
                 throw new LizzyException("A date is needed to consult the schedule.\n"
                         + "Use: on <yyyy-MM-dd>.");
             }
-            printTasksOnDate(tasks, parseDate(argument));
+            ui.showTasksOnDate(tasks, parseDate(argument));
             return;
         case "todo":
             validateTodo(argument);
             tasks.add(new Todo(argument));
             storage.save(tasks);
-            printAddedTodo(tasks.getLast(), tasks.size());
+            ui.showTodoAdded(tasks.getLast(), tasks.size());
             return;
         case "deadline":
             String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
             validateDeadline(deadlineParts[0], deadlineParts[1]);
-            LocalDate deadlineDate = parseDate(deadlineParts[1]);
-            tasks.add(new Deadline(deadlineParts[0].strip(), deadlineDate));
+            tasks.add(new Deadline(deadlineParts[0].strip(), parseDate(deadlineParts[1])));
             storage.save(tasks);
-            printAddedDeadline(tasks.getLast(), tasks.size());
+            ui.showDeadlineAdded(tasks.getLast(), tasks.size());
             return;
         case "event":
             String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
@@ -128,91 +112,34 @@ public class Lizzy {
             }
             tasks.add(new Event(eventParts[0].strip(), eventStartDate, eventEndDate));
             storage.save(tasks);
-            printAddedEvent(tasks.getLast(), tasks.size());
+            ui.showEventAdded(tasks.getLast(), tasks.size());
             return;
         case "mark":
             int markedTaskNumber = parseTaskNumber(argument, "mark");
             validateTaskIndex(markedTaskNumber, tasks, "mark");
             tasks.get(markedTaskNumber - 1).markAsDone();
             storage.save(tasks);
-            System.out.println("Very good! That is one matter settled:");
-            System.out.println("  " + tasks.get(markedTaskNumber - 1));
+            ui.showTaskMarked(tasks.get(markedTaskNumber - 1));
             return;
         case "unmark":
             int unmarkedTaskNumber = parseTaskNumber(argument, "unmark");
             validateTaskIndex(unmarkedTaskNumber, tasks, "unmark");
             tasks.get(unmarkedTaskNumber - 1).markAsNotDone();
             storage.save(tasks);
-            System.out.println("Ah, it seems this matter is not quite settled:");
-            System.out.println("  " + tasks.get(unmarkedTaskNumber - 1));
+            ui.showTaskUnmarked(tasks.get(unmarkedTaskNumber - 1));
             return;
         case "delete":
             int deletedTaskNumber = parseTaskNumber(argument, "delete");
             validateTaskIndex(deletedTaskNumber, tasks, "delete");
             Task deletedTask = tasks.remove(deletedTaskNumber - 1);
             storage.save(tasks);
-            System.out.println("That matter is off the list:");
-            System.out.println("  " + deletedTask);
-            System.out.println("You now have " + tasks.size() + " tasks on your list.");
+            ui.showTaskDeleted(deletedTask, tasks.size());
             return;
         case "bye":
             throw new LizzyException("One farewell at a time, if you please.\nUse: bye.");
         default:
             throw unknownCommand(action);
         }
-    }
-
-    /** Prints every task in the current task list. */
-    private static void printTaskList(List<Task> tasks) {
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
-        }
-    }
-
-    /** Prints deadlines and events scheduled on a date, retaining their task-list numbers. */
-    private static void printTasksOnDate(List<Task> tasks, LocalDate date) {
-        boolean foundTask = false;
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).occursOn(date)) {
-                if (!foundTask) {
-                    System.out.println("Here are the deadlines and events scheduled on "
-                            + date.format(DISPLAY_DATE_FORMAT) + ":");
-                    foundTask = true;
-                }
-                System.out.println((i + 1) + "." + tasks.get(i));
-            }
-        }
-        if (!foundTask) {
-            System.out.println("There are no deadlines or events scheduled on "
-                    + date.format(DISPLAY_DATE_FORMAT) + ".");
-        }
-    }
-
-    /** Prints confirmation after adding a todo. */
-    private static void printAddedTodo(Task task, int numberOfTasks) {
-        System.out.println("Here comes another matter to keep track of:");
-        System.out.println("  " + task);
-        printTaskCount(numberOfTasks);
-    }
-
-    /** Prints confirmation after adding a deadline. */
-    private static void printAddedDeadline(Task task, int numberOfTasks) {
-        System.out.println("A deadline, then. We'd better not keep it waiting.");
-        System.out.println("  " + task);
-        printTaskCount(numberOfTasks);
-    }
-
-    /** Prints confirmation after adding an event. */
-    private static void printAddedEvent(Task task, int numberOfTasks) {
-        System.out.println("An engagement! I've added it to your list:");
-        System.out.println("  " + task);
-        printTaskCount(numberOfTasks);
-    }
-
-    /** Prints the current number of stored tasks. */
-    private static void printTaskCount(int numberOfTasks) {
-        System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
     }
 
     /** Validates that a todo has a non-empty description. */
@@ -245,15 +172,7 @@ public class Lizzy {
         }
     }
 
-    /**
-     * Splits an argument around one required separator.
-     *
-     * @param argument the argument to split
-     * @param separatorPattern the regular expression for the required separator
-     * @param errorMessage the error message for a missing or repeated separator
-     * @return exactly two parts surrounding the separator
-     * @throws LizzyException if the separator does not occur exactly once
-     */
+    /** Splits an argument around one required separator. */
     private static String[] splitExactly(String argument, String separatorPattern, String errorMessage)
             throws LizzyException {
         String[] parts = argument.split(separatorPattern, -1);
@@ -263,7 +182,7 @@ public class Lizzy {
         return parts;
     }
 
-    /** Parses a task number supplied to {@code mark}, {@code unmark}, or {@code delete}. */
+    /** Parses a task number supplied to a task-status or deletion command. */
     private static int parseTaskNumber(String argument, String command) throws LizzyException {
         if (argument.isBlank()) {
             throw invalidTaskNumber(command);
