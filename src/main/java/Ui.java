@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -61,7 +60,7 @@ public class Ui {
     }
 
     /** Displays every task in the supplied task list. */
-    public void showTaskList(List<Task> tasks) {
+    public void showTaskList(TaskList tasks) {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
@@ -109,7 +108,7 @@ public class Ui {
     }
 
     /** Displays deadlines and events that occur on the specified date. */
-    public void showTasksOnDate(List<Task> tasks, LocalDate date) {
+    public void showTasksOnDate(TaskList tasks, LocalDate date) {
         boolean foundTask = false;
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).occursOn(date)) {

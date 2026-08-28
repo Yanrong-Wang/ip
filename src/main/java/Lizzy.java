@@ -1,8 +1,6 @@
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The entry point and application coordinator for the Lizzy chatbot.
@@ -33,11 +31,11 @@ public class Lizzy {
     public void run() {
         ui.showWelcome();
         Storage storage = new Storage(DATA_FILE_PATH);
-        List<Task> tasks;
+        TaskList tasks;
         try {
-            tasks = storage.load();
+            tasks = new TaskList(storage.load());
         } catch (LizzyException exception) {
-            tasks = new ArrayList<>();
+            tasks = new TaskList();
             ui.showError(exception.getMessage());
             ui.showDivider();
         }
@@ -66,7 +64,7 @@ public class Lizzy {
     }
 
     /** Validates and processes one command without changing the task list on invalid input. */
-    private static void processCommand(String command, List<Task> tasks, Storage storage, Ui ui)
+    private static void processCommand(String command, TaskList tasks, Storage storage, Ui ui)
             throws LizzyException {
         if (command.isEmpty()) {
             throw new LizzyException(EMPTY_INPUT_ERROR);
@@ -90,14 +88,14 @@ public class Lizzy {
         case "todo":
             validateTodo(argument);
             tasks.add(new Todo(argument));
-            storage.save(tasks);
+            storage.save(tasks.asList());
             ui.showTodoAdded(tasks.getLast(), tasks.size());
             return;
         case "deadline":
             String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
             validateDeadline(deadlineParts[0], deadlineParts[1]);
             tasks.add(new Deadline(deadlineParts[0].strip(), parseDate(deadlineParts[1])));
-            storage.save(tasks);
+            storage.save(tasks.asList());
             ui.showDeadlineAdded(tasks.getLast(), tasks.size());
             return;
         case "event":
@@ -111,28 +109,27 @@ public class Lizzy {
                         + "Use an end date on or after the start date.");
             }
             tasks.add(new Event(eventParts[0].strip(), eventStartDate, eventEndDate));
-            storage.save(tasks);
+            storage.save(tasks.asList());
             ui.showEventAdded(tasks.getLast(), tasks.size());
             return;
         case "mark":
             int markedTaskNumber = parseTaskNumber(argument, "mark");
-            validateTaskIndex(markedTaskNumber, tasks, "mark");
-            tasks.get(markedTaskNumber - 1).markAsDone();
-            storage.save(tasks);
-            ui.showTaskMarked(tasks.get(markedTaskNumber - 1));
+            Task markedTask = tasks.getTask(markedTaskNumber, "mark");
+            markedTask.markAsDone();
+            storage.save(tasks.asList());
+            ui.showTaskMarked(markedTask);
             return;
         case "unmark":
             int unmarkedTaskNumber = parseTaskNumber(argument, "unmark");
-            validateTaskIndex(unmarkedTaskNumber, tasks, "unmark");
-            tasks.get(unmarkedTaskNumber - 1).markAsNotDone();
-            storage.save(tasks);
-            ui.showTaskUnmarked(tasks.get(unmarkedTaskNumber - 1));
+            Task unmarkedTask = tasks.getTask(unmarkedTaskNumber, "unmark");
+            unmarkedTask.markAsNotDone();
+            storage.save(tasks.asList());
+            ui.showTaskUnmarked(unmarkedTask);
             return;
         case "delete":
             int deletedTaskNumber = parseTaskNumber(argument, "delete");
-            validateTaskIndex(deletedTaskNumber, tasks, "delete");
-            Task deletedTask = tasks.remove(deletedTaskNumber - 1);
-            storage.save(tasks);
+            Task deletedTask = tasks.deleteTask(deletedTaskNumber, "delete");
+            storage.save(tasks.asList());
             ui.showTaskDeleted(deletedTask, tasks.size());
             return;
         case "bye":
@@ -191,18 +188,6 @@ public class Lizzy {
             return Integer.parseInt(argument);
         } catch (NumberFormatException exception) {
             throw invalidTaskNumber(command);
-        }
-    }
-
-    /** Validates that a task number refers to an existing task. */
-    private static void validateTaskIndex(int taskNumber, List<Task> tasks, String command) throws LizzyException {
-        if (tasks.isEmpty()) {
-            throw new LizzyException("There is very little to " + command
-                    + " when the list is entirely empty.\nAdd a task first.");
-        }
-        if (taskNumber < 1 || taskNumber > tasks.size()) {
-            throw new LizzyException("That task seems to exist only in your imagination.\n"
-                    + "Choose a task number from 1 to " + tasks.size() + ".");
         }
     }
 
