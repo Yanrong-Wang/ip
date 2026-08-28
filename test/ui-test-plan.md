@@ -86,8 +86,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ```
 - Inputs:
   ```text
-  deadline submit report /by Sunday
-  event project meeting /from Mon 2pm /to 4pm
+  deadline submit report /by 2026-08-30
+  event project meeting /from 2026-08-31 /to 2026-09-01
   mark 1
   unmark 1
   list
@@ -107,26 +107,26 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
-    [D][ ] submit report (by: Sunday)
+    [D][ ] submit report (by: Aug 30 2026)
   Now you have 1 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   An engagement! I've added it to your list:
-    [E][ ] project meeting (from: Mon 2pm to: 4pm)
+    [E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   Now you have 2 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   Very good! That is one matter settled:
-    [D][X] submit report (by: Sunday)
+    [D][X] submit report (by: Aug 30 2026)
   ____________________________________________________________
   ____________________________________________________________
   Ah, it seems this matter is not quite settled:
-    [D][ ] submit report (by: Sunday)
+    [D][ ] submit report (by: Aug 30 2026)
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
-  1.[D][ ] submit report (by: Sunday)
-  2.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+  1.[D][ ] submit report (by: Aug 30 2026)
+  2.[E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
@@ -229,7 +229,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   deadline submit assignment
   todo prepare slides
   event consultation /from Tue 2pm
-  deadline submit assignment /by Friday
+  deadline submit assignment /by 2026-08-28
   list
   bye
   ```
@@ -252,7 +252,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   Something seems to be missing from this deadline.
-  Use: deadline <description> /by <date>.
+  Use: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -261,18 +261,18 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   This event appears to be missing part of its arrangement.
-  Use: event <description> /from <start> /to <end>.
+  Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
-    [D][ ] submit assignment (by: Friday)
+    [D][ ] submit assignment (by: Aug 28 2026)
   Now you have 3 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][ ] review lecture
   2.[T][ ] prepare slides
-  3.[D][ ] submit assignment (by: Friday)
+  3.[D][ ] submit assignment (by: Aug 28 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
@@ -292,9 +292,9 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   blah
   todo
   deadline submit report
-  deadline submit report /by Friday
+  deadline submit report /by 2026-08-28
   event meeting /from Monday
-  event meeting /from Monday /to Tuesday
+  event meeting /from 2026-08-29 /to 2026-08-30
   mark first
   mark 4
   unmark 2
@@ -334,20 +334,20 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   Something seems to be missing from this deadline.
-  Use: deadline <description> /by <date>.
+  Use: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
-    [D][ ] submit report (by: Friday)
+    [D][ ] submit report (by: Aug 28 2026)
   Now you have 2 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   This event appears to be missing part of its arrangement.
-  Use: event <description> /from <start> /to <end>.
+  Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
   An engagement! I've added it to your list:
-    [E][ ] meeting (from: Monday to: Tuesday)
+    [E][ ] meeting (from: Aug 29 2026 to: Aug 30 2026)
   Now you have 3 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
@@ -360,7 +360,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   Ah, it seems this matter is not quite settled:
-    [D][ ] submit report (by: Friday)
+    [D][ ] submit report (by: Aug 28 2026)
   ____________________________________________________________
   ____________________________________________________________
   A list requires no further instruction.
@@ -373,8 +373,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][ ] read book
-  2.[D][ ] submit report (by: Friday)
-  3.[E][ ] meeting (from: Monday to: Tuesday)
+  2.[D][ ] submit report (by: Aug 28 2026)
+  3.[E][ ] meeting (from: Aug 29 2026 to: Aug 30 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
@@ -454,8 +454,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ```text
   delete 1
   todo read book
-  deadline submit report /by Friday
-  event project meeting /from Aug 6th 2pm /to 4pm
+  deadline submit report /by 2026-08-28
+  event project meeting /from 2026-08-06 /to 2026-08-06
   mark 3
   delete 2
   list
@@ -488,27 +488,27 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
-    [D][ ] submit report (by: Friday)
+    [D][ ] submit report (by: Aug 28 2026)
   Now you have 2 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   An engagement! I've added it to your list:
-    [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+    [E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   Now you have 3 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   Very good! That is one matter settled:
-    [E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+    [E][X] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
   That matter is off the list:
-    [D][ ] submit report (by: Friday)
+    [D][ ] submit report (by: Aug 28 2026)
   You now have 2 tasks on your list.
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][ ] read book
-  2.[E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+  2.[E][X] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
   That task seems to exist only in your imagination.
@@ -525,7 +525,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
-  1.[E][X] project meeting (from: Aug 6th 2pm to: 4pm)
+  1.[E][X] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
@@ -541,8 +541,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Inputs:
   ```text
   todo   read book
-  deadline   submit report    /by    Friday
-  event   project meeting   /from    Monday 2pm   /to    4pm
+  deadline   submit report    /by    2026-08-28
+  event   project meeting   /from    2026-08-31   /to    2026-09-01
   delete 2
   list
   bye
@@ -566,23 +566,23 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
-    [D][ ] submit report (by: Friday)
+    [D][ ] submit report (by: Aug 28 2026)
   Now you have 2 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   An engagement! I've added it to your list:
-    [E][ ] project meeting (from: Monday 2pm to: 4pm)
+    [E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   Now you have 3 tasks in the list.
   ____________________________________________________________
   ____________________________________________________________
   That matter is off the list:
-    [D][ ] submit report (by: Friday)
+    [D][ ] submit report (by: Aug 28 2026)
   You now have 2 tasks on your list.
   ____________________________________________________________
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][ ] read book
-  2.[E][ ] project meeting (from: Monday 2pm to: 4pm)
+  2.[E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
@@ -632,7 +632,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that todos, deadlines, events, and completion state survive a restart.
 - Command:
   ```sh
-  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && printf 'todo read book\ndeadline return book /by June 6th\nevent project meeting /from Aug 6th 2pm /to 4pm\nmark 1\nbye\n' | java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy >/dev/null && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && printf 'todo read book\ndeadline return book /by 2026-06-06\nevent project meeting /from 2026-08-06 /to 2026-08-06\nmark 1\nbye\n' | java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy >/dev/null && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
   ```
 - Inputs:
   ```text
@@ -654,8 +654,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][X] read book
-  2.[D][ ] return book (by: June 6th)
-  3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  2.[D][ ] return book (by: Jun 6 2026)
+  3.[E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.
@@ -760,6 +760,66 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   Here are the tasks in your list:
   1.[T][ ] keep working
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Parse and format calendar dates
+- Aim: Verify strict ISO date parsing, calendar validation, event ordering, and readable output formatting.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes src/main/java/*.java && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes Lizzy
+  ```
+- Inputs:
+  ```text
+  deadline return book /by 2/12/2019
+  deadline leap mistake /by 2019-02-29
+  event backwards /from 2019-12-03 /to 2019-12-02
+  deadline return book /by 2019-12-02
+  event workshop /from 2019-12-02 /to 2019-12-03
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  I couldn't understand that date.
+  Use dates in yyyy-MM-dd format, for example 2019-10-15.
+  ____________________________________________________________
+  ____________________________________________________________
+  I couldn't understand that date.
+  Use dates in yyyy-MM-dd format, for example 2019-10-15.
+  ____________________________________________________________
+  ____________________________________________________________
+  An event cannot end before it begins.
+  Use an end date on or after the start date.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] return book (by: Dec 2 2019)
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement! I've added it to your list:
+    [E][ ] workshop (from: Dec 2 2019 to: Dec 3 2019)
+  Now you have 2 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[D][ ] return book (by: Dec 2 2019)
+  2.[E][ ] workshop (from: Dec 2 2019 to: Dec 3 2019)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.

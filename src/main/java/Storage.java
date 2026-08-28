@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -81,10 +82,11 @@ public class Storage {
         String status = task.isDone() ? "1" : "0";
         String description = encode(task.getDescription());
         if (task instanceof Deadline deadline) {
-            return String.join(FIELD_SEPARATOR, "D", status, description, encode(deadline.by));
+            return String.join(FIELD_SEPARATOR, "D", status, description, encode(deadline.by.toString()));
         }
         if (task instanceof Event event) {
-            return String.join(FIELD_SEPARATOR, "E", status, description, encode(event.from), encode(event.to));
+            return String.join(FIELD_SEPARATOR, "E", status, description,
+                    encode(event.from.toString()), encode(event.to.toString()));
         }
         return String.join(FIELD_SEPARATOR, "T", status, description);
     }
@@ -98,8 +100,9 @@ public class Storage {
             String description = decode(fields[2]);
             return switch (fields[0]) {
             case "T" -> new Todo(description, isDone);
-            case "D" -> new Deadline(description, decode(fields[3]), isDone);
-            case "E" -> new Event(description, decode(fields[3]), decode(fields[4]), isDone);
+            case "D" -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
+            case "E" -> new Event(description, LocalDate.parse(decode(fields[3])),
+                    LocalDate.parse(decode(fields[4])), isDone);
             default -> throw new IllegalArgumentException("Unknown task type");
             };
         } catch (IllegalArgumentException exception) {
