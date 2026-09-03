@@ -24,3 +24,19 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Creating and running the executable JAR
+
+With JDK 25 selected, create Lizzy's self-contained executable JAR with:
+
+```sh
+./gradlew clean shadowJar
+```
+
+Gradle writes the fat JAR to `build/libs/lizzy.jar`. Copy that file to an empty folder and run it from that folder:
+
+```sh
+java -jar "lizzy.jar"
+```
+
+The JAR stores Lizzy's task data relative to the folder from which it is run, so keeping the JAR in its own folder keeps its data separate from the project files.
