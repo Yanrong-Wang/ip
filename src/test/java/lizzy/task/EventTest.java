@@ -7,7 +7,9 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-/** Tests inclusive date-range matching for event tasks. */
+/**
+ * Tests inclusive date-range matching for event tasks.
+ */
 public class EventTest {
     @Test
     void occursOn_startAndEndDatesIncludedDatesBetweenIncludedOutsideDatesExcluded() {

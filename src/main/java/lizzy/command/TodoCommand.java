@@ -6,9 +6,13 @@ import lizzy.task.TaskList;
 import lizzy.task.Todo;
 import lizzy.ui.Ui;
 
-/** Adds one parsed todo to the task list. */
+/**
+ * Adds one parsed todo to the task list.
+ */
 public class TodoCommand extends Command {
-    /** The todo to add. */
+    /**
+     * The todo to add.
+     */
     private final Todo todo;
 
     /**
@@ -20,7 +24,9 @@ public class TodoCommand extends Command {
         this.todo = todo;
     }
 
-    /** Adds, saves, and confirms the todo. */
+    /**
+     * Adds, saves, and confirms the todo.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         tasks.add(todo);

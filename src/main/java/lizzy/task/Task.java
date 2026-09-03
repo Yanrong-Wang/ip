@@ -6,10 +6,14 @@ import java.time.LocalDate;
  * Represents common data and behavior shared by all task types.
  */
 public class Task {
-    /** The text describing the task. */
+    /**
+     * The text describing the task.
+     */
     private final String description;
 
-    /** Whether the task has been completed. */
+    /**
+     * Whether the task has been completed.
+     */
     private boolean isDone;
 
     /**
@@ -80,12 +84,16 @@ public class Task {
         return "[" + getStatusIcon() + "] " + description;
     }
 
-    /** Marks this task as complete. */
+    /**
+     * Marks this task as complete.
+     */
     public void markAsDone() {
         isDone = true;
     }
 
-    /** Marks this task as incomplete. */
+    /**
+     * Marks this task as incomplete.
+     */
     public void markAsNotDone() {
         isDone = false;
     }

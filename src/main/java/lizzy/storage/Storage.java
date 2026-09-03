@@ -22,7 +22,9 @@ public class Storage {
     private static final String FIELD_SEPARATOR = " | ";
     private static final String FIELD_SEPARATOR_PATTERN = "\\s*\\|\\s*";
 
-    /** The relative or user-configured path of the task data file. */
+    /**
+     * The relative or user-configured path of the task data file.
+     */
     private final Path filePath;
 
     /**

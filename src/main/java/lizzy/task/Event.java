@@ -8,14 +8,20 @@ import java.util.Locale;
  * Represents a task that starts and ends at specified times.
  */
 public class Event extends Task {
-    /** The format used to present parsed dates to the user. */
+    /**
+     * The format used to present parsed dates to the user.
+     */
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
-    /** The event start date. */
+    /**
+     * The event start date.
+     */
     protected final LocalDate from;
 
-    /** The event end date. */
+    /**
+     * The event end date.
+     */
     protected final LocalDate to;
 
     /**
@@ -43,7 +49,9 @@ public class Event extends Task {
         this.to = to;
     }
 
-    /** Returns whether the date falls within this event's inclusive date range. */
+    /**
+     * Returns whether the date falls within this event's inclusive date range.
+     */
     @Override
     public boolean occursOn(LocalDate date) {
         return !date.isBefore(from) && !date.isAfter(to);

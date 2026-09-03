@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import lizzy.exception.LizzyException;
 
-/** Tests task ordering, one-based command access, and safe list snapshots. */
+/**
+ * Tests task ordering, one-based command access, and safe list snapshots.
+ */
 public class TaskListTest {
     @Test
     void addAndGet_tasksKeepInsertionOrder() {

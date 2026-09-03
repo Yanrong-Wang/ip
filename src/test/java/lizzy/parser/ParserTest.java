@@ -17,7 +17,9 @@ import lizzy.command.UnmarkCommand;
 import lizzy.command.ViewScheduleCommand;
 import lizzy.exception.LizzyException;
 
-/** Tests command recognition and input validation in {@link Parser}. */
+/**
+ * Tests command recognition and input validation in {@link Parser}.
+ */
 public class ParserTest {
     @Test
     void parse_supportedCommands_correctCommandSubtypes() throws LizzyException {

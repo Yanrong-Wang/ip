@@ -28,6 +28,10 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Coding standards
+
+For every Java production or test-code change, invoke and follow the project skill `$seedu-java-coding-standard`. For every branch, commit, merge, tag, push, or commit-message review, invoke and follow `$seedu-git-standard`. These skills implement the SE-EDU intermediate Java and Git conventions; user-specified Git workflow requirements still take precedence.
+
 ## UI regression testing
 
 After every code update, review `test/ui-test-plan.md` and update it before testing when the changed behavior requires a new or revised console UI test case. Then invoke `$test-ui` and follow its workflow to run the plan. Include the resulting console test-session record in the handoff; if a test fails, stop at that failure and report its actual and expected output.

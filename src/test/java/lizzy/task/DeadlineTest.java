@@ -7,7 +7,9 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-/** Tests date matching for deadline tasks. */
+/**
+ * Tests date matching for deadline tasks.
+ */
 public class DeadlineTest {
     @Test
     void occursOn_matchingDate_trueAndOtherDatesFalse() {

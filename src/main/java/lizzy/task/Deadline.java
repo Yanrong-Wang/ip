@@ -8,11 +8,15 @@ import java.util.Locale;
  * Represents a task that must be completed by a specified time.
  */
 public class Deadline extends Task {
-    /** The format used to present parsed dates to the user. */
+    /**
+     * The format used to present parsed dates to the user.
+     */
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
-    /** The deadline date. */
+    /**
+     * The deadline date.
+     */
     protected final LocalDate by;
 
     /**
@@ -37,7 +41,9 @@ public class Deadline extends Task {
         this.by = by;
     }
 
-    /** Returns whether this deadline falls on the given date. */
+    /**
+     * Returns whether this deadline falls on the given date.
+     */
     @Override
     public boolean occursOn(LocalDate date) {
         return by.equals(date);

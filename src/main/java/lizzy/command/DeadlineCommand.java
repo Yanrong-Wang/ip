@@ -6,9 +6,13 @@ import lizzy.task.Deadline;
 import lizzy.task.TaskList;
 import lizzy.ui.Ui;
 
-/** Adds one parsed deadline to the task list. */
+/**
+ * Adds one parsed deadline to the task list.
+ */
 public class DeadlineCommand extends Command {
-    /** The deadline to add. */
+    /**
+     * The deadline to add.
+     */
     private final Deadline deadline;
 
     /**
@@ -20,7 +24,9 @@ public class DeadlineCommand extends Command {
         this.deadline = deadline;
     }
 
-    /** Adds, saves, and confirms the deadline. */
+    /**
+     * Adds, saves, and confirms the deadline.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         tasks.add(deadline);

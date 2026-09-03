@@ -6,9 +6,13 @@ import lizzy.task.Event;
 import lizzy.task.TaskList;
 import lizzy.ui.Ui;
 
-/** Adds one parsed event to the task list. */
+/**
+ * Adds one parsed event to the task list.
+ */
 public class EventCommand extends Command {
-    /** The event to add. */
+    /**
+     * The event to add.
+     */
     private final Event event;
 
     /**
@@ -20,7 +24,9 @@ public class EventCommand extends Command {
         this.event = event;
     }
 
-    /** Adds, saves, and confirms the event. */
+    /**
+     * Adds, saves, and confirms the event.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         tasks.add(event);

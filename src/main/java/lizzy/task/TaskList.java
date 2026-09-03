@@ -9,10 +9,14 @@ import lizzy.exception.LizzyException;
  * Owns Lizzy's ordered collection of tasks and its list-related operations.
  */
 public class TaskList {
-    /** The tasks in the order they were added. */
+    /**
+     * The tasks in the order they were added.
+     */
     private final List<Task> tasks;
 
-    /** Creates an empty task list. */
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
         this(new ArrayList<>());
     }

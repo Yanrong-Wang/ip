@@ -22,8 +22,9 @@ import lizzy.task.Todo;
  * Parses Lizzy's command language and validates its command-specific arguments.
  */
 public class Parser {
-    private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
-            + "Try: todo <description>, list, or another command.";
+    private static final String EMPTY_INPUT_ERROR =
+            "Silence may be elegant, but it gives me very little to work with.\n"
+                    + "Try: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
             + "Use: todo <description>.";
     private static final String INVALID_DEADLINE_ERROR = "Something seems to be missing from this deadline.\n"
@@ -33,7 +34,9 @@ public class Parser {
     private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
             + "Use dates in yyyy-MM-dd format, for example 2019-10-15.";
 
-    /** Prevents instantiation because parsing is stateless. */
+    /**
+     * Prevents instantiation because parsing is stateless.
+     */
     private Parser() {
     }
 

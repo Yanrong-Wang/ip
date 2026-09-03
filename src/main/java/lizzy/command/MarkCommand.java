@@ -6,9 +6,13 @@ import lizzy.task.Task;
 import lizzy.task.TaskList;
 import lizzy.ui.Ui;
 
-/** Marks one numbered task as complete. */
+/**
+ * Marks one numbered task as complete.
+ */
 public class MarkCommand extends Command {
-    /** The one-based task number to mark. */
+    /**
+     * The one-based task number to mark.
+     */
     private final int taskNumber;
 
     /**
@@ -20,7 +24,9 @@ public class MarkCommand extends Command {
         this.taskNumber = taskNumber;
     }
 
-    /** Marks, saves, and confirms the referenced task. */
+    /**
+     * Marks, saves, and confirms the referenced task.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         Task task = tasks.getTask(taskNumber, "mark");

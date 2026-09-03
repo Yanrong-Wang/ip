@@ -16,15 +16,21 @@ public class Ui {
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
-    /** Reads one command at a time from standard input. */
+    /**
+     * Reads one command at a time from standard input.
+     */
     private final Scanner scanner;
 
-    /** Creates a UI that reads commands from standard input. */
+    /**
+     * Creates a UI that reads commands from standard input.
+     */
     public Ui() {
         scanner = new Scanner(System.in);
     }
 
-    /** Displays Lizzy's greeting and banner. */
+    /**
+     * Displays Lizzy's greeting and banner.
+     */
     public void showWelcome() {
         String banner = "    __    _\n"
                 + "   / /   (_)_______  __  __\n"
@@ -57,12 +63,16 @@ public class Ui {
         return scanner.nextLine().strip();
     }
 
-    /** Displays the standard divider line. */
+    /**
+     * Displays the standard divider line.
+     */
     public void showDivider() {
         System.out.println(DIVIDER);
     }
 
-    /** Displays Lizzy's farewell. */
+    /**
+     * Displays Lizzy's farewell.
+     */
     public void showGoodbye() {
         System.out.println("Bye! I hope our next conversation will be just as agreeable.");
     }
