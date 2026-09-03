@@ -11,7 +11,11 @@ public class DeadlineCommand extends Command {
     /** The deadline to add. */
     private final Deadline deadline;
 
-    /** Creates a command that adds the supplied deadline. */
+    /**
+     * Creates a command that adds the supplied deadline.
+     *
+     * @param deadline the deadline to add
+     */
     public DeadlineCommand(Deadline deadline) {
         this.deadline = deadline;
     }

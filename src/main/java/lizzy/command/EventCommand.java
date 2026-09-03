@@ -11,7 +11,11 @@ public class EventCommand extends Command {
     /** The event to add. */
     private final Event event;
 
-    /** Creates a command that adds the supplied event. */
+    /**
+     * Creates a command that adds the supplied event.
+     *
+     * @param event the event to add
+     */
     public EventCommand(Event event) {
         this.event = event;
     }

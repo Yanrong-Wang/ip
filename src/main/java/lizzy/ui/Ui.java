@@ -39,12 +39,20 @@ public class Ui {
         showDivider();
     }
 
-    /** Returns whether another user command is available. */
+    /**
+     * Returns whether another user command is available.
+     *
+     * @return {@code true} if standard input contains another line
+     */
     public boolean hasNextCommand() {
         return scanner.hasNextLine();
     }
 
-    /** Reads and trims the next user command. */
+    /**
+     * Reads and trims the next user command.
+     *
+     * @return the next command without leading or trailing whitespace
+     */
     public String readCommand() {
         return scanner.nextLine().strip();
     }
@@ -59,12 +67,20 @@ public class Ui {
         System.out.println("Bye! I hope our next conversation will be just as agreeable.");
     }
 
-    /** Displays a user-facing error message. */
+    /**
+     * Displays a user-facing error message.
+     *
+     * @param message the message to display
+     */
     public void showError(String message) {
         System.out.println(message);
     }
 
-    /** Displays every task in the supplied task list. */
+    /**
+     * Displays every task in the supplied task list.
+     *
+     * @param tasks the tasks to display
+     */
     public void showTaskList(TaskList tasks) {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
@@ -72,47 +88,80 @@ public class Ui {
         }
     }
 
-    /** Displays confirmation after adding a todo. */
+    /**
+     * Displays confirmation after adding a todo.
+     *
+     * @param task the todo that was added
+     * @param numberOfTasks the new number of tasks in the list
+     */
     public void showTodoAdded(Task task, int numberOfTasks) {
         System.out.println("Here comes another matter to keep track of:");
         System.out.println("  " + task);
         showTaskCount(numberOfTasks);
     }
 
-    /** Displays confirmation after adding a deadline. */
+    /**
+     * Displays confirmation after adding a deadline.
+     *
+     * @param task the deadline that was added
+     * @param numberOfTasks the new number of tasks in the list
+     */
     public void showDeadlineAdded(Task task, int numberOfTasks) {
         System.out.println("A deadline, then. We'd better not keep it waiting.");
         System.out.println("  " + task);
         showTaskCount(numberOfTasks);
     }
 
-    /** Displays confirmation after adding an event. */
+    /**
+     * Displays confirmation after adding an event.
+     *
+     * @param task the event that was added
+     * @param numberOfTasks the new number of tasks in the list
+     */
     public void showEventAdded(Task task, int numberOfTasks) {
         System.out.println("An engagement! I've added it to your list:");
         System.out.println("  " + task);
         showTaskCount(numberOfTasks);
     }
 
-    /** Displays confirmation after a task is marked as complete. */
+    /**
+     * Displays confirmation after a task is marked as complete.
+     *
+     * @param task the task marked as complete
+     */
     public void showTaskMarked(Task task) {
         System.out.println("Very good! That is one matter settled:");
         System.out.println("  " + task);
     }
 
-    /** Displays confirmation after a task is marked as incomplete. */
+    /**
+     * Displays confirmation after a task is marked as incomplete.
+     *
+     * @param task the task marked as incomplete
+     */
     public void showTaskUnmarked(Task task) {
         System.out.println("Ah, it seems this matter is not quite settled:");
         System.out.println("  " + task);
     }
 
-    /** Displays confirmation after a task is deleted. */
+    /**
+     * Displays confirmation after a task is deleted.
+     *
+     * @param task the task that was deleted
+     * @param numberOfTasks the number of tasks remaining in the list
+     */
     public void showTaskDeleted(Task task, int numberOfTasks) {
         System.out.println("That matter is off the list:");
         System.out.println("  " + task);
         System.out.println("You now have " + numberOfTasks + " tasks on your list.");
     }
 
-    /** Displays deadlines and events that occur on the specified date. */
+    /**
+     * Displays deadlines and events that occur on the specified date.
+     *
+     * @param tasks the task list to search
+     * @param date the requested calendar date
+     */
     public void showTasksOnDate(TaskList tasks, LocalDate date) {
         boolean foundTask = false;
         for (int i = 0; i < tasks.size(); i++) {
@@ -131,7 +180,11 @@ public class Ui {
         }
     }
 
-    /** Displays the current number of tasks. */
+    /**
+     * Displays the current number of tasks after a task has been added.
+     *
+     * @param numberOfTasks the total number of tasks now in the list
+     */
     private void showTaskCount(int numberOfTasks) {
         System.out.println("Now you have " + numberOfTasks + " tasks in the list.");
     }

@@ -11,7 +11,11 @@ public class ViewScheduleCommand extends Command {
     /** The date to search for. */
     private final LocalDate date;
 
-    /** Creates a command that lists tasks occurring on {@code date}. */
+    /**
+     * Creates a command that lists tasks occurring on {@code date}.
+     *
+     * @param date the date to search for
+     */
     public ViewScheduleCommand(LocalDate date) {
         this.date = date;
     }

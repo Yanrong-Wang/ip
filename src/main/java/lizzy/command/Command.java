@@ -9,6 +9,10 @@ import lizzy.ui.Ui;
  * Represents one executable user request in Lizzy's command language.
  */
 public abstract class Command {
+    /** Creates a command. */
+    public Command() {
+    }
+
     /**
      * Performs this command's operation.
      *

@@ -26,22 +26,39 @@ public class TaskList {
         this.tasks = new ArrayList<>(tasks);
     }
 
-    /** Adds a task to the end of the list. */
+    /**
+     * Adds a task to the end of the list.
+     *
+     * @param task the task to add
+     */
     public void add(Task task) {
         tasks.add(task);
     }
 
-    /** Returns the task at a zero-based position for presentation purposes. */
+    /**
+     * Returns the task at a zero-based position for presentation purposes.
+     *
+     * @param index the zero-based position of the task
+     * @return the task at that position
+     */
     public Task get(int index) {
         return tasks.get(index);
     }
 
-    /** Returns the most recently added task. */
+    /**
+     * Returns the most recently added task.
+     *
+     * @return the last task in the list
+     */
     public Task getLast() {
         return tasks.getLast();
     }
 
-    /** Returns the number of tasks in the list. */
+    /**
+     * Returns the number of tasks in the list.
+     *
+     * @return the number of tasks
+     */
     public int size() {
         return tasks.size();
     }
@@ -72,12 +89,22 @@ public class TaskList {
         return tasks.remove(taskNumber - 1);
     }
 
-    /** Returns an immutable snapshot for saving to storage. */
+    /**
+     * Returns an immutable snapshot for saving to storage.
+     *
+     * @return an immutable copy of the current tasks
+     */
     public List<Task> asList() {
         return List.copyOf(tasks);
     }
 
-    /** Validates that a one-based task number exists in this list. */
+    /**
+     * Validates that a one-based task number exists in this list.
+     *
+     * @param taskNumber the task number supplied by the user
+     * @param command the command that requested the task
+     * @throws LizzyException if the list is empty or the number is outside its valid range
+     */
     private void validateTaskNumber(int taskNumber, String command) throws LizzyException {
         if (tasks.isEmpty()) {
             throw new LizzyException("There is very little to " + command
