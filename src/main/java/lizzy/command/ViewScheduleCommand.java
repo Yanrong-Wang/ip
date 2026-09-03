@@ -1,12 +1,18 @@
+package lizzy.command;
+
 import java.time.LocalDate;
 
+import lizzy.storage.Storage;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
+
 /** Displays dated tasks that occur on one requested date. */
-public class OnCommand extends Command {
+public class ViewScheduleCommand extends Command {
     /** The date to search for. */
     private final LocalDate date;
 
     /** Creates a command that lists tasks occurring on {@code date}. */
-    public OnCommand(LocalDate date) {
+    public ViewScheduleCommand(LocalDate date) {
         this.date = date;
     }
 

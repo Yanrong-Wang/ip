@@ -1,3 +1,5 @@
+package lizzy.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -6,6 +8,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
+import lizzy.exception.LizzyException;
+import lizzy.task.Deadline;
+import lizzy.task.Event;
+import lizzy.task.Task;
+import lizzy.task.Todo;
 
 /**
  * Saves Lizzy's task list in a text file on disk.
@@ -82,11 +90,12 @@ public class Storage {
         String status = task.isDone() ? "1" : "0";
         String description = encode(task.getDescription());
         if (task instanceof Deadline deadline) {
-            return String.join(FIELD_SEPARATOR, "D", status, description, encode(deadline.by.toString()));
+            return String.join(FIELD_SEPARATOR, "D", status, description,
+                    encode(deadline.getBy().toString()));
         }
         if (task instanceof Event event) {
             return String.join(FIELD_SEPARATOR, "E", status, description,
-                    encode(event.from.toString()), encode(event.to.toString()));
+                    encode(event.getFrom().toString()), encode(event.getTo().toString()));
         }
         return String.join(FIELD_SEPARATOR, "T", status, description);
     }

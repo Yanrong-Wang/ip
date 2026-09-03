@@ -1,3 +1,5 @@
+package lizzy.exception;
+
 /**
  * Represents an input error that Lizzy can explain to the user without ending the session.
  */

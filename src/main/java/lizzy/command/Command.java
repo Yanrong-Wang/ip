@@ -1,3 +1,10 @@
+package lizzy.command;
+
+import lizzy.exception.LizzyException;
+import lizzy.storage.Storage;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
+
 /**
  * Represents one executable user request in Lizzy's command language.
  */

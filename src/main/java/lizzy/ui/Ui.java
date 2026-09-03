@@ -1,7 +1,12 @@
+package lizzy.ui;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Scanner;
+
+import lizzy.task.Task;
+import lizzy.task.TaskList;
 
 /**
  * Handles all console input and output for Lizzy.

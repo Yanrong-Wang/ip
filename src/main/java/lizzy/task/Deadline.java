@@ -1,3 +1,5 @@
+package lizzy.task;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -39,6 +41,15 @@ public class Deadline extends Task {
     @Override
     public boolean occursOn(LocalDate date) {
         return by.equals(date);
+    }
+
+    /**
+     * Returns this task's deadline date.
+     *
+     * @return the deadline date
+     */
+    public LocalDate getBy() {
+        return by;
     }
 
     /**

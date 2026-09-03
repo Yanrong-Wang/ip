@@ -1,3 +1,11 @@
+package lizzy.command;
+
+import lizzy.exception.LizzyException;
+import lizzy.storage.Storage;
+import lizzy.task.Event;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
+
 /** Adds one parsed event to the task list. */
 public class EventCommand extends Command {
     /** The event to add. */

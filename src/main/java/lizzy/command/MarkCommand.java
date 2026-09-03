@@ -1,3 +1,11 @@
+package lizzy.command;
+
+import lizzy.exception.LizzyException;
+import lizzy.storage.Storage;
+import lizzy.task.Task;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
+
 /** Marks one numbered task as complete. */
 public class MarkCommand extends Command {
     /** The one-based task number to mark. */

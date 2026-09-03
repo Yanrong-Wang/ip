@@ -1,3 +1,9 @@
+package lizzy.command;
+
+import lizzy.storage.Storage;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
+
 /** Ends the current Lizzy session. */
 public class ExitCommand extends Command {
     /** Displays Lizzy's farewell. */

@@ -1,5 +1,22 @@
+package lizzy.parser;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+
+import lizzy.command.Command;
+import lizzy.command.DeadlineCommand;
+import lizzy.command.DeleteCommand;
+import lizzy.command.EventCommand;
+import lizzy.command.ExitCommand;
+import lizzy.command.ListCommand;
+import lizzy.command.MarkCommand;
+import lizzy.command.TodoCommand;
+import lizzy.command.UnmarkCommand;
+import lizzy.command.ViewScheduleCommand;
+import lizzy.exception.LizzyException;
+import lizzy.task.Deadline;
+import lizzy.task.Event;
+import lizzy.task.Todo;
 
 /**
  * Parses Lizzy's command language and validates its command-specific arguments.
@@ -40,7 +57,7 @@ public class Parser {
             requireNoArgument(argument, "A list requires no further instruction.", "list");
             yield new ListCommand();
         }
-        case "on" -> new OnCommand(parseOnDate(argument));
+        case "on" -> new ViewScheduleCommand(parseOnDate(argument));
         case "todo" -> new TodoCommand(parseTodo(argument));
         case "deadline" -> new DeadlineCommand(parseDeadline(argument));
         case "event" -> new EventCommand(parseEvent(argument));
