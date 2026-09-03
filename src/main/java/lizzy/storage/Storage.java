@@ -123,11 +123,11 @@ public class Storage {
             boolean isDone = fields[1].equals("1");
             String description = decode(fields[2]);
             return switch (fields[0]) {
-            case "T" -> new Todo(description, isDone);
-            case "D" -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
-            case "E" -> new Event(description, LocalDate.parse(decode(fields[3])),
-                    LocalDate.parse(decode(fields[4])), isDone);
-            default -> throw new IllegalArgumentException("Unknown task type");
+                case "T" -> new Todo(description, isDone);
+                case "D" -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
+                case "E" -> new Event(description, LocalDate.parse(decode(fields[3])),
+                        LocalDate.parse(decode(fields[4])), isDone);
+                default -> throw new IllegalArgumentException("Unknown task type");
             };
         } catch (IllegalArgumentException exception) {
             throw new LizzyException("I couldn't understand the saved task data at line " + lineNumber + ".\n"
@@ -147,10 +147,10 @@ public class Storage {
         }
 
         int expectedFieldCount = switch (fields[0]) {
-        case "T" -> 3;
-        case "D" -> 4;
-        case "E" -> 5;
-        default -> throw new IllegalArgumentException("Unknown task type");
+            case "T" -> 3;
+            case "D" -> 4;
+            case "E" -> 5;
+            default -> throw new IllegalArgumentException("Unknown task type");
         };
         if (fields.length != expectedFieldCount) {
             throw new IllegalArgumentException("Invalid field count");

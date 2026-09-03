@@ -99,8 +99,7 @@ public class TaskListTest {
 
     private static void assertTaskNumberError(TaskList tasks, int number, String command,
                                               String expectedMessage) {
-        LizzyException exception = assertThrows(LizzyException.class,
-                () -> tasks.getTask(number, command));
+        LizzyException exception = assertThrows(LizzyException.class, () -> tasks.getTask(number, command));
         assertTrue(exception.getMessage().contains(expectedMessage));
     }
 }
