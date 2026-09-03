@@ -1,3 +1,5 @@
+package lizzy.task;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -45,6 +47,24 @@ public class Event extends Task {
     @Override
     public boolean occursOn(LocalDate date) {
         return !date.isBefore(from) && !date.isAfter(to);
+    }
+
+    /**
+     * Returns this event's start date.
+     *
+     * @return the event start date
+     */
+    public LocalDate getFrom() {
+        return from;
+    }
+
+    /**
+     * Returns this event's end date.
+     *
+     * @return the event end date
+     */
+    public LocalDate getTo() {
+        return to;
     }
 
     /**

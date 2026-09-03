@@ -1,3 +1,11 @@
+package lizzy.command;
+
+import lizzy.exception.LizzyException;
+import lizzy.storage.Storage;
+import lizzy.task.TaskList;
+import lizzy.task.Todo;
+import lizzy.ui.Ui;
+
 /** Adds one parsed todo to the task list. */
 public class TodoCommand extends Command {
     /** The todo to add. */

@@ -1,4 +1,13 @@
+package lizzy;
+
 import java.nio.file.Path;
+
+import lizzy.command.Command;
+import lizzy.exception.LizzyException;
+import lizzy.parser.Parser;
+import lizzy.storage.Storage;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
 
 /**
  * The entry point and application coordinator for the Lizzy chatbot.

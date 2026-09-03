@@ -1,3 +1,11 @@
+package lizzy.command;
+
+import lizzy.exception.LizzyException;
+import lizzy.storage.Storage;
+import lizzy.task.Deadline;
+import lizzy.task.TaskList;
+import lizzy.ui.Ui;
+
 /** Adds one parsed deadline to the task list. */
 public class DeadlineCommand extends Command {
     /** The deadline to add. */

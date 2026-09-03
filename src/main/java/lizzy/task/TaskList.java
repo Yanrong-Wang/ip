@@ -1,5 +1,9 @@
+package lizzy.task;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import lizzy.exception.LizzyException;
 
 /**
  * Owns Lizzy's ordered collection of tasks and its list-related operations.
