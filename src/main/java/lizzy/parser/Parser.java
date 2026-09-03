@@ -57,23 +57,23 @@ public class Parser {
         String action = commandParts[0];
         String argument = commandParts.length == 2 ? commandParts[1].strip() : "";
         return switch (action) {
-        case "list" -> {
-            requireNoArgument(argument, "A list requires no further instruction.", "list");
-            yield new ListCommand();
-        }
-        case "on" -> new ViewScheduleCommand(parseOnDate(argument));
-        case "todo" -> new TodoCommand(parseTodo(argument));
-        case "deadline" -> new DeadlineCommand(parseDeadline(argument));
-        case "event" -> new EventCommand(parseEvent(argument));
-        case "find" -> new FindCommand(parseFindKeyword(argument));
-        case "mark" -> new MarkCommand(parseTaskNumber(argument, "mark"));
-        case "unmark" -> new UnmarkCommand(parseTaskNumber(argument, "unmark"));
-        case "delete" -> new DeleteCommand(parseTaskNumber(argument, "delete"));
-        case "bye" -> {
-            requireNoArgument(argument, "One farewell at a time, if you please.", "bye");
-            yield new ExitCommand();
-        }
-        default -> throw unknownCommand(action);
+            case "list" -> {
+                requireNoArgument(argument, "A list requires no further instruction.", "list");
+                yield new ListCommand();
+            }
+            case "on" -> new ViewScheduleCommand(parseOnDate(argument));
+            case "todo" -> new TodoCommand(parseTodo(argument));
+            case "deadline" -> new DeadlineCommand(parseDeadline(argument));
+            case "event" -> new EventCommand(parseEvent(argument));
+            case "find" -> new FindCommand(parseFindKeyword(argument));
+            case "mark" -> new MarkCommand(parseTaskNumber(argument, "mark"));
+            case "unmark" -> new UnmarkCommand(parseTaskNumber(argument, "unmark"));
+            case "delete" -> new DeleteCommand(parseTaskNumber(argument, "delete"));
+            case "bye" -> {
+                requireNoArgument(argument, "One farewell at a time, if you please.", "bye");
+                yield new ExitCommand();
+            }
+            default -> throw unknownCommand(action);
         };
     }
 
