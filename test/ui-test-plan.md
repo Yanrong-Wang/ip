@@ -901,3 +901,73 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Bye! I hope our next conversation will be just as agreeable.
   ____________________________________________________________
   ```
+
+### Find tasks by keyword
+- Aim: Verify that description search finds matching task types in original list order, retains task numbers and completion state, and handles no or missing keywords.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  ```
+- Inputs:
+  ```text
+  todo read book
+  deadline return book /by 2026-09-06
+  todo buy milk
+  mark 1
+  mark 2
+  find book
+  find pen
+  find
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] read book
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline, then. We'd better not keep it waiting.
+    [D][ ] return book (by: Sep 6 2026)
+  Now you have 2 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] buy milk
+  Now you have 3 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  Very good! That is one matter settled:
+    [T][X] read book
+  ____________________________________________________________
+  ____________________________________________________________
+  Very good! That is one matter settled:
+    [D][X] return book (by: Sep 6 2026)
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the matching tasks in your list:
+  1.[T][X] read book
+  2.[D][X] return book (by: Sep 6 2026)
+  ____________________________________________________________
+  ____________________________________________________________
+  There are no matching tasks in your list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A keyword is needed to find a task.
+  Use: find <keyword>.
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```

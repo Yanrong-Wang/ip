@@ -8,6 +8,7 @@ import lizzy.command.DeadlineCommand;
 import lizzy.command.DeleteCommand;
 import lizzy.command.EventCommand;
 import lizzy.command.ExitCommand;
+import lizzy.command.FindCommand;
 import lizzy.command.ListCommand;
 import lizzy.command.MarkCommand;
 import lizzy.command.TodoCommand;
@@ -64,6 +65,7 @@ public class Parser {
         case "todo" -> new TodoCommand(parseTodo(argument));
         case "deadline" -> new DeadlineCommand(parseDeadline(argument));
         case "event" -> new EventCommand(parseEvent(argument));
+        case "find" -> new FindCommand(parseFindKeyword(argument));
         case "mark" -> new MarkCommand(parseTaskNumber(argument, "mark"));
         case "unmark" -> new UnmarkCommand(parseTaskNumber(argument, "unmark"));
         case "delete" -> new DeleteCommand(parseTaskNumber(argument, "delete"));
@@ -124,6 +126,20 @@ public class Parser {
                     + "Use an end date on or after the start date.");
         }
         return new Event(eventParts[0].strip(), eventStartDate, eventEndDate);
+    }
+
+    /**
+     * Validates the keyword used to search task descriptions.
+     *
+     * @param argument the user-supplied keyword
+     * @return the trimmed keyword
+     * @throws LizzyException if no keyword was supplied
+     */
+    private static String parseFindKeyword(String argument) throws LizzyException {
+        if (argument.isBlank()) {
+            throw new LizzyException("A keyword is needed to find a task.\nUse: find <keyword>.");
+        }
+        return argument;
     }
 
     /**

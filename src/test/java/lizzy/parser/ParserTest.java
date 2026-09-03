@@ -10,6 +10,7 @@ import lizzy.command.DeadlineCommand;
 import lizzy.command.DeleteCommand;
 import lizzy.command.EventCommand;
 import lizzy.command.ExitCommand;
+import lizzy.command.FindCommand;
 import lizzy.command.ListCommand;
 import lizzy.command.MarkCommand;
 import lizzy.command.TodoCommand;
@@ -29,6 +30,7 @@ public class ParserTest {
         assertInstanceOf(DeadlineCommand.class, Parser.parse("deadline submit work /by 2026-09-04"));
         assertInstanceOf(EventCommand.class,
                 Parser.parse("event consultation /from 2026-09-04 /to 2026-09-05"));
+        assertInstanceOf(FindCommand.class, Parser.parse("find notes"));
         assertInstanceOf(MarkCommand.class, Parser.parse("mark 1"));
         assertInstanceOf(UnmarkCommand.class, Parser.parse("unmark 1"));
         assertInstanceOf(DeleteCommand.class, Parser.parse("delete 1"));
@@ -58,6 +60,7 @@ public class ParserTest {
                 "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("event /from 2026-09-04 /to 2026-09-05",
                 "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+        assertParseFails("find", "Use: find <keyword>.");
     }
 
     @Test

@@ -87,6 +87,16 @@ public class TaskListTest {
         assertThrows(UnsupportedOperationException.class, () -> snapshot.add(new Todo("third")));
     }
 
+    @Test
+    void findMatchingTaskNumbers_matchingDescriptionsKeepOriginalNumbersAndOrder() {
+        TaskList tasks = new TaskList(List.of(new Todo("read book"), new Todo("buy milk"),
+                new Todo("return book"), new Todo("Book review")));
+
+        assertEquals(List.of(1, 3), tasks.findMatchingTaskNumbers("book"));
+        assertEquals(List.of(), tasks.findMatchingTaskNumbers("pen"));
+        assertEquals(List.of(4), tasks.findMatchingTaskNumbers("Book"));
+    }
+
     private static void assertTaskNumberError(TaskList tasks, int number, String command,
                                               String expectedMessage) {
         LizzyException exception = assertThrows(LizzyException.class,

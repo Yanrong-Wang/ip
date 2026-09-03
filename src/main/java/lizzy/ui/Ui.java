@@ -2,6 +2,7 @@ package lizzy.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -95,6 +96,24 @@ public class Ui {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /**
+     * Displays tasks that matched a description search while retaining their list numbers.
+     *
+     * @param tasks the complete task list
+     * @param matchingTaskNumbers the one-based numbers of the matching tasks
+     */
+    public void showMatchingTasks(TaskList tasks, List<Integer> matchingTaskNumbers) {
+        if (matchingTaskNumbers.isEmpty()) {
+            System.out.println("There are no matching tasks in your list.");
+            return;
+        }
+
+        System.out.println("Here are the matching tasks in your list:");
+        for (int taskNumber : matchingTaskNumbers) {
+            System.out.println(taskNumber + "." + tasks.get(taskNumber - 1));
         }
     }
 
