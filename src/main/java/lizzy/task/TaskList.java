@@ -47,6 +47,22 @@ public class TaskList {
     }
 
     /**
+     * Returns one-based task numbers whose descriptions contain a case-sensitive keyword.
+     *
+     * @param keyword the text to search for
+     * @return the matching task numbers in task-list order
+     */
+    public List<Integer> findMatchingTaskNumbers(String keyword) {
+        List<Integer> taskNumbers = new ArrayList<>();
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getDescription().contains(keyword)) {
+                taskNumbers.add(i + 1);
+            }
+        }
+        return List.copyOf(taskNumbers);
+    }
+
+    /**
      * Returns a task referenced by a one-based command number.
      *
      * @param taskNumber the one-based task number from the user
