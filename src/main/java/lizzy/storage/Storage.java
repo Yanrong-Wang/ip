@@ -22,7 +22,9 @@ public class Storage {
     private static final String FIELD_SEPARATOR = " | ";
     private static final String FIELD_SEPARATOR_PATTERN = "\\s*\\|\\s*";
 
-    /** The relative or user-configured path of the task data file. */
+    /**
+     * The relative or user-configured path of the task data file.
+     */
     private final Path filePath;
 
     /**
@@ -85,7 +87,9 @@ public class Storage {
         }
     }
 
-    /** Converts one task into a delimiter-separated storage record. */
+    /**
+     * Converts one task into a delimiter-separated storage record.
+     */
     private static String serialize(Task task) {
         String status = task.isDone() ? "1" : "0";
         String description = encode(task.getDescription());
@@ -100,7 +104,9 @@ public class Storage {
         return String.join(FIELD_SEPARATOR, "T", status, description);
     }
 
-    /** Restores one task from a storage record. */
+    /**
+     * Restores one task from a storage record.
+     */
     private static Task deserialize(String line, int lineNumber) throws LizzyException {
         String[] fields = line.split(FIELD_SEPARATOR_PATTERN, -1);
         try {
@@ -120,7 +126,9 @@ public class Storage {
         }
     }
 
-    /** Validates the type, completion state, and field count of a storage record. */
+    /**
+     * Validates the type, completion state, and field count of a storage record.
+     */
     private static void validateRecord(String[] fields) {
         if (fields.length < 2 || !(fields[1].equals("0") || fields[1].equals("1"))) {
             throw new IllegalArgumentException("Invalid task status");
@@ -137,12 +145,16 @@ public class Storage {
         }
     }
 
-    /** Encodes user-entered text so it cannot be confused with file delimiters. */
+    /**
+     * Encodes user-entered text so it cannot be confused with file delimiters.
+     */
     private static String encode(String text) {
         return Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));
     }
 
-    /** Decodes one Base64-encoded text field from the data file. */
+    /**
+     * Decodes one Base64-encoded text field from the data file.
+     */
     private static String decode(String text) {
         byte[] decodedBytes = Base64.getDecoder().decode(text);
         return new String(decodedBytes, StandardCharsets.UTF_8);

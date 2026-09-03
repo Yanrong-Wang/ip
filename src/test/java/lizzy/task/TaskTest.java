@@ -8,7 +8,9 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-/** Tests shared task completion state and the default non-scheduled behavior. */
+/**
+ * Tests shared task completion state and the default non-scheduled behavior.
+ */
 public class TaskTest {
     @Test
     void markAndUnmark_completionStatusChangesAccordingly() {

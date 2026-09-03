@@ -22,18 +22,22 @@ import lizzy.task.Todo;
  * Parses Lizzy's command language and validates its command-specific arguments.
  */
 public class Parser {
-    private static final String EMPTY_INPUT_ERROR = "Silence may be elegant, but it gives me very little to work with.\n"
-            + "Try: todo <description>, list, or another command.";
+    private static final String EMPTY_INPUT_ERROR =
+            "Silence may be elegant, but it gives me very little to work with.\n"
+                    + "Try: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
             + "Use: todo <description>.";
     private static final String INVALID_DEADLINE_ERROR = "Something seems to be missing from this deadline.\n"
             + "Use: deadline <description> /by <yyyy-MM-dd>.";
-    private static final String INVALID_EVENT_ERROR = "This event appears to be missing part of its arrangement.\n"
-            + "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+    private static final String INVALID_EVENT_ERROR =
+            "This event appears to be missing part of its arrangement.\n"
+                    + "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
     private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
             + "Use dates in yyyy-MM-dd format, for example 2019-10-15.";
 
-    /** Prevents instantiation because parsing is stateless. */
+    /**
+     * Prevents instantiation because parsing is stateless.
+     */
     private Parser() {
     }
 
@@ -172,7 +176,9 @@ public class Parser {
         }
     }
 
-    /** Parses one strictly formatted ISO date for a deadline, event, or schedule search. */
+    /**
+     * Parses one strictly formatted ISO date for a deadline, event, or schedule search.
+     */
     private static LocalDate parseDate(String dateText) throws LizzyException {
         try {
             return LocalDate.parse(dateText.strip());
@@ -181,7 +187,9 @@ public class Parser {
         }
     }
 
-    /** Splits an argument around one required separator. */
+    /**
+     * Splits an argument around one required separator.
+     */
     private static String[] splitExactly(String argument, String separatorPattern, String errorMessage)
             throws LizzyException {
         String[] parts = argument.split(separatorPattern, -1);
@@ -191,13 +199,17 @@ public class Parser {
         return parts;
     }
 
-    /** Creates an exception for an unrecognised command. */
+    /**
+     * Creates an exception for an unrecognised command.
+     */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
                 + "Try todo, deadline, event, list, on, mark, unmark, delete, or bye.");
     }
 
-    /** Creates an exception for a missing or malformed task number. */
+    /**
+     * Creates an exception for a missing or malformed task number.
+     */
     private static LizzyException invalidTaskNumber(String command) {
         return new LizzyException("I'm afraid that will not quite do; I need a proper task number.\n"
                 + "Use: " + command + " <task number>.");

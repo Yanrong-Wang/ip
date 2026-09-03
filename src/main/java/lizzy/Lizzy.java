@@ -15,15 +15,21 @@ import lizzy.ui.Ui;
 public class Lizzy {
     private static final Path DATA_FILE_PATH = Path.of(
             System.getProperty("lizzy.data.path", "data/lizzy.txt"));
-    /** The component responsible for all console interaction. */
+    /**
+     * The component responsible for all console interaction.
+     */
     private final Ui ui;
 
-    /** Creates Lizzy with its standard console UI. */
+    /**
+     * Creates Lizzy with its standard console UI.
+     */
     public Lizzy() {
         ui = new Ui();
     }
 
-    /** Runs Lizzy until the user enters {@code bye} or closes standard input. */
+    /**
+     * Runs Lizzy until the user enters {@code bye} or closes standard input.
+     */
     public void run() {
         ui.showWelcome();
         Storage storage = new Storage(DATA_FILE_PATH);
@@ -52,7 +58,9 @@ public class Lizzy {
         }
     }
 
-    /** Starts the Lizzy application. */
+    /**
+     * Starts the Lizzy application.
+     */
     public static void main(String[] args) {
         new Lizzy().run();
     }

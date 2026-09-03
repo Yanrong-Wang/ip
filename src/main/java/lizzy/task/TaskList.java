@@ -9,10 +9,14 @@ import lizzy.exception.LizzyException;
  * Owns Lizzy's ordered collection of tasks and its list-related operations.
  */
 public class TaskList {
-    /** The tasks in the order they were added. */
+    /**
+     * The tasks in the order they were added.
+     */
     private final List<Task> tasks;
 
-    /** Creates an empty task list. */
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
         this(new ArrayList<>());
     }
@@ -26,22 +30,30 @@ public class TaskList {
         this.tasks = new ArrayList<>(tasks);
     }
 
-    /** Adds a task to the end of the list. */
+    /**
+     * Adds a task to the end of the list.
+     */
     public void add(Task task) {
         tasks.add(task);
     }
 
-    /** Returns the task at a zero-based position for presentation purposes. */
+    /**
+     * Returns the task at a zero-based position for presentation purposes.
+     */
     public Task get(int index) {
         return tasks.get(index);
     }
 
-    /** Returns the most recently added task. */
+    /**
+     * Returns the most recently added task.
+     */
     public Task getLast() {
         return tasks.getLast();
     }
 
-    /** Returns the number of tasks in the list. */
+    /**
+     * Returns the number of tasks in the list.
+     */
     public int size() {
         return tasks.size();
     }
@@ -72,12 +84,16 @@ public class TaskList {
         return tasks.remove(taskNumber - 1);
     }
 
-    /** Returns an immutable snapshot for saving to storage. */
+    /**
+     * Returns an immutable snapshot for saving to storage.
+     */
     public List<Task> asList() {
         return List.copyOf(tasks);
     }
 
-    /** Validates that a one-based task number exists in this list. */
+    /**
+     * Validates that a one-based task number exists in this list.
+     */
     private void validateTaskNumber(int taskNumber, String command) throws LizzyException {
         if (tasks.isEmpty()) {
             throw new LizzyException("There is very little to " + command

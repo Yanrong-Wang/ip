@@ -4,7 +4,9 @@ package lizzy.exception;
  * Represents an input error that Lizzy can explain to the user without ending the session.
  */
 public class LizzyException extends Exception {
-    /** Version identifier for Java exception serialization. */
+    /**
+     * Version identifier for Java exception serialization.
+     */
     private static final long serialVersionUID = 1L;
 
     /**

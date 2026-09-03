@@ -6,17 +6,25 @@ import lizzy.task.Task;
 import lizzy.task.TaskList;
 import lizzy.ui.Ui;
 
-/** Deletes one numbered task from the task list. */
+/**
+ * Deletes one numbered task from the task list.
+ */
 public class DeleteCommand extends Command {
-    /** The one-based task number to delete. */
+    /**
+     * The one-based task number to delete.
+     */
     private final int taskNumber;
 
-    /** Creates a command that deletes the supplied task number. */
+    /**
+     * Creates a command that deletes the supplied task number.
+     */
     public DeleteCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }
 
-    /** Deletes, saves, and confirms the referenced task. */
+    /**
+     * Deletes, saves, and confirms the referenced task.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         Task task = tasks.deleteTask(taskNumber, "delete");

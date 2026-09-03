@@ -21,7 +21,9 @@ import lizzy.task.Event;
 import lizzy.task.Task;
 import lizzy.task.Todo;
 
-/** Tests task-file creation, round-trip persistence, and invalid-data handling. */
+/**
+ * Tests task-file creation, round-trip persistence, and invalid-data handling.
+ */
 public class StorageTest {
     @TempDir
     Path temporaryDirectory;
