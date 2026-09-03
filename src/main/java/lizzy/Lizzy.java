@@ -13,6 +13,7 @@ import lizzy.ui.Ui;
  * The entry point and application coordinator for the Lizzy chatbot.
  */
 public class Lizzy {
+    /** The path used for persistent task data unless the caller overrides it with a system property. */
     private static final Path DATA_FILE_PATH = Path.of(
             System.getProperty("lizzy.data.path", "data/lizzy.txt"));
     /** The component responsible for all console interaction. */
@@ -52,7 +53,11 @@ public class Lizzy {
         }
     }
 
-    /** Starts the Lizzy application. */
+    /**
+     * Starts the Lizzy application.
+     *
+     * @param args command-line arguments, which Lizzy does not use
+     */
     public static void main(String[] args) {
         new Lizzy().run();
     }

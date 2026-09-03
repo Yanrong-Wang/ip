@@ -172,7 +172,13 @@ public class Parser {
         }
     }
 
-    /** Parses one strictly formatted ISO date for a deadline, event, or schedule search. */
+    /**
+     * Parses one strictly formatted ISO date for a deadline, event, or schedule search.
+     *
+     * @param dateText the user-supplied ISO date text
+     * @return the parsed calendar date
+     * @throws LizzyException if the text is not a valid ISO date
+     */
     private static LocalDate parseDate(String dateText) throws LizzyException {
         try {
             return LocalDate.parse(dateText.strip());
@@ -181,7 +187,15 @@ public class Parser {
         }
     }
 
-    /** Splits an argument around one required separator. */
+    /**
+     * Splits an argument around one required separator and rejects missing or repeated separators.
+     *
+     * @param argument the complete command argument
+     * @param separatorPattern the regular expression for the required separator
+     * @param errorMessage the user-facing message for invalid input
+     * @return the two argument parts on either side of the separator
+     * @throws LizzyException if the separator does not produce exactly two parts
+     */
     private static String[] splitExactly(String argument, String separatorPattern, String errorMessage)
             throws LizzyException {
         String[] parts = argument.split(separatorPattern, -1);
@@ -191,13 +205,23 @@ public class Parser {
         return parts;
     }
 
-    /** Creates an exception for an unrecognised command. */
+    /**
+     * Creates an exception for an unrecognised command word.
+     *
+     * @param command the command word that was not recognised
+     * @return an exception explaining the supported commands
+     */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
                 + "Try todo, deadline, event, list, on, mark, unmark, delete, or bye.");
     }
 
-    /** Creates an exception for a missing or malformed task number. */
+    /**
+     * Creates an exception for a missing or malformed task number.
+     *
+     * @param command the command that requires a task number
+     * @return an exception explaining the expected task-number syntax
+     */
     private static LizzyException invalidTaskNumber(String command) {
         return new LizzyException("I'm afraid that will not quite do; I need a proper task number.\n"
                 + "Use: " + command + " <task number>.");

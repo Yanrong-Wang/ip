@@ -11,7 +11,11 @@ public class TodoCommand extends Command {
     /** The todo to add. */
     private final Todo todo;
 
-    /** Creates a command that adds the supplied todo. */
+    /**
+     * Creates a command that adds the supplied todo.
+     *
+     * @param todo the todo to add
+     */
     public TodoCommand(Todo todo) {
         this.todo = todo;
     }
