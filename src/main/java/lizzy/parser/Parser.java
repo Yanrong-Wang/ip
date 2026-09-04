@@ -44,9 +44,9 @@ public class Parser {
     /**
      * Separates a supported command word from its argument.
      *
-     * @param fullCommand the complete line entered by the user
-     * @return the command ready to execute
-     * @throws LizzyException if the line is empty or the command word is unknown
+     * @param fullCommand the complete line entered by the user.
+     * @return the command ready to execute.
+     * @throws LizzyException if the line is empty or the command word is unknown.
      */
     public static Command parse(String fullCommand) throws LizzyException {
         if (fullCommand.isEmpty()) {
@@ -80,9 +80,9 @@ public class Parser {
     /**
      * Parses the argument of a todo command into a task.
      *
-     * @param description the todo description
-     * @return a new incomplete todo
-     * @throws LizzyException if the description is blank
+     * @param description the todo description.
+     * @return a new incomplete todo.
+     * @throws LizzyException if the description is blank.
      */
     private static Todo parseTodo(String description) throws LizzyException {
         if (description.isBlank()) {
@@ -94,9 +94,9 @@ public class Parser {
     /**
      * Parses the argument of a deadline command into a task.
      *
-     * @param argument the deadline description and /by date
-     * @return a new incomplete deadline
-     * @throws LizzyException if the argument is incomplete or its date is invalid
+     * @param argument the deadline description and /by date.
+     * @return a new incomplete deadline.
+     * @throws LizzyException if the argument is incomplete or its date is invalid.
      */
     private static Deadline parseDeadline(String argument) throws LizzyException {
         String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
@@ -109,9 +109,9 @@ public class Parser {
     /**
      * Parses the argument of an event command into a task.
      *
-     * @param argument the event description and /from and /to dates
-     * @return a new incomplete event
-     * @throws LizzyException if the argument is incomplete, invalid, or ends before it begins
+     * @param argument the event description and /from and /to dates.
+     * @return a new incomplete event.
+     * @throws LizzyException if the argument is incomplete, invalid, or ends before it begins.
      */
     private static Event parseEvent(String argument) throws LizzyException {
         String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
@@ -131,9 +131,9 @@ public class Parser {
     /**
      * Validates the keyword used to search task descriptions.
      *
-     * @param argument the user-supplied keyword
-     * @return the trimmed keyword
-     * @throws LizzyException if no keyword was supplied
+     * @param argument the user-supplied keyword.
+     * @return the trimmed keyword.
+     * @throws LizzyException if no keyword was supplied.
      */
     private static String parseFindKeyword(String argument) throws LizzyException {
         if (argument.isBlank()) {
@@ -145,9 +145,9 @@ public class Parser {
     /**
      * Parses the date used by the on command.
      *
-     * @param argument the supplied date text
-     * @return the requested date
-     * @throws LizzyException if the date is missing or malformed
+     * @param argument the supplied date text.
+     * @return the requested date.
+     * @throws LizzyException if the date is missing or malformed.
      */
     private static LocalDate parseOnDate(String argument) throws LizzyException {
         if (argument.isBlank()) {
@@ -160,10 +160,10 @@ public class Parser {
     /**
      * Parses a one-based task number for a command.
      *
-     * @param argument the supplied task number
-     * @param command the command requesting the number
-     * @return the parsed task number
-     * @throws LizzyException if the number is missing or malformed
+     * @param argument the supplied task number.
+     * @param command the command requesting the number.
+     * @return the parsed task number.
+     * @throws LizzyException if the number is missing or malformed.
      */
     private static int parseTaskNumber(String argument, String command) throws LizzyException {
         if (argument.isBlank()) {
@@ -179,10 +179,10 @@ public class Parser {
     /**
      * Ensures a command that takes no argument has not received one.
      *
-     * @param argument the supplied argument
-     * @param firstSentence the first line of the validation error
-     * @param command the command's name
-     * @throws LizzyException if an argument was supplied
+     * @param argument the supplied argument.
+     * @param firstSentence the first line of the validation error.
+     * @param command the command's name.
+     * @throws LizzyException if an argument was supplied.
      */
     private static void requireNoArgument(String argument, String firstSentence, String command)
             throws LizzyException {
@@ -194,9 +194,9 @@ public class Parser {
     /**
      * Parses one strictly formatted ISO date for a deadline, event, or schedule search.
      *
-     * @param dateText the user-supplied ISO date text
-     * @return the parsed calendar date
-     * @throws LizzyException if the text is not a valid ISO date
+     * @param dateText the user-supplied ISO date text.
+     * @return the parsed calendar date.
+     * @throws LizzyException if the text is not a valid ISO date.
      */
     private static LocalDate parseDate(String dateText) throws LizzyException {
         try {
@@ -209,11 +209,11 @@ public class Parser {
     /**
      * Splits an argument around one required separator and rejects missing or repeated separators.
      *
-     * @param argument the complete command argument
-     * @param separatorPattern the regular expression for the required separator
-     * @param errorMessage the user-facing message for invalid input
-     * @return the two argument parts on either side of the separator
-     * @throws LizzyException if the separator does not produce exactly two parts
+     * @param argument the complete command argument.
+     * @param separatorPattern the regular expression for the required separator.
+     * @param errorMessage the user-facing message for invalid input.
+     * @return the two argument parts on either side of the separator.
+     * @throws LizzyException if the separator does not produce exactly two parts.
      */
     private static String[] splitExactly(String argument, String separatorPattern, String errorMessage)
             throws LizzyException {
@@ -227,8 +227,8 @@ public class Parser {
     /**
      * Creates an exception for an unrecognised command word.
      *
-     * @param command the command word that was not recognised
-     * @return an exception explaining the supported commands
+     * @param command the command word that was not recognised.
+     * @return an exception explaining the supported commands.
      */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
@@ -238,8 +238,8 @@ public class Parser {
     /**
      * Creates an exception for a missing or malformed task number.
      *
-     * @param command the command that requires a task number
-     * @return an exception explaining the expected task-number syntax
+     * @param command the command that requires a task number.
+     * @return an exception explaining the expected task-number syntax.
      */
     private static LizzyException invalidTaskNumber(String command) {
         return new LizzyException("I'm afraid that will not quite do; I need a proper task number.\n"

@@ -192,18 +192,18 @@ public class Ui {
      * @param date the requested calendar date
      */
     public void showTasksOnDate(TaskList tasks, LocalDate date) {
-        boolean foundTask = false;
+        boolean hasFoundTask = false;
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).occursOn(date)) {
-                if (!foundTask) {
+                if (!hasFoundTask) {
                     System.out.println("Here are the deadlines and events scheduled on "
                             + date.format(DISPLAY_DATE_FORMAT) + ":");
-                    foundTask = true;
+                    hasFoundTask = true;
                 }
                 System.out.println((i + 1) + "." + tasks.get(i));
             }
         }
-        if (!foundTask) {
+        if (!hasFoundTask) {
             System.out.println("There are no deadlines or events scheduled on "
                     + date.format(DISPLAY_DATE_FORMAT) + ".");
         }

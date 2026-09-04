@@ -76,9 +76,9 @@ public class Event extends Task {
     }
 
     /**
-     * Returns this event with its type marker and time range.
+     * Returns a display-ready representation of this event.
      *
-     * @return the event's display-ready representation
+     * @return the event type marker, completion status, description, and formatted date range.
      */
     @Override
     public String toString() {

@@ -59,9 +59,9 @@ public class Deadline extends Task {
     }
 
     /**
-     * Returns this deadline with its type marker and deadline text.
+     * Returns a display-ready representation of this deadline.
      *
-     * @return the deadline's display-ready representation
+     * @return the deadline type marker, completion status, description, and formatted deadline date.
      */
     @Override
     public String toString() {
