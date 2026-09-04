@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root alignment="TOP_LEFT" maxWidth="Infinity" spacing="8.0"
+         type="javafx.scene.layout.HBox"
+         xmlns="http://javafx.com/javafx/17"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+    </padding>
+    <Label fx:id="speaker" minWidth="52.0" styleClass="speaker" />
+    <Label fx:id="dialog" maxWidth="330.0" minHeight="-Infinity"
+           styleClass="message" text="Message" wrapText="true" />
+</fx:root>
