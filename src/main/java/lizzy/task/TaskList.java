@@ -36,6 +36,7 @@ public class TaskList {
      * @param task the task to add
      */
     public void add(Task task) {
+        assert task != null : "A task list cannot contain a null task.";
         tasks.add(task);
     }
 
@@ -46,6 +47,7 @@ public class TaskList {
      * @return the task at that position
      */
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size() : "A list-display index must refer to an existing task.";
         return tasks.get(index);
     }
 
@@ -55,6 +57,7 @@ public class TaskList {
      * @return the last task in the list
      */
     public Task getLast() {
+        assert !tasks.isEmpty() : "The last task can be requested only from a non-empty list.";
         return tasks.getLast();
     }
 
@@ -93,6 +96,8 @@ public class TaskList {
      */
     public Task getTask(int taskNumber, String command) throws LizzyException {
         validateTaskNumber(taskNumber, command);
+        assert taskNumber >= 1 && taskNumber <= tasks.size()
+                : "A validated task number must refer to an existing task.";
         return tasks.get(taskNumber - 1);
     }
 
@@ -106,6 +111,8 @@ public class TaskList {
      */
     public Task deleteTask(int taskNumber, String command) throws LizzyException {
         validateTaskNumber(taskNumber, command);
+        assert taskNumber >= 1 && taskNumber <= tasks.size()
+                : "A validated task number must refer to an existing task.";
         return tasks.remove(taskNumber - 1);
     }
 
