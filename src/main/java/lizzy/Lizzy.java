@@ -90,7 +90,7 @@ public class Lizzy {
      * Executes one command and returns the text Lizzy would display for it.
      *
      * @param input the command entered through the graphical interface
-     * @return Lizzy's response without console divider lines
+     * @return Lizzy's response without console divider lines, using LF line separators
      */
     public String getResponse(String input) {
         ByteArrayOutputStream responseBytes = new ByteArrayOutputStream();
@@ -98,7 +98,8 @@ public class Lizzy {
             Ui responseUi = new Ui(InputStream.nullInputStream(), responseStream);
             executeCommand(input.strip(), responseUi);
         }
-        return responseBytes.toString(StandardCharsets.UTF_8).stripTrailing();
+        String response = responseBytes.toString(StandardCharsets.UTF_8);
+        return response.replace("\r\n", "\n").stripTrailing();
     }
 
     /**
