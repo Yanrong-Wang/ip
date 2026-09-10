@@ -2,6 +2,7 @@ package lizzy.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import lizzy.exception.LizzyException;
 
@@ -74,13 +75,11 @@ public class TaskList {
      * @return the matching task numbers in task-list order
      */
     public List<Integer> findMatchingTaskNumbers(String keyword) {
-        List<Integer> taskNumbers = new ArrayList<>();
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getDescription().contains(keyword)) {
-                taskNumbers.add(i + 1);
-            }
-        }
-        return List.copyOf(taskNumbers);
+        return IntStream.range(0, tasks.size())
+                .filter(index -> tasks.get(index).getDescription().contains(keyword))
+                .map(index -> index + 1)
+                .boxed()
+                .toList();
     }
 
     /**
