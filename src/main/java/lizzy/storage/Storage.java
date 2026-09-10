@@ -21,6 +21,11 @@ import lizzy.task.Todo;
 public class Storage {
     private static final String FIELD_SEPARATOR = " | ";
     private static final String FIELD_SEPARATOR_PATTERN = "\\s*\\|\\s*";
+    private static final String TODO_RECORD_TYPE = "T";
+    private static final String DEADLINE_RECORD_TYPE = "D";
+    private static final String EVENT_RECORD_TYPE = "E";
+    private static final String INCOMPLETE_STATUS = "0";
+    private static final String COMPLETE_STATUS = "1";
 
     /**
      * The relative or user-configured path of the task data file.
@@ -95,17 +100,17 @@ public class Storage {
      * @return one complete line for the data file
      */
     private static String serialize(Task task) {
-        String status = task.isDone() ? "1" : "0";
+        String status = task.isDone() ? COMPLETE_STATUS : INCOMPLETE_STATUS;
         String description = encode(task.getDescription());
         if (task instanceof Deadline deadline) {
-            return String.join(FIELD_SEPARATOR, "D", status, description,
+            return String.join(FIELD_SEPARATOR, DEADLINE_RECORD_TYPE, status, description,
                     encode(deadline.getBy().toString()));
         }
         if (task instanceof Event event) {
-            return String.join(FIELD_SEPARATOR, "E", status, description,
+            return String.join(FIELD_SEPARATOR, EVENT_RECORD_TYPE, status, description,
                     encode(event.getFrom().toString()), encode(event.getTo().toString()));
         }
-        return String.join(FIELD_SEPARATOR, "T", status, description);
+        return String.join(FIELD_SEPARATOR, TODO_RECORD_TYPE, status, description);
     }
 
     /**
@@ -120,12 +125,12 @@ public class Storage {
         String[] fields = line.split(FIELD_SEPARATOR_PATTERN, -1);
         try {
             validateRecord(fields);
-            boolean isDone = fields[1].equals("1");
+            boolean isDone = fields[1].equals(COMPLETE_STATUS);
             String description = decode(fields[2]);
             return switch (fields[0]) {
-                case "T" -> new Todo(description, isDone);
-                case "D" -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
-                case "E" -> new Event(description, LocalDate.parse(decode(fields[3])),
+                case TODO_RECORD_TYPE -> new Todo(description, isDone);
+                case DEADLINE_RECORD_TYPE -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
+                case EVENT_RECORD_TYPE -> new Event(description, LocalDate.parse(decode(fields[3])),
                         LocalDate.parse(decode(fields[4])), isDone);
                 default -> throw new IllegalArgumentException("Unknown task type");
             };
@@ -142,19 +147,29 @@ public class Storage {
      * @throws IllegalArgumentException if the record cannot represent a supported task
      */
     private static void validateRecord(String[] fields) {
-        if (fields.length < 2 || !(fields[1].equals("0") || fields[1].equals("1"))) {
+        if (fields.length < 2 || !isValidStatus(fields[1])) {
             throw new IllegalArgumentException("Invalid task status");
         }
 
         int expectedFieldCount = switch (fields[0]) {
-            case "T" -> 3;
-            case "D" -> 4;
-            case "E" -> 5;
+            case TODO_RECORD_TYPE -> 3;
+            case DEADLINE_RECORD_TYPE -> 4;
+            case EVENT_RECORD_TYPE -> 5;
             default -> throw new IllegalArgumentException("Unknown task type");
         };
         if (fields.length != expectedFieldCount) {
             throw new IllegalArgumentException("Invalid field count");
         }
+    }
+
+    /**
+     * Returns whether a stored completion marker is supported.
+     *
+     * @param status the completion marker from a storage record
+     * @return {@code true} if the marker represents a complete or incomplete task
+     */
+    private static boolean isValidStatus(String status) {
+        return status.equals(INCOMPLETE_STATUS) || status.equals(COMPLETE_STATUS);
     }
 
     /**
