@@ -57,7 +57,8 @@ public class TaskListTest {
         TaskList emptyTasks = new TaskList();
         TaskList oneTask = new TaskList(List.of(new Todo("first")));
 
-        assertTaskNumberError(emptyTasks, 1, "mark", "Add a task first.");
+        assertTaskNumberError(emptyTasks, 1, "mark",
+                "Add a task first, and then we shall have something to mark.");
         assertTaskNumberError(oneTask, 0, "mark", "Choose a task number from 1 to 1.");
         assertTaskNumberError(oneTask, 2, "mark", "Choose a task number from 1 to 1.");
     }

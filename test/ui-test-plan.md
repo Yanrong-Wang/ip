@@ -34,8 +34,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -63,16 +63,16 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] read book
   ____________________________________________________________
   ____________________________________________________________
@@ -104,29 +104,29 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] submit report (by: Aug 30 2026)
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement! I have reserved it a place:
+  An engagement! I've added it to your list:
     [E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [D][X] submit report (by: Aug 30 2026)
   ____________________________________________________________
   ____________________________________________________________
-  No harm done—this matter wants our attention again:
+  Ah, it seems this matter is not quite settled:
     [D][ ] submit report (by: Aug 30 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[D][ ] submit report (by: Aug 30 2026)
   2.[E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   ____________________________________________________________
@@ -155,11 +155,11 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Your list is perfectly untroubled—there is nothing on it.
+  Your list is blissfully free of obligations.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -190,28 +190,28 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] revise notes
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [T][X] revise notes
   ____________________________________________________________
   ____________________________________________________________
-  I cannot find that task in the present list.
+  An imaginative choice—but that task is not on the present list.
   Choose a task number from 1 to 1.
   ____________________________________________________________
   ____________________________________________________________
-  No harm done—this matter wants our attention again:
+  Ah, it seems this matter is not quite settled:
     [T][ ] revise notes
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] revise notes
   ____________________________________________________________
   ____________________________________________________________
@@ -244,34 +244,34 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] review lecture
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  This deadline is missing either its duty or its date.
-  Use: deadline <description> /by <yyyy-MM-dd>.
+  A deadline without both a duty and a date is merely suspense.
+  Set it out like this: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] prepare slides
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  This engagement needs a description, a beginning, and an end.
-  Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
+  An engagement without a beginning and an end is a mysterious affair.
+  Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] submit assignment (by: Aug 28 2026)
-  You now have 3 tasks in your list.
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] review lecture
   2.[T][ ] prepare slides
   3.[D][ ] submit assignment (by: Aug 28 2026)
@@ -314,66 +314,66 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  A thoughtful pause, but I still need a command.
-  Try: todo <description>, list, or another command.
+  Silence may be elegant, but it gives me very little to work with.
+  A little direction will do: todo <description>, list, or another command.
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  I do not believe I know the command "blah"—yet.
-  Try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.
+  I'm afraid "blah" is quite beyond my acquaintance.
+  You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.
   ____________________________________________________________
   ____________________________________________________________
-  Even the smallest task needs a description.
-  Use: todo <description>.
+  A task with nothing to do is hardly a task at all.
+  Give it some substance: todo <description>.
   ____________________________________________________________
   ____________________________________________________________
-  This deadline is missing either its duty or its date.
-  Use: deadline <description> /by <yyyy-MM-dd>.
+  A deadline without both a duty and a date is merely suspense.
+  Set it out like this: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] submit report (by: Aug 28 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  This engagement needs a description, a beginning, and an end.
-  Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
+  An engagement without a beginning and an end is a mysterious affair.
+  Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement! I have reserved it a place:
+  An engagement! I've added it to your list:
     [E][ ] meeting (from: Aug 29 2026 to: Aug 30 2026)
-  You now have 3 tasks in your list.
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Numbers are wonderfully unambiguous; I shall need one here.
-  Use: mark <task number>.
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: mark <task number>.
   ____________________________________________________________
   ____________________________________________________________
-  I cannot find that task in the present list.
+  An imaginative choice—but that task is not on the present list.
   Choose a task number from 1 to 3.
   ____________________________________________________________
   ____________________________________________________________
-  No harm done—this matter wants our attention again:
+  Ah, it seems this matter is not quite settled:
     [D][ ] submit report (by: Aug 28 2026)
   ____________________________________________________________
   ____________________________________________________________
-  The list needs no embellishment.
-  Use: list.
+  A list requires no further instruction.
+  A simple "list" will do.
   ____________________________________________________________
   ____________________________________________________________
-  One farewell is quite sufficient, thank you.
-  Use: bye.
+  One farewell at a time, if you please.
+  A simple "bye" will do.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] read book
   2.[D][ ] submit report (by: Aug 28 2026)
   3.[E][ ] meeting (from: Aug 29 2026 to: Aug 30 2026)
@@ -409,36 +409,36 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  There is nothing to mark while your list is empty.
-  Add a task first.
+  Ambitious—but there is nothing to mark while your list is empty.
+  Add a task first, and then we shall have something to mark.
   ____________________________________________________________
   ____________________________________________________________
-  There is nothing to unmark while your list is empty.
-  Add a task first.
+  Ambitious—but there is nothing to unmark while your list is empty.
+  Add a task first, and then we shall have something to unmark.
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] write report
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Numbers are wonderfully unambiguous; I shall need one here.
-  Use: unmark <task number>.
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: unmark <task number>.
   ____________________________________________________________
   ____________________________________________________________
-  I cannot find that task in the present list.
+  An imaginative choice—but that task is not on the present list.
   Choose a task number from 1 to 1.
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [T][X] write report
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][X] write report
   ____________________________________________________________
   ____________________________________________________________
@@ -476,57 +476,57 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  There is nothing to delete while your list is empty.
-  Add a task first.
+  Ambitious—but there is nothing to delete while your list is empty.
+  Add a task first, and then we shall have something to delete.
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] submit report (by: Aug 28 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement! I have reserved it a place:
+  An engagement! I've added it to your list:
     [E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
-  You now have 3 tasks in your list.
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [E][X] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Consider that matter dismissed:
+  That matter is off the list:
     [D][ ] submit report (by: Aug 28 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] read book
   2.[E][X] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
-  I cannot find that task in the present list.
+  An imaginative choice—but that task is not on the present list.
   Choose a task number from 1 to 2.
   ____________________________________________________________
   ____________________________________________________________
-  Numbers are wonderfully unambiguous; I shall need one here.
-  Use: delete <task number>.
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: delete <task number>.
   ____________________________________________________________
   ____________________________________________________________
-  Consider that matter dismissed:
+  That matter is off the list:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[E][X] project meeting (from: Aug 6 2026 to: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
@@ -558,31 +558,31 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] submit report (by: Aug 28 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement! I have reserved it a place:
+  An engagement! I've added it to your list:
     [E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
-  You now have 3 tasks in your list.
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Consider that matter dismissed:
+  That matter is off the list:
     [D][ ] submit report (by: Aug 28 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] read book
   2.[E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   ____________________________________________________________
@@ -612,16 +612,16 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [T][X] read book
   ____________________________________________________________
   ____________________________________________________________
@@ -650,11 +650,11 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][X] read book
   2.[D][ ] return book (by: Jun 6 2026)
   3.[E][ ] project meeting (from: Aug 6 2026 to: Aug 6 2026)
@@ -684,13 +684,13 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] first run
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -718,14 +718,14 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   I couldn't understand the saved task data at line 1.
   Starting with an empty task list for this session.
   ____________________________________________________________
   ____________________________________________________________
-  Your list is perfectly untroubled—there is nothing on it.
+  Your list is blissfully free of obligations.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -753,14 +753,14 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
   I updated your task list, but couldn't save it to _temp/ui-test-data/not-a-folder/lizzy.txt.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[T][ ] keep working
   ____________________________________________________________
   ____________________________________________________________
@@ -793,33 +793,33 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  That date has rather defeated me.
-  Use dates in yyyy-MM-dd format, for example 2019-10-15.
+  I couldn't understand that date.
+  Dates behave best as yyyy-MM-dd—for example, 2019-10-15.
   ____________________________________________________________
   ____________________________________________________________
-  That date has rather defeated me.
-  Use dates in yyyy-MM-dd format, for example 2019-10-15.
+  I couldn't understand that date.
+  Dates behave best as yyyy-MM-dd—for example, 2019-10-15.
   ____________________________________________________________
   ____________________________________________________________
-  Even the liveliest engagement cannot end before it begins.
-  Use an end date on or after the start date.
+  An event cannot end before it begins.
+  Let time keep its proper order: choose an end date on or after the start date.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] return book (by: Dec 2 2019)
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement! I have reserved it a place:
+  An engagement! I've added it to your list:
     [E][ ] workshop (from: Dec 2 2019 to: Dec 3 2019)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[D][ ] return book (by: Dec 2 2019)
   2.[E][ ] workshop (from: Dec 2 2019 to: Dec 3 2019)
   ____________________________________________________________
@@ -856,48 +856,48 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] buy milk
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] submit report (by: Sep 1 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement! I have reserved it a place:
+  An engagement! I've added it to your list:
     [E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
-  You now have 3 tasks in your list.
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] pay bill (by: Sep 4 2026)
-  You now have 4 tasks in your list.
+  That makes 4 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Tell me which date you wish to inspect.
-  Use: on <yyyy-MM-dd>.
+  A date is needed to consult the schedule.
+  Name the day like this: on <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
-  That date has rather defeated me.
-  Use dates in yyyy-MM-dd format, for example 2019-10-15.
+  I couldn't understand that date.
+  Dates behave best as yyyy-MM-dd—for example, 2019-10-15.
   ____________________________________________________________
   ____________________________________________________________
-  Here are the matters requiring attention on Sep 1 2026:
+  On Sep 1 2026, these matters have designs upon your time:
   2.[D][ ] submit report (by: Sep 1 2026)
   3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Here are the matters requiring attention on Sep 2 2026:
+  On Sep 2 2026, these matters have designs upon your time:
   3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
   ____________________________________________________________
   ____________________________________________________________
-  That date makes no demands upon you: Sep 5 2026.
+  Sep 5 2026 appears to make no demands upon you.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -929,31 +929,31 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  A useful interval; I have noted it:
+  A period to work within—I've added it to your list:
     [W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A useful interval must end no earlier than it begins.
-  Use an end date on or after the start date.
+  A completion period cannot end before it begins.
+  Keep the interval sensible: choose an end date on or after the start date.
   ____________________________________________________________
   ____________________________________________________________
-  Here are the matters requiring attention on Sep 10 2026:
+  On Sep 10 2026, these matters have designs upon your time:
   1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Here are the matters requiring attention on Sep 11 2026:
+  On Sep 11 2026, these matters have designs upon your time:
   1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
-  That date makes no demands upon you: Sep 13 2026.
+  Sep 13 2026 appears to make no demands upon you.
   ____________________________________________________________
   ____________________________________________________________
-  Here is your present list:
+  Let us see what presently claims your attention:
   1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
@@ -988,30 +988,30 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
    / /___/ / / /_/ /_/ /_/ /
   /_____/_/ /___/___/\__, /
                     /____/
-  Good day! I'm Elizabeth Bennet—Lizzy, if you please.
-  Tell me, what shall we set in order?
+  Hello! I'm Lizzy.
+  What brings you here today?
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] read book
-  You now have 1 task in your list.
+  That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline. Let us give it its proper attention:
+  A deadline, then. We'd better not keep it waiting.
     [D][ ] return book (by: Sep 6 2026)
-  You now have 2 tasks in your list.
+  That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Very well—one more matter worth remembering:
+  Here comes another matter to keep track of:
     [T][ ] buy milk
-  You now have 3 tasks in your list.
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [T][X] read book
   ____________________________________________________________
   ____________________________________________________________
-  Excellent. One less claim upon your attention:
+  Very good! That is one matter settled:
     [D][X] return book (by: Sep 6 2026)
   ____________________________________________________________
   ____________________________________________________________
@@ -1020,11 +1020,11 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   2.[D][X] return book (by: Sep 6 2026)
   ____________________________________________________________
   ____________________________________________________________
-  I found no task answering to that description.
+  Not a single task answers to that description.
   ____________________________________________________________
   ____________________________________________________________
-  Give me a word to look for.
-  Use: find <keyword>.
+  A keyword is needed to find a task.
+  Give me something to seek: find <keyword>.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
