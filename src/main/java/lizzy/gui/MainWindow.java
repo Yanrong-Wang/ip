@@ -38,7 +38,8 @@ public class MainWindow {
     public void setLizzy(Lizzy lizzy) {
         this.lizzy = lizzy;
         dialogContainer.getChildren().add(
-                DialogBox.getLizzyDialog("Hello! I'm Lizzy.\nWhat brings you here today?"));
+                DialogBox.getLizzyDialog("Good day! I'm Elizabeth Bennet—Lizzy, if you please.\n"
+                        + "Tell me, what shall we set in order?"));
     }
 
     /**

@@ -23,10 +23,10 @@ public class LizzyTest {
         String addResponse = lizzy.getResponse("todo test the GUI");
         String listResponse = lizzy.getResponse("list");
 
-        assertEquals("Here comes another matter to keep track of:\n"
+        assertEquals("Very well—one more matter worth remembering:\n"
                 + "  [T][ ] test the GUI\n"
-                + "Now you have 1 tasks in the list.", addResponse);
-        assertEquals("Here are the tasks in your list:\n"
+                + "You now have 1 task in your list.", addResponse);
+        assertEquals("Here is your present list:\n"
                 + "1.[T][ ] test the GUI", listResponse);
     }
 
@@ -36,8 +36,8 @@ public class LizzyTest {
 
         String response = lizzy.getResponse("unknown");
 
-        assertEquals("I'm afraid \"unknown\" is quite beyond my acquaintance.\n"
-                + "Try todo, deadline, event, within, list, on, mark, unmark, delete, or bye.", response);
+        assertEquals("I do not believe I know the command \"unknown\"—yet.\n"
+                + "Try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.", response);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class LizzyTest {
 
         Lizzy.Response response = lizzy.getResponseWithStatus("list");
 
-        assertEquals("Here are the tasks in your list:", response.text());
+        assertEquals("Your list is perfectly untroubled—there is nothing on it.", response.text());
         assertFalse(response.isError());
     }
 
@@ -56,7 +56,7 @@ public class LizzyTest {
 
         Lizzy.Response response = lizzy.getResponseWithStatus("dance");
 
-        assertTrue(response.text().startsWith("I'm afraid \"dance\" is quite beyond my acquaintance."));
+        assertTrue(response.text().startsWith("I do not believe I know the command \"dance\"—yet."));
         assertTrue(response.isError());
     }
 }

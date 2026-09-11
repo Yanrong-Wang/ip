@@ -19,8 +19,8 @@
             <padding>
                 <Insets bottom="12.0" left="18.0" right="18.0" top="12.0" />
             </padding>
-            <Label maxWidth="Infinity" text="Lizzy" styleClass="title" />
-            <Label maxWidth="Infinity" text="Your sensible companion for matters at hand"
+            <Label maxWidth="Infinity" text="Elizabeth “Lizzy” Bennet" styleClass="title" />
+            <Label maxWidth="Infinity" text="A lively mind for matters at hand"
                    styleClass="subtitle" />
         </VBox>
     </top>
@@ -41,7 +41,7 @@
                 <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
             </padding>
             <TextField fx:id="userInput" accessibleText="Command input"
-                       onAction="#handleUserInput" promptText="Enter a command…"
+                       onAction="#handleUserInput" promptText="What shall we attend to?"
                        HBox.hgrow="ALWAYS" />
             <Button fx:id="sendButton" defaultButton="true"
                     onAction="#handleUserInput" text="Send" />
