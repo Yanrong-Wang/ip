@@ -19,8 +19,8 @@
             <padding>
                 <Insets bottom="12.0" left="18.0" right="18.0" top="12.0" />
             </padding>
-            <Label maxWidth="Infinity" text="Elizabeth “Lizzy” Bennet" styleClass="title" />
-            <Label maxWidth="Infinity" text="A lively mind for matters at hand"
+            <Label maxWidth="Infinity" text="Lizzy" styleClass="title" />
+            <Label maxWidth="Infinity" text="Good sense, good humour, and matters in order"
                    styleClass="subtitle" />
         </VBox>
     </top>

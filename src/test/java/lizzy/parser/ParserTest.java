@@ -52,42 +52,44 @@ public class ParserTest {
 
     @Test
     void parse_emptyAndUnknownInput_exceptionsContainHelpfulMessages() {
-        assertParseFails("", "A thoughtful pause, but I still need a command.");
-        assertParseFails("postpone", "I do not believe I know the command \"postpone\"—yet.");
+        assertParseFails("", "Silence may be elegant, but it gives me very little to work with.");
+        assertParseFails("postpone", "I'm afraid \"postpone\" is quite beyond my acquaintance.");
     }
 
     @Test
     void parse_missingTaskDetails_exceptionsExplainRequiredSyntax() {
-        assertParseFails("todo", "Use: todo <description>.");
-        assertParseFails("deadline submit work", "Use: deadline <description> /by <yyyy-MM-dd>.");
-        assertParseFails("deadline /by 2026-09-04", "Use: deadline <description> /by <yyyy-MM-dd>.");
+        assertParseFails("todo", "Give it some substance: todo <description>.");
+        assertParseFails("deadline submit work",
+                "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
+        assertParseFails("deadline /by 2026-09-04",
+                "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
         assertParseFails("event consultation /from 2026-09-04",
-                "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+                "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("event /from 2026-09-04 /to 2026-09-05",
-                "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+                "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("within collect certificate /from 2026-09-04",
-                "Use: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
-        assertParseFails("find", "Use: find <keyword>.");
+                "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+        assertParseFails("find", "Give me something to seek: find <keyword>.");
     }
 
     @Test
     void parse_invalidDatesAndEventRange_exceptionsRejectInvalidSchedules() {
         assertParseFails("deadline submit work /by 2026-02-29",
-                "Use dates in yyyy-MM-dd format, for example 2019-10-15.");
-        assertParseFails("on", "Use: on <yyyy-MM-dd>.");
+                "Dates behave best as yyyy-MM-dd—for example, 2019-10-15.");
+        assertParseFails("on", "Name the day like this: on <yyyy-MM-dd>.");
         assertParseFails("event consultation /from 2026-09-05 /to 2026-09-04",
-                "Use an end date on or after the start date.");
+                "Let time keep its proper order: choose an end date on or after the start date.");
         assertParseFails("within collect certificate /from 2026-09-05 /to 2026-09-04",
-                "Use an end date on or after the start date.");
+                "Keep the interval sensible: choose an end date on or after the start date.");
     }
 
     @Test
     void parse_invalidTaskNumbersAndExtraArguments_exceptionsRejectInvalidCommands() {
-        assertParseFails("mark", "Use: mark <task number>.");
-        assertParseFails("unmark first", "Use: unmark <task number>.");
-        assertParseFails("delete 1 2", "Use: delete <task number>.");
-        assertParseFails("list now", "Use: list.");
-        assertParseFails("bye now", "Use: bye.");
+        assertParseFails("mark", "Be precise: mark <task number>.");
+        assertParseFails("unmark first", "Be precise: unmark <task number>.");
+        assertParseFails("delete 1 2", "Be precise: delete <task number>.");
+        assertParseFails("list now", "A simple \"list\" will do.");
+        assertParseFails("bye now", "A simple \"bye\" will do.");
     }
 
     private static void assertParseFails(String input, String expectedMessage) {

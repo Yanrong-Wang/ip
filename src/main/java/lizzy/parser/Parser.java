@@ -26,19 +26,21 @@ import lizzy.task.WithinPeriodTask;
  */
 public class Parser {
     private static final String EMPTY_INPUT_ERROR =
-            "A thoughtful pause, but I still need a command.\n"
-                    + "Try: todo <description>, list, or another command.";
-    private static final String INVALID_TODO_ERROR = "Even the smallest task needs a description.\n"
-            + "Use: todo <description>.";
-    private static final String INVALID_DEADLINE_ERROR = "This deadline is missing either its duty or its date.\n"
-            + "Use: deadline <description> /by <yyyy-MM-dd>.";
+            "Silence may be elegant, but it gives me very little to work with.\n"
+                    + "A little direction will do: todo <description>, list, or another command.";
+    private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
+            + "Give it some substance: todo <description>.";
+    private static final String INVALID_DEADLINE_ERROR =
+            "A deadline without both a duty and a date is merely suspense.\n"
+                    + "Set it out like this: deadline <description> /by <yyyy-MM-dd>.";
     private static final String INVALID_EVENT_ERROR =
-            "This engagement needs a description, a beginning, and an end.\n"
-            + "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
-    private static final String INVALID_WITHIN_ERROR = "This task needs both ends of its useful interval.\n"
-            + "Use: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
-    private static final String INVALID_DATE_ERROR = "That date has rather defeated me.\n"
-            + "Use dates in yyyy-MM-dd format, for example 2019-10-15.";
+            "An engagement without a beginning and an end is a mysterious affair.\n"
+                    + "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+    private static final String INVALID_WITHIN_ERROR =
+            "An interval, inconveniently, requires both a beginning and an end.\n"
+                    + "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+    private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
+            + "Dates behave best as yyyy-MM-dd—for example, 2019-10-15.";
 
     /**
      * Prevents instantiation because parsing is stateless.
@@ -63,7 +65,7 @@ public class Parser {
         String argument = commandParts.length == 2 ? commandParts[1].strip() : "";
         return switch (action) {
             case "list" -> {
-                requireNoArgument(argument, "The list needs no embellishment.", "list");
+                requireNoArgument(argument, "A list requires no further instruction.", "list");
                 yield new ListCommand();
             }
             case "on" -> new ViewScheduleCommand(parseOnDate(argument));
@@ -76,7 +78,7 @@ public class Parser {
             case "unmark" -> new UnmarkCommand(parseTaskNumber(argument, "unmark"));
             case "delete" -> new DeleteCommand(parseTaskNumber(argument, "delete"));
             case "bye" -> {
-                requireNoArgument(argument, "One farewell is quite sufficient, thank you.", "bye");
+                requireNoArgument(argument, "One farewell at a time, if you please.", "bye");
                 yield new ExitCommand();
             }
             default -> throw unknownCommand(action);
@@ -128,8 +130,8 @@ public class Parser {
         LocalDate eventStartDate = parseDate(timeParts[0]);
         LocalDate eventEndDate = parseDate(timeParts[1]);
         if (eventEndDate.isBefore(eventStartDate)) {
-            throw new LizzyException("Even the liveliest engagement cannot end before it begins.\n"
-                    + "Use an end date on or after the start date.");
+            throw new LizzyException("An event cannot end before it begins.\n"
+                    + "Let time keep its proper order: choose an end date on or after the start date.");
         }
         return new Event(eventParts[0].strip(), eventStartDate, eventEndDate);
     }
@@ -150,8 +152,8 @@ public class Parser {
         LocalDate periodStartDate = parseDate(dateParts[0]);
         LocalDate periodEndDate = parseDate(dateParts[1]);
         if (periodEndDate.isBefore(periodStartDate)) {
-            throw new LizzyException("A useful interval must end no earlier than it begins.\n"
-                    + "Use an end date on or after the start date.");
+            throw new LizzyException("A completion period cannot end before it begins.\n"
+                    + "Keep the interval sensible: choose an end date on or after the start date.");
         }
         return new WithinPeriodTask(periodParts[0].strip(), periodStartDate, periodEndDate);
     }
@@ -165,7 +167,8 @@ public class Parser {
      */
     private static String parseFindKeyword(String argument) throws LizzyException {
         if (argument.isBlank()) {
-            throw new LizzyException("Give me a word to look for.\nUse: find <keyword>.");
+            throw new LizzyException("A keyword is needed to find a task.\n"
+                    + "Give me something to seek: find <keyword>.");
         }
         return argument;
     }
@@ -179,8 +182,8 @@ public class Parser {
      */
     private static LocalDate parseOnDate(String argument) throws LizzyException {
         if (argument.isBlank()) {
-            throw new LizzyException("Tell me which date you wish to inspect.\n"
-                    + "Use: on <yyyy-MM-dd>.");
+            throw new LizzyException("A date is needed to consult the schedule.\n"
+                    + "Name the day like this: on <yyyy-MM-dd>.");
         }
         return parseDate(argument);
     }
@@ -215,7 +218,7 @@ public class Parser {
     private static void requireNoArgument(String argument, String firstSentence, String command)
             throws LizzyException {
         if (!argument.isBlank()) {
-            throw new LizzyException(firstSentence + "\nUse: " + command + ".");
+            throw new LizzyException(firstSentence + "\nA simple \"" + command + "\" will do.");
         }
     }
 
@@ -259,8 +262,8 @@ public class Parser {
      * @return an exception explaining the supported commands.
      */
     private static LizzyException unknownCommand(String command) {
-        return new LizzyException("I do not believe I know the command \"" + command + "\"—yet.\n"
-                + "Try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.");
+        return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
+                + "You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.");
     }
 
     /**
@@ -270,7 +273,7 @@ public class Parser {
      * @return an exception explaining the expected task-number syntax.
      */
     private static LizzyException invalidTaskNumber(String command) {
-        return new LizzyException("Numbers are wonderfully unambiguous; I shall need one here.\n"
-                + "Use: " + command + " <task number>.");
+        return new LizzyException("I'm afraid that will not quite do; I need a proper task number.\n"
+                + "Be precise: " + command + " <task number>.");
     }
 }

@@ -58,8 +58,8 @@ public class Ui {
                 + "                  /____/\n";
         showDivider();
         outputStream.print(banner);
-        outputStream.println("Good day! I'm Elizabeth Bennet—Lizzy, if you please.");
-        outputStream.println("Tell me, what shall we set in order?");
+        outputStream.println("Hello! I'm Lizzy.");
+        outputStream.println("What brings you here today?");
         showDivider();
     }
 
@@ -111,11 +111,11 @@ public class Ui {
      */
     public void showTaskList(TaskList tasks) {
         if (tasks.size() == 0) {
-            outputStream.println("Your list is perfectly untroubled—there is nothing on it.");
+            outputStream.println("Your list is blissfully free of obligations.");
             return;
         }
 
-        outputStream.println("Here is your present list:");
+        outputStream.println("Let us see what presently claims your attention:");
         for (int i = 0; i < tasks.size(); i++) {
             outputStream.println((i + 1) + "." + tasks.get(i));
         }
@@ -129,7 +129,7 @@ public class Ui {
      */
     public void showMatchingTasks(TaskList tasks, List<Integer> matchingTaskNumbers) {
         if (matchingTaskNumbers.isEmpty()) {
-            outputStream.println("I found no task answering to that description.");
+            outputStream.println("Not a single task answers to that description.");
             return;
         }
 
@@ -146,7 +146,7 @@ public class Ui {
      * @param numberOfTasks the new number of tasks in the list
      */
     public void showTodoAdded(Task task, int numberOfTasks) {
-        outputStream.println("Very well—one more matter worth remembering:");
+        outputStream.println("Here comes another matter to keep track of:");
         outputStream.println("  " + task);
         showTaskCount(numberOfTasks);
     }
@@ -158,7 +158,7 @@ public class Ui {
      * @param numberOfTasks the new number of tasks in the list
      */
     public void showDeadlineAdded(Task task, int numberOfTasks) {
-        outputStream.println("A deadline. Let us give it its proper attention:");
+        outputStream.println("A deadline, then. We'd better not keep it waiting.");
         outputStream.println("  " + task);
         showTaskCount(numberOfTasks);
     }
@@ -170,7 +170,7 @@ public class Ui {
      * @param numberOfTasks the new number of tasks in the list
      */
     public void showEventAdded(Task task, int numberOfTasks) {
-        outputStream.println("An engagement! I have reserved it a place:");
+        outputStream.println("An engagement! I've added it to your list:");
         outputStream.println("  " + task);
         showTaskCount(numberOfTasks);
     }
@@ -182,7 +182,7 @@ public class Ui {
      * @param numberOfTasks the new number of tasks in the list
      */
     public void showPeriodTaskAdded(Task task, int numberOfTasks) {
-        outputStream.println("A useful interval; I have noted it:");
+        outputStream.println("A period to work within—I've added it to your list:");
         outputStream.println("  " + task);
         showTaskCount(numberOfTasks);
     }
@@ -193,7 +193,7 @@ public class Ui {
      * @param task the task marked as complete
      */
     public void showTaskMarked(Task task) {
-        outputStream.println("Excellent. One less claim upon your attention:");
+        outputStream.println("Very good! That is one matter settled:");
         outputStream.println("  " + task);
     }
 
@@ -203,7 +203,7 @@ public class Ui {
      * @param task the task marked as incomplete
      */
     public void showTaskUnmarked(Task task) {
-        outputStream.println("No harm done—this matter wants our attention again:");
+        outputStream.println("Ah, it seems this matter is not quite settled:");
         outputStream.println("  " + task);
     }
 
@@ -214,7 +214,7 @@ public class Ui {
      * @param numberOfTasks the number of tasks remaining in the list
      */
     public void showTaskDeleted(Task task, int numberOfTasks) {
-        outputStream.println("Consider that matter dismissed:");
+        outputStream.println("That matter is off the list:");
         outputStream.println("  " + task);
         showTaskCount(numberOfTasks);
     }
@@ -230,16 +230,16 @@ public class Ui {
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).occursOn(date)) {
                 if (!hasFoundTask) {
-                    outputStream.println("Here are the matters requiring attention on "
-                            + date.format(DISPLAY_DATE_FORMAT) + ":");
+                    outputStream.println("On " + date.format(DISPLAY_DATE_FORMAT)
+                            + ", these matters have designs upon your time:");
                     hasFoundTask = true;
                 }
                 outputStream.println((i + 1) + "." + tasks.get(i));
             }
         }
         if (!hasFoundTask) {
-            outputStream.println("That date makes no demands upon you: "
-                    + date.format(DISPLAY_DATE_FORMAT) + ".");
+            outputStream.println(date.format(DISPLAY_DATE_FORMAT)
+                    + " appears to make no demands upon you.");
         }
     }
 
@@ -250,6 +250,6 @@ public class Ui {
      */
     private void showTaskCount(int numberOfTasks) {
         String taskNoun = numberOfTasks == 1 ? "task" : "tasks";
-        outputStream.println("You now have " + numberOfTasks + " " + taskNoun + " in your list.");
+        outputStream.println("That makes " + numberOfTasks + " " + taskNoun + " awaiting your attention.");
     }
 }
