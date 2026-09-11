@@ -328,7 +328,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   I'm afraid "blah" is quite beyond my acquaintance.
-  Try todo, deadline, event, list, on, mark, unmark, delete, or bye.
+  Try todo, deadline, event, within, list, on, mark, unmark, delete, or bye.
   ____________________________________________________________
   ____________________________________________________________
   A task with nothing to do is hardly a task at all.
@@ -828,7 +828,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ```
 
-### Find scheduled tasks on a date
+### Find dated tasks on a date
 - Aim: Verify date-based lookup for deadlines and inclusive event ranges, while excluding todos and retaining original task numbers.
 - Command:
   ```sh
@@ -888,16 +888,73 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Use dates in yyyy-MM-dd format, for example 2019-10-15.
   ____________________________________________________________
   ____________________________________________________________
-  Here are the deadlines and events scheduled on Sep 1 2026:
+  Here are the dated tasks relevant on Sep 1 2026:
   2.[D][ ] submit report (by: Sep 1 2026)
   3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Here are the deadlines and events scheduled on Sep 2 2026:
+  Here are the dated tasks relevant on Sep 2 2026:
   3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
   ____________________________________________________________
   ____________________________________________________________
-  There are no deadlines or events scheduled on Sep 5 2026.
+  There are no dated tasks relevant on Sep 5 2026.
+  ____________________________________________________________
+  ____________________________________________________________
+  Bye! I hope our next conversation will be just as agreeable.
+  ____________________________________________________________
+  ```
+
+### Add and view a task within a date period
+- Aim: Verify that a period task accepts inclusive dates, appears on each date in its period, is saved in the list, and rejects a reversed period.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  ```
+- Inputs:
+  ```text
+  within collect certificate /from 2026-09-10 /to 2026-09-12
+  within invalid period /from 2026-09-12 /to 2026-09-10
+  on 2026-09-10
+  on 2026-09-11
+  on 2026-09-13
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  A period to work within—I've added it to your list:
+    [W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
+  Now you have 1 tasks in the list.
+  ____________________________________________________________
+  ____________________________________________________________
+  A completion period cannot end before it begins.
+  Use an end date on or after the start date.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the dated tasks relevant on Sep 10 2026:
+  1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the dated tasks relevant on Sep 11 2026:
+  1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
+  ____________________________________________________________
+  ____________________________________________________________
+  There are no dated tasks relevant on Sep 13 2026.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here are the tasks in your list:
+  1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
   Bye! I hope our next conversation will be just as agreeable.

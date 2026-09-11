@@ -14,6 +14,7 @@ import lizzy.task.Deadline;
 import lizzy.task.Event;
 import lizzy.task.Task;
 import lizzy.task.Todo;
+import lizzy.task.WithinPeriodTask;
 
 /**
  * Saves Lizzy's task list in a text file on disk.
@@ -24,6 +25,7 @@ public class Storage {
     private static final String TODO_RECORD_TYPE = "T";
     private static final String DEADLINE_RECORD_TYPE = "D";
     private static final String EVENT_RECORD_TYPE = "E";
+    private static final String WITHIN_PERIOD_RECORD_TYPE = "W";
     private static final String INCOMPLETE_STATUS = "0";
     private static final String COMPLETE_STATUS = "1";
 
@@ -102,6 +104,10 @@ public class Storage {
     private static String serialize(Task task) {
         String status = task.isDone() ? COMPLETE_STATUS : INCOMPLETE_STATUS;
         String description = encode(task.getDescription());
+        if (task instanceof WithinPeriodTask periodTask) {
+            return String.join(FIELD_SEPARATOR, WITHIN_PERIOD_RECORD_TYPE, status, description,
+                    encode(periodTask.getFrom().toString()), encode(periodTask.getTo().toString()));
+        }
         if (task instanceof Deadline deadline) {
             return String.join(FIELD_SEPARATOR, DEADLINE_RECORD_TYPE, status, description,
                     encode(deadline.getBy().toString()));
@@ -132,6 +138,8 @@ public class Storage {
                 case DEADLINE_RECORD_TYPE -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
                 case EVENT_RECORD_TYPE -> new Event(description, LocalDate.parse(decode(fields[3])),
                         LocalDate.parse(decode(fields[4])), isDone);
+                case WITHIN_PERIOD_RECORD_TYPE -> new WithinPeriodTask(description,
+                        LocalDate.parse(decode(fields[3])), LocalDate.parse(decode(fields[4])), isDone);
                 default -> throw new IllegalArgumentException("Unknown task type");
             };
         } catch (IllegalArgumentException exception) {
@@ -155,6 +163,7 @@ public class Storage {
             case TODO_RECORD_TYPE -> 3;
             case DEADLINE_RECORD_TYPE -> 4;
             case EVENT_RECORD_TYPE -> 5;
+            case WITHIN_PERIOD_RECORD_TYPE -> 5;
             default -> throw new IllegalArgumentException("Unknown task type");
         };
         if (fields.length != expectedFieldCount) {

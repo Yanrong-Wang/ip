@@ -14,10 +14,12 @@ import lizzy.command.MarkCommand;
 import lizzy.command.TodoCommand;
 import lizzy.command.UnmarkCommand;
 import lizzy.command.ViewScheduleCommand;
+import lizzy.command.WithinPeriodCommand;
 import lizzy.exception.LizzyException;
 import lizzy.task.Deadline;
 import lizzy.task.Event;
 import lizzy.task.Todo;
+import lizzy.task.WithinPeriodTask;
 
 /**
  * Parses Lizzy's command language and validates its command-specific arguments.
@@ -32,6 +34,8 @@ public class Parser {
             + "Use: deadline <description> /by <yyyy-MM-dd>.";
     private static final String INVALID_EVENT_ERROR = "This event appears to be missing part of its arrangement.\n"
             + "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+    private static final String INVALID_WITHIN_ERROR = "This completion period appears to be incomplete.\n"
+            + "Use: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
     private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
             + "Use dates in yyyy-MM-dd format, for example 2019-10-15.";
 
@@ -65,6 +69,7 @@ public class Parser {
             case "todo" -> new TodoCommand(parseTodo(argument));
             case "deadline" -> new DeadlineCommand(parseDeadline(argument));
             case "event" -> new EventCommand(parseEvent(argument));
+            case "within" -> new WithinPeriodCommand(parseWithinPeriod(argument));
             case "find" -> new FindCommand(parseFindKeyword(argument));
             case "mark" -> new MarkCommand(parseTaskNumber(argument, "mark"));
             case "unmark" -> new UnmarkCommand(parseTaskNumber(argument, "unmark"));
@@ -126,6 +131,28 @@ public class Parser {
                     + "Use an end date on or after the start date.");
         }
         return new Event(eventParts[0].strip(), eventStartDate, eventEndDate);
+    }
+
+    /**
+     * Parses the argument of a within command into a task with an inclusive completion period.
+     *
+     * @param argument the task description and /from and /to dates
+     * @return a new incomplete period task
+     * @throws LizzyException if the argument is incomplete, invalid, or ends before it begins
+     */
+    private static WithinPeriodTask parseWithinPeriod(String argument) throws LizzyException {
+        String[] periodParts = splitExactly(argument, "\\s+/from\\s+", INVALID_WITHIN_ERROR);
+        String[] dateParts = splitExactly(periodParts[1], "\\s+/to\\s+", INVALID_WITHIN_ERROR);
+        if (periodParts[0].isBlank() || dateParts[0].isBlank() || dateParts[1].isBlank()) {
+            throw new LizzyException(INVALID_WITHIN_ERROR);
+        }
+        LocalDate periodStartDate = parseDate(dateParts[0]);
+        LocalDate periodEndDate = parseDate(dateParts[1]);
+        if (periodEndDate.isBefore(periodStartDate)) {
+            throw new LizzyException("A completion period cannot end before it begins.\n"
+                    + "Use an end date on or after the start date.");
+        }
+        return new WithinPeriodTask(periodParts[0].strip(), periodStartDate, periodEndDate);
     }
 
     /**
@@ -232,7 +259,7 @@ public class Parser {
      */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
-                + "Try todo, deadline, event, list, on, mark, unmark, delete, or bye.");
+                + "Try todo, deadline, event, within, list, on, mark, unmark, delete, or bye.");
     }
 
     /**

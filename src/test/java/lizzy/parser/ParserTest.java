@@ -16,6 +16,7 @@ import lizzy.command.MarkCommand;
 import lizzy.command.TodoCommand;
 import lizzy.command.UnmarkCommand;
 import lizzy.command.ViewScheduleCommand;
+import lizzy.command.WithinPeriodCommand;
 import lizzy.exception.LizzyException;
 
 /**
@@ -30,6 +31,8 @@ public class ParserTest {
         assertInstanceOf(DeadlineCommand.class, Parser.parse("deadline submit work /by 2026-09-04"));
         assertInstanceOf(EventCommand.class,
                 Parser.parse("event consultation /from 2026-09-04 /to 2026-09-05"));
+        assertInstanceOf(WithinPeriodCommand.class,
+                Parser.parse("within collect certificate /from 2026-09-04 /to 2026-09-05"));
         assertInstanceOf(FindCommand.class, Parser.parse("find notes"));
         assertInstanceOf(MarkCommand.class, Parser.parse("mark 1"));
         assertInstanceOf(UnmarkCommand.class, Parser.parse("unmark 1"));
@@ -43,6 +46,8 @@ public class ParserTest {
                 Parser.parse("deadline   submit work    /by    2026-09-04"));
         assertInstanceOf(EventCommand.class,
                 Parser.parse("event   consultation   /from   2026-09-04   /to   2026-09-05"));
+        assertInstanceOf(WithinPeriodCommand.class,
+                Parser.parse("within   collect certificate   /from   2026-09-04   /to   2026-09-05"));
     }
 
     @Test
@@ -60,6 +65,8 @@ public class ParserTest {
                 "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("event /from 2026-09-04 /to 2026-09-05",
                 "Use: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+        assertParseFails("within collect certificate /from 2026-09-04",
+                "Use: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("find", "Use: find <keyword>.");
     }
 
@@ -69,6 +76,8 @@ public class ParserTest {
                 "Use dates in yyyy-MM-dd format, for example 2019-10-15.");
         assertParseFails("on", "Use: on <yyyy-MM-dd>.");
         assertParseFails("event consultation /from 2026-09-05 /to 2026-09-04",
+                "Use an end date on or after the start date.");
+        assertParseFails("within collect certificate /from 2026-09-05 /to 2026-09-04",
                 "Use an end date on or after the start date.");
     }
 

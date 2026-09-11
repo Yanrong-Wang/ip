@@ -171,6 +171,18 @@ public class Ui {
     }
 
     /**
+     * Displays confirmation after adding a task with an inclusive completion period.
+     *
+     * @param task the period task that was added
+     * @param numberOfTasks the new number of tasks in the list
+     */
+    public void showPeriodTaskAdded(Task task, int numberOfTasks) {
+        outputStream.println("A period to work within—I've added it to your list:");
+        outputStream.println("  " + task);
+        showTaskCount(numberOfTasks);
+    }
+
+    /**
      * Displays confirmation after a task is marked as complete.
      *
      * @param task the task marked as complete
@@ -203,7 +215,7 @@ public class Ui {
     }
 
     /**
-     * Displays deadlines and events that occur on the specified date.
+     * Displays dated tasks that are relevant on the specified date.
      *
      * @param tasks the task list to search
      * @param date the requested calendar date
@@ -213,7 +225,7 @@ public class Ui {
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).occursOn(date)) {
                 if (!hasFoundTask) {
-                    outputStream.println("Here are the deadlines and events scheduled on "
+                    outputStream.println("Here are the dated tasks relevant on "
                             + date.format(DISPLAY_DATE_FORMAT) + ":");
                     hasFoundTask = true;
                 }
@@ -221,7 +233,7 @@ public class Ui {
             }
         }
         if (!hasFoundTask) {
-            outputStream.println("There are no deadlines or events scheduled on "
+            outputStream.println("There are no dated tasks relevant on "
                     + date.format(DISPLAY_DATE_FORMAT) + ".");
         }
     }
