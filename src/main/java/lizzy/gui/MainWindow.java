@@ -59,8 +59,11 @@ public class MainWindow {
         }
 
         dialogContainer.getChildren().add(DialogBox.getUserDialog(input));
-        String response = lizzy.getResponse(input);
-        dialogContainer.getChildren().add(DialogBox.getLizzyDialog(response));
+        Lizzy.Response response = lizzy.getResponseWithStatus(input);
+        DialogBox responseDialog = response.isError()
+                ? DialogBox.getErrorDialog(response.text())
+                : DialogBox.getLizzyDialog(response.text());
+        dialogContainer.getChildren().add(responseDialog);
         userInput.clear();
         userInput.requestFocus();
     }

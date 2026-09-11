@@ -29,8 +29,9 @@ public class Main extends Application {
         mainWindow.setLizzy(new Lizzy());
 
         stage.setTitle("Lizzy");
-        stage.setMinWidth(420);
-        stage.setMinHeight(560);
+        stage.setMinWidth(400);
+        stage.setMinHeight(480);
+        stage.setResizable(true);
         stage.setScene(new Scene(root));
         stage.show();
         mainWindow.focusInput();
