@@ -20,6 +20,7 @@ import lizzy.task.Deadline;
 import lizzy.task.Event;
 import lizzy.task.Task;
 import lizzy.task.Todo;
+import lizzy.task.WithinPeriodTask;
 
 /**
  * Tests task-file creation, round-trip persistence, and invalid-data handling.
@@ -43,11 +44,13 @@ public class StorageTest {
         Deadline deadline = new Deadline("submit report", LocalDate.of(2026, 9, 10));
         Event event = new Event("project meeting", LocalDate.of(2026, 9, 11),
                 LocalDate.of(2026, 9, 12), true);
+        WithinPeriodTask periodTask = new WithinPeriodTask("collect certificate", LocalDate.of(2026, 9, 13),
+                LocalDate.of(2026, 9, 15));
 
-        storage.save(List.of(todo, deadline, event));
+        storage.save(List.of(todo, deadline, event, periodTask));
         List<Task> loadedTasks = storage.load();
 
-        assertEquals(3, loadedTasks.size());
+        assertEquals(4, loadedTasks.size());
         Todo loadedTodo = assertInstanceOf(Todo.class, loadedTasks.get(0));
         assertEquals("read | reference", loadedTodo.getDescription());
         assertTrue(loadedTodo.isDone());
@@ -60,6 +63,11 @@ public class StorageTest {
         assertEquals(LocalDate.of(2026, 9, 11), loadedEvent.getFrom());
         assertEquals(LocalDate.of(2026, 9, 12), loadedEvent.getTo());
         assertTrue(loadedEvent.isDone());
+
+        WithinPeriodTask loadedPeriodTask = assertInstanceOf(WithinPeriodTask.class, loadedTasks.get(3));
+        assertEquals(LocalDate.of(2026, 9, 13), loadedPeriodTask.getFrom());
+        assertEquals(LocalDate.of(2026, 9, 15), loadedPeriodTask.getTo());
+        assertFalse(loadedPeriodTask.isDone());
         assertTrue(Files.exists(filePath));
     }
 

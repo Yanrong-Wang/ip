@@ -35,6 +35,6 @@ public class LizzyTest {
         String response = lizzy.getResponse("unknown");
 
         assertEquals("I'm afraid \"unknown\" is quite beyond my acquaintance.\n"
-                + "Try todo, deadline, event, list, on, mark, unmark, delete, or bye.", response);
+                + "Try todo, deadline, event, within, list, on, mark, unmark, delete, or bye.", response);
     }
 }
