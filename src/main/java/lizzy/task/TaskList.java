@@ -133,11 +133,11 @@ public class TaskList {
      */
     private void validateTaskNumber(int taskNumber, String command) throws LizzyException {
         if (tasks.isEmpty()) {
-            throw new LizzyException("There is very little to " + command
-                    + " when the list is entirely empty.\nAdd a task first.");
+            throw new LizzyException("There is nothing to " + command + " while your list is empty.\n"
+                    + "Add a task first.");
         }
         if (taskNumber < 1 || taskNumber > tasks.size()) {
-            throw new LizzyException("That task seems to exist only in your imagination.\n"
+            throw new LizzyException("I cannot find that task in the present list.\n"
                     + "Choose a task number from 1 to " + tasks.size() + ".");
         }
     }

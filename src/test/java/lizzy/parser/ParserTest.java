@@ -52,8 +52,8 @@ public class ParserTest {
 
     @Test
     void parse_emptyAndUnknownInput_exceptionsContainHelpfulMessages() {
-        assertParseFails("", "Silence may be elegant, but it gives me very little to work with.");
-        assertParseFails("postpone", "I'm afraid \"postpone\" is quite beyond my acquaintance.");
+        assertParseFails("", "A thoughtful pause, but I still need a command.");
+        assertParseFails("postpone", "I do not believe I know the command \"postpone\"—yet.");
     }
 
     @Test

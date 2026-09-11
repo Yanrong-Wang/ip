@@ -76,6 +76,7 @@ public class DialogBox extends HBox {
      */
     public static DialogBox getErrorDialog(String text) {
         DialogBox dialogBox = getLizzyDialog(text);
+        dialogBox.speaker.setText("A gentle correction");
         dialogBox.getStyleClass().add("error-dialog");
         return dialogBox;
     }
