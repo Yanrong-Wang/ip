@@ -1,6 +1,8 @@
 package lizzy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 
@@ -36,5 +38,25 @@ public class LizzyTest {
 
         assertEquals("I'm afraid \"unknown\" is quite beyond my acquaintance.\n"
                 + "Try todo, deadline, event, within, list, on, mark, unmark, delete, or bye.", response);
+    }
+
+    @Test
+    void getResponseWithStatus_validCommand_responseIsNotError() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+
+        Lizzy.Response response = lizzy.getResponseWithStatus("list");
+
+        assertEquals("Here are the tasks in your list:", response.text());
+        assertFalse(response.isError());
+    }
+
+    @Test
+    void getResponseWithStatus_invalidCommand_responseIsError() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+
+        Lizzy.Response response = lizzy.getResponseWithStatus("dance");
+
+        assertTrue(response.text().startsWith("I'm afraid \"dance\" is quite beyond my acquaintance."));
+        assertTrue(response.isError());
     }
 }

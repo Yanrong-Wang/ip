@@ -18,6 +18,24 @@ import lizzy.ui.Ui;
  */
 public class Lizzy {
     /**
+     * Contains the text and presentation category for one graphical-interface response.
+     *
+     * @param text the response text to display
+     * @param isError whether the response explains an invalid command
+     */
+    public record Response(String text, boolean isError) {
+    }
+
+    /**
+     * Describes how executing a command affects its session and presentation.
+     *
+     * @param isExit whether the command ends a console session
+     * @param isError whether executing the command produced an error
+     */
+    private record CommandStatus(boolean isExit, boolean isError) {
+    }
+
+    /**
      * The path used for persistent task data unless the caller overrides it with a system property.
      */
     private static final Path DATA_FILE_PATH = Path.of(
@@ -81,7 +99,7 @@ public class Lizzy {
         while (ui.hasNextCommand() && !isExit) {
             String command = ui.readCommand();
             ui.showDivider();
-            isExit = executeCommand(command, ui);
+            isExit = executeCommand(command, ui).isExit();
             ui.showDivider();
         }
     }
@@ -93,13 +111,24 @@ public class Lizzy {
      * @return Lizzy's response without console divider lines, using LF line separators
      */
     public String getResponse(String input) {
+        return getResponseWithStatus(input).text();
+    }
+
+    /**
+     * Executes one command and returns both its text and whether it is an error response.
+     *
+     * @param input the command entered through the graphical interface
+     * @return the response text and its presentation category
+     */
+    public Response getResponseWithStatus(String input) {
         ByteArrayOutputStream responseBytes = new ByteArrayOutputStream();
+        CommandStatus commandStatus;
         try (PrintStream responseStream = new PrintStream(responseBytes, true, StandardCharsets.UTF_8)) {
             Ui responseUi = new Ui(InputStream.nullInputStream(), responseStream);
-            executeCommand(input.strip(), responseUi);
+            commandStatus = executeCommand(input.strip(), responseUi);
         }
         String response = responseBytes.toString(StandardCharsets.UTF_8);
-        return response.replace("\r\n", "\n").stripTrailing();
+        return new Response(response.replace("\r\n", "\n").stripTrailing(), commandStatus.isError());
     }
 
     /**
@@ -107,16 +136,16 @@ public class Lizzy {
      *
      * @param input the complete command text
      * @param targetUi the interface that receives command output
-     * @return whether the command ends a console session
+     * @return the command's session and presentation status
      */
-    private boolean executeCommand(String input, Ui targetUi) {
+    private CommandStatus executeCommand(String input, Ui targetUi) {
         try {
             Command parsedCommand = Parser.parse(input);
             parsedCommand.execute(tasks, targetUi, storage);
-            return parsedCommand.isExit();
+            return new CommandStatus(parsedCommand.isExit(), false);
         } catch (LizzyException exception) {
             targetUi.showError(exception.getMessage());
-            return false;
+            return new CommandStatus(false, true);
         }
     }
 

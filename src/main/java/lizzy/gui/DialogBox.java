@@ -36,6 +36,7 @@ public class DialogBox extends HBox {
         }
         speaker.setText(speakerName);
         dialog.setText(text);
+        dialog.maxWidthProperty().bind(widthProperty().multiply(0.78));
     }
 
     /**
@@ -48,6 +49,8 @@ public class DialogBox extends HBox {
         DialogBox dialogBox = new DialogBox(text, "You");
         dialogBox.getChildren().add(dialogBox.getChildren().remove(0));
         dialogBox.setAlignment(Pos.TOP_RIGHT);
+        dialogBox.speaker.setManaged(false);
+        dialogBox.speaker.setVisible(false);
         dialogBox.getStyleClass().add("user-dialog");
         return dialogBox;
     }
@@ -62,6 +65,18 @@ public class DialogBox extends HBox {
         DialogBox dialogBox = new DialogBox(text, "Lizzy");
         dialogBox.setAlignment(Pos.TOP_LEFT);
         dialogBox.getStyleClass().add("lizzy-dialog");
+        return dialogBox;
+    }
+
+    /**
+     * Creates a visually prominent dialog for an invalid command.
+     *
+     * @param text Lizzy's explanation of the invalid command
+     * @return a dialog styled as an error
+     */
+    public static DialogBox getErrorDialog(String text) {
+        DialogBox dialogBox = getLizzyDialog(text);
+        dialogBox.getStyleClass().add("error-dialog");
         return dialogBox;
     }
 }
