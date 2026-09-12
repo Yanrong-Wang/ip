@@ -45,8 +45,22 @@ public class TaskListTest {
     }
 
     @Test
+    void constructor_varargsTasks_tasksKeepArgumentOrderAndOwnCopy() {
+        Todo first = new Todo("read chapter");
+        Todo second = new Todo("revise notes");
+        Task[] initialTasks = {first, second};
+
+        TaskList tasks = new TaskList(initialTasks);
+        initialTasks[0] = new Todo("replacement");
+
+        assertEquals(2, tasks.size());
+        assertSame(first, tasks.get(0));
+        assertSame(second, tasks.getLast());
+    }
+
+    @Test
     void getTask_validOneBasedNumber_matchingTaskReturned() throws LizzyException {
-        TaskList tasks = new TaskList(List.of(new Todo("first"), new Todo("second")));
+        TaskList tasks = new TaskList(new Todo("first"), new Todo("second"));
 
         Task task = tasks.getTask(2, "mark");
 
@@ -56,7 +70,7 @@ public class TaskListTest {
     @Test
     void getTask_emptyOrOutOfRangeNumber_helpfulExceptionThrown() {
         TaskList emptyTasks = new TaskList();
-        TaskList oneTask = new TaskList(List.of(new Todo("first")));
+        TaskList oneTask = new TaskList(new Todo("first"));
 
         assertTaskNumberError(emptyTasks, 1, "mark",
                 "Add a task first, and then we shall have something to mark.");
@@ -77,7 +91,7 @@ public class TaskListTest {
     void deleteTask_validOneBasedNumber_taskRemovedAndFollowingTaskReindexed() throws LizzyException {
         Todo first = new Todo("first");
         Todo second = new Todo("second");
-        TaskList tasks = new TaskList(List.of(first, second));
+        TaskList tasks = new TaskList(first, second);
 
         Task deletedTask = tasks.deleteTask(1, "delete");
 
@@ -100,8 +114,8 @@ public class TaskListTest {
 
     @Test
     void findMatchingTaskNumbers_matchingDescriptionsKeepOriginalNumbersAndOrder() {
-        TaskList tasks = new TaskList(List.of(new Todo("read book"), new Todo("buy milk"),
-                new Todo("return book"), new Todo("Book review")));
+        TaskList tasks = new TaskList(new Todo("read book"), new Todo("buy milk"),
+                new Todo("return book"), new Todo("Book review"));
 
         assertEquals(List.of(1, 3), tasks.findMatchingTaskNumbers("book"));
         assertEquals(List.of(), tasks.findMatchingTaskNumbers("pen"));

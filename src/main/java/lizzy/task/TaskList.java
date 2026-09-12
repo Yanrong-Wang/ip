@@ -23,6 +23,15 @@ public class TaskList {
     }
 
     /**
+     * Creates a task list from zero or more supplied tasks.
+     *
+     * @param tasks the tasks to place in the list, in insertion order
+     */
+    public TaskList(Task... tasks) {
+        this(List.of(tasks));
+    }
+
+    /**
      * Creates a task list containing the supplied saved tasks.
      *
      * @param tasks the tasks loaded from storage

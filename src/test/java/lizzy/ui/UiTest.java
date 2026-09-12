@@ -54,8 +54,8 @@ public class UiTest {
     @Test
     void showTaskList_emptyAndPopulated_correctBranchesWritten() {
         TaskList emptyTasks = new TaskList();
-        TaskList populatedTasks = new TaskList(List.of(new Todo("read chapter"),
-                new Deadline("submit report", LocalDate.of(2026, 9, 20))));
+        TaskList populatedTasks = new TaskList(new Todo("read chapter"),
+                new Deadline("submit report", LocalDate.of(2026, 9, 20)));
 
         String emptyOutput = captureOutput(ui -> ui.showTaskList(emptyTasks));
         String populatedOutput = captureOutput(ui -> ui.showTaskList(populatedTasks));
@@ -68,7 +68,7 @@ public class UiTest {
 
     @Test
     void showMatchingTasks_emptyAndPopulated_correctBranchesWritten() {
-        TaskList tasks = new TaskList(List.of(new Todo("read chapter"), new Todo("write tests")));
+        TaskList tasks = new TaskList(new Todo("read chapter"), new Todo("write tests"));
 
         String emptyOutput = captureOutput(ui -> ui.showMatchingTasks(tasks, List.of()));
         String populatedOutput = captureOutput(ui -> ui.showMatchingTasks(tasks, List.of(2)));
@@ -114,10 +114,10 @@ public class UiTest {
 
     @Test
     void showTasksOnDate_matchesAndNoMatches_correctBranchesWritten() {
-        TaskList tasks = new TaskList(List.of(
+        TaskList tasks = new TaskList(
                 new Todo("undated"),
                 new Deadline("submit report", LocalDate.of(2026, 9, 20)),
-                new Event("conference", LocalDate.of(2026, 9, 19), LocalDate.of(2026, 9, 21))));
+                new Event("conference", LocalDate.of(2026, 9, 19), LocalDate.of(2026, 9, 21)));
 
         String matchingOutput = captureOutput(ui -> ui.showTasksOnDate(tasks, LocalDate.of(2026, 9, 20)));
         String emptyOutput = captureOutput(ui -> ui.showTasksOnDate(tasks, LocalDate.of(2026, 9, 22)));
