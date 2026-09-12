@@ -81,4 +81,38 @@ public class StorageTest {
 
         assertTrue(exception.getMessage().contains("saved task data at line 1"));
     }
+
+    @Test
+    void load_blankDescription_friendlyExceptionIdentifiesLine() throws IOException {
+        Path filePath = temporaryDirectory.resolve("lizzy.txt");
+        Files.writeString(filePath, "T | 0 | IA==\n");
+        Storage storage = new Storage(filePath);
+
+        LizzyException exception = assertThrows(LizzyException.class, storage::load);
+
+        assertTrue(exception.getMessage().contains("saved task data at line 1"));
+    }
+
+    @Test
+    void load_reversedEventDates_friendlyExceptionIdentifiesLine() throws IOException {
+        Path filePath = temporaryDirectory.resolve("lizzy.txt");
+        Files.writeString(filePath,
+                "E | 0 | bWVldGluZw== | MjAyNi0wOS0xMg== | MjAyNi0wOS0xMQ==\n");
+        Storage storage = new Storage(filePath);
+
+        LizzyException exception = assertThrows(LizzyException.class, storage::load);
+
+        assertTrue(exception.getMessage().contains("saved task data at line 1"));
+    }
+
+    @Test
+    void load_pathIsDirectory_friendlyReadErrorReturned() throws IOException {
+        Path directoryPath = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(directoryPath);
+        Storage storage = new Storage(directoryPath);
+
+        LizzyException exception = assertThrows(LizzyException.class, storage::load);
+
+        assertTrue(exception.getMessage().contains("couldn't read your saved tasks"));
+    }
 }

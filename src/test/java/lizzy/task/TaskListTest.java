@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import lizzy.exception.LizzyException;
  */
 public class TaskListTest {
     @Test
-    void addAndGet_tasksKeepInsertionOrder() {
+    void addAndGet_tasksKeepInsertionOrder() throws LizzyException {
         TaskList tasks = new TaskList();
         Todo first = new Todo("read chapter");
         Todo second = new Todo("revise notes");
@@ -77,7 +78,7 @@ public class TaskListTest {
     }
 
     @Test
-    void asList_snapshotIsImmutableAndUnaffectedByLaterAdditions() {
+    void asList_snapshotIsImmutableAndUnaffectedByLaterAdditions() throws LizzyException {
         TaskList tasks = new TaskList();
         tasks.add(new Todo("first"));
 
@@ -96,6 +97,29 @@ public class TaskListTest {
         assertEquals(List.of(1, 3), tasks.findMatchingTaskNumbers("book"));
         assertEquals(List.of(), tasks.findMatchingTaskNumbers("pen"));
         assertEquals(List.of(4), tasks.findMatchingTaskNumbers("Book"));
+    }
+
+    @Test
+    void add_sameTaskDetailsTwice_duplicateRejected() throws LizzyException {
+        TaskList tasks = new TaskList();
+        tasks.add(new Deadline("submit report", LocalDate.of(2026, 9, 10)));
+
+        LizzyException exception = assertThrows(LizzyException.class, () ->
+                tasks.add(new Deadline("submit report", LocalDate.of(2026, 9, 10), true)));
+
+        assertTrue(exception.getMessage().contains("already keeping its place"));
+        assertEquals(1, tasks.size());
+    }
+
+    @Test
+    void add_similarButDifferentTaskDetails_tasksAccepted() throws LizzyException {
+        TaskList tasks = new TaskList();
+
+        tasks.add(new Todo("submit report"));
+        tasks.add(new Deadline("submit report", LocalDate.of(2026, 9, 10)));
+        tasks.add(new Deadline("submit report", LocalDate.of(2026, 9, 11)));
+
+        assertEquals(3, tasks.size());
     }
 
     private static void assertTaskNumberError(TaskList tasks, int number, String command,

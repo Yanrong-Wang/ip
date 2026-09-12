@@ -56,11 +56,11 @@ public class Parser {
      * @throws LizzyException if the line is empty or the command word is unknown.
      */
     public static Command parse(String fullCommand) throws LizzyException {
-        if (fullCommand.isEmpty()) {
+        if (fullCommand == null || fullCommand.isBlank()) {
             throw new LizzyException(EMPTY_INPUT_ERROR);
         }
 
-        String[] commandParts = fullCommand.split("\\s+", 2);
+        String[] commandParts = fullCommand.strip().split("\\s+", 2);
         String action = commandParts[0];
         String argument = commandParts.length == 2 ? commandParts[1].strip() : "";
         return switch (action) {
@@ -197,7 +197,7 @@ public class Parser {
      * @throws LizzyException if the number is missing or malformed.
      */
     private static int parseTaskNumber(String argument, String command) throws LizzyException {
-        if (argument.isBlank()) {
+        if (!argument.matches("[1-9]\\d*")) {
             throw invalidTaskNumber(command);
         }
         try {

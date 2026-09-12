@@ -42,6 +42,7 @@ public class ParserTest {
 
     @Test
     void parse_flexibleWhitespaceInDatedCommands_commandsCreated() throws LizzyException {
+        assertInstanceOf(ListCommand.class, Parser.parse("  list  "));
         assertInstanceOf(DeadlineCommand.class,
                 Parser.parse("deadline   submit work    /by    2026-09-04"));
         assertInstanceOf(EventCommand.class,
@@ -52,7 +53,9 @@ public class ParserTest {
 
     @Test
     void parse_emptyAndUnknownInput_exceptionsContainHelpfulMessages() {
+        assertParseFails(null, "Silence may be elegant, but it gives me very little to work with.");
         assertParseFails("", "Silence may be elegant, but it gives me very little to work with.");
+        assertParseFails("   ", "Silence may be elegant, but it gives me very little to work with.");
         assertParseFails("postpone", "I'm afraid \"postpone\" is quite beyond my acquaintance.");
     }
 
@@ -86,10 +89,23 @@ public class ParserTest {
     @Test
     void parse_invalidTaskNumbersAndExtraArguments_exceptionsRejectInvalidCommands() {
         assertParseFails("mark", "Be precise: mark <task number>.");
+        assertParseFails("mark +1", "Be precise: mark <task number>.");
+        assertParseFails("mark -1", "Be precise: mark <task number>.");
+        assertParseFails("mark 01", "Be precise: mark <task number>.");
         assertParseFails("unmark first", "Be precise: unmark <task number>.");
         assertParseFails("delete 1 2", "Be precise: delete <task number>.");
         assertParseFails("list now", "A simple \"list\" will do.");
         assertParseFails("bye now", "A simple \"bye\" will do.");
+    }
+
+    @Test
+    void parse_repeatedDateMarkers_exceptionsExplainRequiredSyntax() {
+        assertParseFails("deadline report /by 2026-09-04 /by 2026-09-05",
+                "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
+        assertParseFails("event meeting /from 2026-09-04 /from 2026-09-05 /to 2026-09-06",
+                "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+        assertParseFails("within task /from 2026-09-04 /to 2026-09-05 /to 2026-09-06",
+                "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
     }
 
     private static void assertParseFails(String input, String expectedMessage) {

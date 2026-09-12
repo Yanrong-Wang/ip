@@ -45,8 +45,27 @@ public class Event extends Task {
      */
     public Event(String description, LocalDate from, LocalDate to, boolean isDone) {
         super(description, isDone);
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("Event dates cannot be null.");
+        }
+        if (to.isBefore(from)) {
+            throw new IllegalArgumentException("An event's end date cannot be before its start date.");
+        }
         this.from = from;
         this.to = to;
+    }
+
+    /**
+     * Returns whether another task is an event with the same description and date range.
+     *
+     * @param other the task to compare
+     * @return {@code true} if both events have the same details
+     */
+    @Override
+    boolean hasSameDetails(Task other) {
+        return super.hasSameDetails(other)
+                && from.equals(((Event) other).from)
+                && to.equals(((Event) other).to);
     }
 
     /**

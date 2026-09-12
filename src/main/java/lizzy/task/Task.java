@@ -32,8 +32,24 @@ public class Task {
      * @param isDone whether the task has been completed
      */
     protected Task(String description, boolean isDone) {
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("A task description cannot be blank.");
+        }
         this.description = description;
         this.isDone = isDone;
+    }
+
+    /**
+     * Returns whether another task has the same concrete type and user-entered details.
+     * Completion state is deliberately ignored because marking a task does not make it a different task.
+     *
+     * @param other the task to compare
+     * @return {@code true} if both tasks describe the same matter
+     */
+    boolean hasSameDetails(Task other) {
+        return other != null
+                && getClass().equals(other.getClass())
+                && description.equals(other.description);
     }
 
     /**

@@ -35,9 +35,15 @@ public class TaskList {
      * Adds a task to the end of the list.
      *
      * @param task the task to add
+     * @throws LizzyException if an identical task is already in the list
      */
-    public void add(Task task) {
+    public void add(Task task) throws LizzyException {
         assert task != null : "A task list cannot contain a null task.";
+        boolean hasDuplicate = tasks.stream().anyMatch(existingTask -> existingTask.hasSameDetails(task));
+        if (hasDuplicate) {
+            throw new LizzyException("This task is already keeping its place in your list.\n"
+                    + "Even a worthy matter need not be introduced twice.");
+        }
         tasks.add(task);
     }
 

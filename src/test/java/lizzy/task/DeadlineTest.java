@@ -1,6 +1,7 @@
 package lizzy.task;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -18,5 +19,10 @@ public class DeadlineTest {
         assertTrue(deadline.occursOn(LocalDate.of(2026, 9, 3)));
         assertFalse(deadline.occursOn(LocalDate.of(2026, 9, 2)));
         assertFalse(deadline.occursOn(LocalDate.of(2026, 9, 4)));
+    }
+
+    @Test
+    void constructor_nullDate_exceptionThrown() {
+        assertThrows(IllegalArgumentException.class, () -> new Deadline("submit report", null));
     }
 }
