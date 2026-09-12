@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -142,7 +143,7 @@ public class Storage {
                         LocalDate.parse(decode(fields[3])), LocalDate.parse(decode(fields[4])), isDone);
                 default -> throw new IllegalArgumentException("Unknown task type");
             };
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException | DateTimeParseException exception) {
             throw new LizzyException("I couldn't understand the saved task data at line " + lineNumber + ".\n"
                     + "Starting with an empty task list for this session.");
         }

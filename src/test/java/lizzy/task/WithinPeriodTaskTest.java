@@ -1,5 +1,6 @@
 package lizzy.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,5 +37,24 @@ public class WithinPeriodTaskTest {
                 LocalDate.of(2026, 9, 3)));
         assertThrows(IllegalArgumentException.class, () -> new WithinPeriodTask("collect certificate",
                 LocalDate.of(2026, 9, 3), null));
+    }
+
+    @Test
+    void gettersAndToString_completedPeriodTask_detailsReturnedAndFormatted() {
+        WithinPeriodTask task = new WithinPeriodTask("collect certificate", LocalDate.of(2026, 9, 3),
+                LocalDate.of(2026, 9, 5), true);
+
+        assertEquals(LocalDate.of(2026, 9, 3), task.getFrom());
+        assertEquals(LocalDate.of(2026, 9, 5), task.getTo());
+        assertEquals("[W][X] collect certificate (within: Sep 3 2026 to: Sep 5 2026)", task.toString());
+        assertTrue(task.isDone());
+    }
+
+    @Test
+    void constructor_sameStartAndEnd_singleDayPeriodAccepted() {
+        WithinPeriodTask task = new WithinPeriodTask("collect certificate", LocalDate.of(2026, 9, 3),
+                LocalDate.of(2026, 9, 3));
+
+        assertTrue(task.occursOn(LocalDate.of(2026, 9, 3)));
     }
 }

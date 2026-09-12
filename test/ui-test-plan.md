@@ -761,11 +761,11 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Data file created.
   ```
 
-### Recover from malformed saved data
-- Aim: Verify that Lizzy explains an invalid storage record and continues with an empty task list.
+### Recover from an invalid date in saved data
+- Aim: Verify that Lizzy explains a non-existent saved calendar date and continues with an empty task list.
 - Command:
   ```sh
-  mkdir -p _temp/ui-test-data && printf 'not valid\n' > _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  mkdir -p _temp/ui-test-data && printf 'D | 0 | c3VibWl0IHJlcG9ydA== | MjAyNi0wMi0zMA==\n' > _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
   ```
 - Inputs:
   ```text

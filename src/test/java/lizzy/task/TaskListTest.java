@@ -65,6 +65,15 @@ public class TaskListTest {
     }
 
     @Test
+    void getTask_emptyList_eachMutatingCommandNamedInGuidance() {
+        TaskList tasks = new TaskList();
+
+        assertTaskNumberError(tasks, 1, "mark", "something to mark");
+        assertTaskNumberError(tasks, 1, "unmark", "something to unmark");
+        assertTaskNumberError(tasks, 1, "delete", "something to delete");
+    }
+
+    @Test
     void deleteTask_validOneBasedNumber_taskRemovedAndFollowingTaskReindexed() throws LizzyException {
         Todo first = new Todo("first");
         Todo second = new Todo("second");
@@ -119,6 +128,23 @@ public class TaskListTest {
         tasks.add(new Deadline("submit report", LocalDate.of(2026, 9, 10)));
         tasks.add(new Deadline("submit report", LocalDate.of(2026, 9, 11)));
 
+        assertEquals(3, tasks.size());
+    }
+
+    @Test
+    void add_duplicateTodoEventAndPeriodTask_eachTypeRejected() throws LizzyException {
+        TaskList tasks = new TaskList();
+        LocalDate firstDate = LocalDate.of(2026, 9, 10);
+        LocalDate secondDate = LocalDate.of(2026, 9, 11);
+        tasks.add(new Todo("read chapter"));
+        tasks.add(new Event("conference", firstDate, secondDate));
+        tasks.add(new WithinPeriodTask("collect certificate", firstDate, secondDate));
+
+        assertThrows(LizzyException.class, () -> tasks.add(new Todo("read chapter", true)));
+        assertThrows(LizzyException.class, () ->
+                tasks.add(new Event("conference", firstDate, secondDate, true)));
+        assertThrows(LizzyException.class, () ->
+                tasks.add(new WithinPeriodTask("collect certificate", firstDate, secondDate, true)));
         assertEquals(3, tasks.size());
     }
 

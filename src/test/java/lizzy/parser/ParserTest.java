@@ -1,5 +1,6 @@
 package lizzy.parser;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,6 +53,22 @@ public class ParserTest {
     }
 
     @Test
+    void parse_validCalendarAndBoundaryDates_commandsCreated() throws LizzyException {
+        assertInstanceOf(DeadlineCommand.class,
+                Parser.parse("deadline leap-day task /by 2028-02-29"));
+        assertInstanceOf(EventCommand.class,
+                Parser.parse("event interview /from 2026-09-04 /to 2026-09-04"));
+        assertInstanceOf(WithinPeriodCommand.class,
+                Parser.parse("within collect form /from 2026-09-04 /to 2026-09-04"));
+    }
+
+    @Test
+    void parse_exitAndOrdinaryCommand_isExitDistinguishesCommands() throws LizzyException {
+        assertTrue(Parser.parse("bye").isExit());
+        assertFalse(Parser.parse("list").isExit());
+    }
+
+    @Test
     void parse_emptyAndUnknownInput_exceptionsContainHelpfulMessages() {
         assertParseFails(null, "Silence may be elegant, but it gives me very little to work with.");
         assertParseFails("", "Silence may be elegant, but it gives me very little to work with.");
@@ -94,6 +111,7 @@ public class ParserTest {
         assertParseFails("mark 01", "Be precise: mark <task number>.");
         assertParseFails("unmark first", "Be precise: unmark <task number>.");
         assertParseFails("delete 1 2", "Be precise: delete <task number>.");
+        assertParseFails("delete 999999999999999999999", "Be precise: delete <task number>.");
         assertParseFails("list now", "A simple \"list\" will do.");
         assertParseFails("bye now", "A simple \"bye\" will do.");
     }
