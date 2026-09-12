@@ -1,5 +1,6 @@
 package lizzy.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,5 +37,23 @@ public class EventTest {
                 LocalDate.of(2026, 9, 3)));
         assertThrows(IllegalArgumentException.class, () -> new Event("project meeting",
                 LocalDate.of(2026, 9, 3), null));
+    }
+
+    @Test
+    void gettersAndToString_completedEvent_detailsReturnedAndFormatted() {
+        Event event = new Event("conference", LocalDate.of(2026, 9, 3),
+                LocalDate.of(2026, 9, 5), true);
+
+        assertEquals(LocalDate.of(2026, 9, 3), event.getFrom());
+        assertEquals(LocalDate.of(2026, 9, 5), event.getTo());
+        assertEquals("[E][X] conference (from: Sep 3 2026 to: Sep 5 2026)", event.toString());
+        assertTrue(event.isDone());
+    }
+
+    @Test
+    void constructor_sameStartAndEnd_singleDayEventAccepted() {
+        Event event = new Event("conference", LocalDate.of(2026, 9, 3), LocalDate.of(2026, 9, 3));
+
+        assertTrue(event.occursOn(LocalDate.of(2026, 9, 3)));
     }
 }

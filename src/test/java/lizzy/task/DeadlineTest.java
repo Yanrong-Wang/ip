@@ -1,5 +1,6 @@
 package lizzy.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,5 +25,14 @@ public class DeadlineTest {
     @Test
     void constructor_nullDate_exceptionThrown() {
         assertThrows(IllegalArgumentException.class, () -> new Deadline("submit report", null));
+    }
+
+    @Test
+    void gettersAndToString_completedDeadline_detailsReturnedAndFormatted() {
+        Deadline deadline = new Deadline("submit report", LocalDate.of(2026, 9, 3), true);
+
+        assertEquals(LocalDate.of(2026, 9, 3), deadline.getBy());
+        assertEquals("[D][X] submit report (by: Sep 3 2026)", deadline.toString());
+        assertTrue(deadline.isDone());
     }
 }

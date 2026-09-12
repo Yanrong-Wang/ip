@@ -17,9 +17,13 @@ public class TaskTest {
     void markAndUnmark_completionStatusChangesAccordingly() {
         Task task = new Task("read chapter");
 
+        assertFalse(task.isDone());
+        assertEquals("read chapter", task.getDescription());
+        assertEquals("[ ] read chapter", task.toString());
         task.markAsDone();
         assertTrue(task.isDone());
         assertEquals("X", task.getStatusIcon());
+        assertEquals("[X] read chapter", task.toString());
 
         task.markAsNotDone();
         assertFalse(task.isDone());

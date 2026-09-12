@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -106,6 +108,51 @@ public class StorageTest {
     }
 
     @Test
+    void load_malformedRecordVariants_eachRejectedAsInvalidSavedData() throws IOException {
+        List<String> invalidRecords = List.of(
+                "T | 2 | " + encode("read chapter"),
+                "X | 0 | " + encode("read chapter"),
+                "T | 0",
+                "D | 0 | " + encode("submit report") + " | " + encode("2026-09-20")
+                        + " | extra",
+                "T | 0 | %%%",
+                "D | 0 | " + encode("submit report") + " | " + encode("2026-02-30"),
+                "W | 0 | " + encode("collect certificate") + " | " + encode("2026-09-22")
+                        + " | " + encode("2026-09-20"));
+
+        for (String invalidRecord : invalidRecords) {
+            Path filePath = temporaryDirectory.resolve("invalid-" + invalidRecords.indexOf(invalidRecord) + ".txt");
+            Files.writeString(filePath, invalidRecord + System.lineSeparator());
+
+            LizzyException exception = assertThrows(LizzyException.class, () -> new Storage(filePath).load());
+
+            assertTrue(exception.getMessage().contains("saved task data at line 1"));
+        }
+    }
+
+    @Test
+    void load_blankLinesBeforeInvalidRecord_reportUsesPhysicalLineNumber() throws IOException {
+        Path filePath = temporaryDirectory.resolve("lizzy.txt");
+        Files.writeString(filePath, System.lineSeparator() + System.lineSeparator() + "not valid\n");
+
+        LizzyException exception = assertThrows(LizzyException.class, () -> new Storage(filePath).load());
+
+        assertTrue(exception.getMessage().contains("saved task data at line 3"));
+    }
+
+    @Test
+    void save_emptyListAfterExistingTasks_fileClearedAndEmptyListLoaded() throws LizzyException, IOException {
+        Path filePath = temporaryDirectory.resolve("lizzy.txt");
+        Storage storage = new Storage(filePath);
+        storage.save(List.of(new Todo("read chapter")));
+
+        storage.save(List.of());
+
+        assertEquals("", Files.readString(filePath));
+        assertEquals(List.of(), storage.load());
+    }
+
+    @Test
     void load_pathIsDirectory_friendlyReadErrorReturned() throws IOException {
         Path directoryPath = temporaryDirectory.resolve("tasks");
         Files.createDirectory(directoryPath);
@@ -114,5 +161,15 @@ public class StorageTest {
         LizzyException exception = assertThrows(LizzyException.class, storage::load);
 
         assertTrue(exception.getMessage().contains("couldn't read your saved tasks"));
+    }
+
+    /**
+     * Encodes a storage field using the same documented UTF-8 Base64 representation as production storage.
+     *
+     * @param value the plain-text field value
+     * @return the encoded storage field
+     */
+    private static String encode(String value) {
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
     }
 }
