@@ -29,4 +29,12 @@ public class WithinPeriodTaskTest {
         assertThrows(IllegalArgumentException.class, () -> new WithinPeriodTask("collect certificate",
                 LocalDate.of(2026, 9, 5), LocalDate.of(2026, 9, 3)));
     }
+
+    @Test
+    void constructor_nullDate_exceptionThrown() {
+        assertThrows(IllegalArgumentException.class, () -> new WithinPeriodTask("collect certificate", null,
+                LocalDate.of(2026, 9, 3)));
+        assertThrows(IllegalArgumentException.class, () -> new WithinPeriodTask("collect certificate",
+                LocalDate.of(2026, 9, 3), null));
+    }
 }

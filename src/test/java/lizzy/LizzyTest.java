@@ -60,4 +60,28 @@ public class LizzyTest {
         assertTrue(response.text().startsWith("I'm afraid \"dance\" is quite beyond my acquaintance."));
         assertTrue(response.isError());
     }
+
+    @Test
+    void getResponse_duplicateTask_errorReturnedWithoutChangingTaskList() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+        lizzy.getResponse("todo read chapter");
+
+        Lizzy.Response duplicateResponse = lizzy.getResponseWithStatus("todo read chapter");
+        String listResponse = lizzy.getResponse("list");
+
+        assertTrue(duplicateResponse.text().contains("already keeping its place"));
+        assertTrue(duplicateResponse.isError());
+        assertEquals("Let us see what presently claims your attention:\n"
+                + "1.[T][ ] read chapter", listResponse);
+    }
+
+    @Test
+    void getResponse_nullInput_friendlyErrorReturned() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+
+        Lizzy.Response response = lizzy.getResponseWithStatus(null);
+
+        assertTrue(response.text().startsWith("Silence may be elegant"));
+        assertTrue(response.isError());
+    }
 }

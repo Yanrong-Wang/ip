@@ -50,11 +50,11 @@ public class Storage {
      * @throws LizzyException if the file cannot be read or contains an invalid record
      */
     public List<Task> load() throws LizzyException {
-        if (!Files.exists(filePath)) {
-            return new ArrayList<>();
-        }
-
         try {
+            if (!Files.exists(filePath)) {
+                return new ArrayList<>();
+            }
+
             List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
             List<Task> tasks = new ArrayList<>();
             for (int i = 0; i < lines.size(); i++) {
@@ -63,7 +63,7 @@ public class Storage {
                 }
             }
             return tasks;
-        } catch (IOException exception) {
+        } catch (IOException | SecurityException exception) {
             throw new LizzyException("I couldn't read your saved tasks from " + filePath + ".\n"
                     + "Starting with an empty task list for this session.");
         }
@@ -88,7 +88,7 @@ public class Storage {
                 Files.createDirectories(parentFolder);
             }
             Files.write(filePath, lines, StandardCharsets.UTF_8);
-        } catch (IOException exception) {
+        } catch (IOException | SecurityException exception) {
             throw new LizzyException("I updated your task list, but couldn't save it to "
                     + filePath + ".");
         }

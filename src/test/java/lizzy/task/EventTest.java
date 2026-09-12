@@ -1,6 +1,7 @@
 package lizzy.task;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -21,5 +22,19 @@ public class EventTest {
         assertTrue(event.occursOn(LocalDate.of(2026, 9, 4)));
         assertTrue(event.occursOn(LocalDate.of(2026, 9, 5)));
         assertFalse(event.occursOn(LocalDate.of(2026, 9, 6)));
+    }
+
+    @Test
+    void constructor_endBeforeStart_exceptionThrown() {
+        assertThrows(IllegalArgumentException.class, () -> new Event("project meeting",
+                LocalDate.of(2026, 9, 5), LocalDate.of(2026, 9, 3)));
+    }
+
+    @Test
+    void constructor_nullDate_exceptionThrown() {
+        assertThrows(IllegalArgumentException.class, () -> new Event("project meeting", null,
+                LocalDate.of(2026, 9, 3)));
+        assertThrows(IllegalArgumentException.class, () -> new Event("project meeting",
+                LocalDate.of(2026, 9, 3), null));
     }
 }

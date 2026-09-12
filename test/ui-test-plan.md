@@ -42,6 +42,69 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ```
 
+### Reject duplicate and ambiguous command input
+- Aim: Verify that duplicate tasks, repeated date markers, and decorated task numbers are rejected without changing the valid task list.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  ```
+- Inputs:
+  ```text
+  todo read chapter
+  todo read chapter
+  deadline report /by 2026-09-20 /by 2026-09-21
+  event meeting /from 2026-09-20 /to 2026-09-21 /to 2026-09-22
+  mark +1
+  mark 01
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] read chapter
+  That makes 1 task awaiting your attention.
+  ____________________________________________________________
+  ____________________________________________________________
+  This task is already keeping its place in your list.
+  Even a worthy matter need not be introduced twice.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline without both a duty and a date is merely suspense.
+  Set it out like this: deadline <description> /by <yyyy-MM-dd>.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement without a beginning and an end is a mysterious affair.
+  Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
+  ____________________________________________________________
+  ____________________________________________________________
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: mark <task number>.
+  ____________________________________________________________
+  ____________________________________________________________
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: mark <task number>.
+  ____________________________________________________________
+  ____________________________________________________________
+  Let us see what presently claims your attention:
+  1.[T][ ] read chapter
+  ____________________________________________________________
+  ____________________________________________________________
+  Goodbye! May your plans prosper—and leave you a little leisure.
+  ____________________________________________________________
+  ```
+
 ### Add and list a todo
 - Aim: Verify that a todo receives the T type marker and can be listed as incomplete.
 - Command:
@@ -430,8 +493,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Be precise: unmark <task number>.
   ____________________________________________________________
   ____________________________________________________________
-  An imaginative choice—but that task is not on the present list.
-  Choose a task number from 1 to 1.
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: unmark <task number>.
   ____________________________________________________________
   ____________________________________________________________
   Very good! That is one matter settled:

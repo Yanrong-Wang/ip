@@ -125,7 +125,7 @@ public class Lizzy {
         CommandStatus commandStatus;
         try (PrintStream responseStream = new PrintStream(responseBytes, true, StandardCharsets.UTF_8)) {
             Ui responseUi = new Ui(InputStream.nullInputStream(), responseStream);
-            commandStatus = executeCommand(input.strip(), responseUi);
+            commandStatus = executeCommand(input, responseUi);
         }
         String response = responseBytes.toString(StandardCharsets.UTF_8);
         return new Response(response.replace("\r\n", "\n").stripTrailing(), commandStatus.isError());

@@ -38,7 +38,21 @@ public class Deadline extends Task {
      */
     public Deadline(String description, LocalDate by, boolean isDone) {
         super(description, isDone);
+        if (by == null) {
+            throw new IllegalArgumentException("A deadline date cannot be null.");
+        }
         this.by = by;
+    }
+
+    /**
+     * Returns whether another task is a deadline with the same description and date.
+     *
+     * @param other the task to compare
+     * @return {@code true} if both deadlines have the same details
+     */
+    @Override
+    boolean hasSameDetails(Task other) {
+        return super.hasSameDetails(other) && by.equals(((Deadline) other).by);
     }
 
     /**

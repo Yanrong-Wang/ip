@@ -45,11 +45,27 @@ public class WithinPeriodTask extends Task {
      */
     public WithinPeriodTask(String description, LocalDate from, LocalDate to, boolean isDone) {
         super(description, isDone);
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("Completion-period dates cannot be null.");
+        }
         if (to.isBefore(from)) {
             throw new IllegalArgumentException("A period's end date cannot be before its start date.");
         }
         this.from = from;
         this.to = to;
+    }
+
+    /**
+     * Returns whether another task has the same description and inclusive completion period.
+     *
+     * @param other the task to compare
+     * @return {@code true} if both period tasks have the same details
+     */
+    @Override
+    boolean hasSameDetails(Task other) {
+        return super.hasSameDetails(other)
+                && from.equals(((WithinPeriodTask) other).from)
+                && to.equals(((WithinPeriodTask) other).to);
     }
 
     /**

@@ -2,6 +2,7 @@ package lizzy.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -30,5 +31,11 @@ public class TaskTest {
         Task task = new Task("read chapter");
 
         assertFalse(task.occursOn(LocalDate.of(2026, 9, 3)));
+    }
+
+    @Test
+    void constructor_blankOrNullDescription_exceptionThrown() {
+        assertThrows(IllegalArgumentException.class, () -> new Task("   "));
+        assertThrows(IllegalArgumentException.class, () -> new Task(null));
     }
 }
