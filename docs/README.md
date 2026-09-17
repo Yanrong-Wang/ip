@@ -1,47 +1,178 @@
 # Lizzy User Guide
 
-Lizzy is a task tracker for todos, deadlines, events, and tasks that must be
-completed within a date period. Dates use the `yyyy-MM-dd` format.
+> A little wit for keeping life in order.
 
-## Add a task to complete within a period
+Lizzy is a desktop task manager with a warm, lightly witty personality. She
+keeps todos, deadlines, events, and flexible completion periods in one
+searchable list, and remembers them between sessions.
 
-Use `within` for work that can be completed on any date in an inclusive period.
+![The Lizzy desktop application showing a realistic task list](Ui.png)
+
+## Quick start
+
+1. Install **Java 25**.
+2. Download `lizzy.jar` from the
+   [latest release](https://github.com/Yanrong-Wang/ip/releases/latest).
+3. Put the JAR in its own folder and open a terminal in that folder.
+4. Run:
+
+   ```sh
+   java -jar "lizzy.jar"
+   ```
+
+Type a command in the box at the bottom, then press **Enter** or click
+**Send**. Command words are lowercase. Dates use `yyyy-MM-dd`, for example
+`2026-09-18`.
+
+> **Command notation:** words in angle brackets such as `<description>` are
+> values you supply. Do not type the angle brackets.
+
+## Command summary
+
+| Purpose | Command |
+|---|---|
+| Add a todo | `todo <description>` |
+| Add a deadline | `deadline <description> /by <date>` |
+| Add a one-day event | `event <description> /on <date>` |
+| Add a timed event | `event <description> /on <date> /from <HH:mm> /to <HH:mm>` |
+| Add a multi-day event | `event <description> /from <date> /to <date>` |
+| Add a task for a flexible period | `within <description> /from <date> /to <date>` |
+| Show every task | `list` |
+| Find tasks | `find <keyword>` |
+| Show scheduled tasks on a date | `on <date>` |
+| Mark a task complete | `mark <task number>` |
+| Mark a task incomplete | `unmark <task number>` |
+| Delete a task | `delete <task number>` |
+| Exit Lizzy | `bye` |
+
+## Features
+
+### Adding a todo
+
+Use a todo for a task without a date.
 
 ```text
-within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>
+todo Read chapter 6
 ```
 
-Example:
+### Adding a deadline
+
+Use a deadline for work that must be completed by one date.
 
 ```text
-within collect certificate /from 2026-09-10 /to 2026-09-15
+deadline Submit CS2103 iP /by 2026-09-18
 ```
 
-Lizzy displays the task with the `[W]` marker. The start and end dates are both
-included, so a task with the same start and end date is valid. The end date must
-not be earlier than the start date.
+### Adding an event
 
-## View dated tasks on a date
-
-Use `on` to view deadlines, events, and period tasks relevant on a date.
+Use an event for an engagement fixed to a particular day or inclusive date
+range, such as a team meeting.
 
 ```text
-on <yyyy-MM-dd>
+event Team meeting /on 2026-09-17
+event Team meeting /on 2026-09-17 /from 14:00 /to 16:00
+event Orientation /from 2026-09-17 /to 2026-09-19
 ```
 
-For a period task, Lizzy includes every date from its `/from` date through its
-`/to` date, inclusive.
+Times use 24-hour `HH:mm` format. A timed event must end later than it starts.
+For a multi-day event, the end date cannot be before the start date.
+Lizzy presents parsed dates in a friendlier form such as `Sep 17 2026`, while
+times remain in the same 24-hour form used in commands, such as `14:00`.
 
-## Other task commands
+### Adding a task to complete within a period
+
+Use `within` when a task is not fixed to one day and may be completed at any
+time in an inclusive period. It represents a flexible completion window, not
+an activity that necessarily lasts continuously from the first date to the
+last.
 
 ```text
-todo <description>
-deadline <description> /by <yyyy-MM-dd>
-event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>
+within Polish user guide /from 2026-09-16 /to 2026-09-18
+```
+
+Lizzy displays these tasks with a `[W]` marker. As with events, the end date
+cannot be before the start date.
+
+### Listing tasks
+
+```text
 list
-find <keyword>
-mark <task number>
-unmark <task number>
-delete <task number>
+```
+
+Lizzy numbers the tasks in their current order. Use these numbers with
+`mark`, `unmark`, and `delete`; the numbers may change after a deletion.
+
+### Marking and unmarking tasks
+
+```text
+mark 2
+unmark 2
+```
+
+A completed task has an `[X]` status marker. An incomplete task has `[ ]`.
+
+### Deleting a task
+
+```text
+delete 3
+```
+
+This permanently removes the selected task from the list.
+
+### Finding tasks
+
+```text
+find project
+```
+
+Lizzy searches task descriptions for the exact, case-sensitive keyword and
+keeps the original task numbers in the results.
+
+### Viewing one day's schedule
+
+```text
+on 2026-09-17
+```
+
+Lizzy shows deadlines on that date and events or flexible-period tasks whose
+inclusive date ranges contain it. Undated todos are not shown.
+
+### Exiting
+
+```text
 bye
 ```
+
+Lizzy says goodbye and closes the application.
+
+## If something goes wrong
+
+Lizzy explains invalid commands in the conversation and shows the expected
+format. Extra spaces around words are accepted, but required markers such as
+`/by`, `/from`, and `/to` must appear exactly once and in the order shown.
+Formatting mistakes such as `17/09/2026` receive syntax guidance, while
+well-formed but impossible values such as `2026-02-30` or `25:00` receive a
+separate calendar or clock error.
+
+If the data file is missing, Lizzy starts with an empty task list and creates
+the file when the first task is saved. If the file cannot be read or contains
+invalid data, Lizzy reports the problem and starts a safe, empty session
+instead of crashing. A save failure is also reported without ending the
+session.
+
+## Saving data
+
+Lizzy saves tasks automatically in `data/lizzy.txt`, relative to the folder
+from which the JAR is run. Keep `lizzy.jar` in a dedicated folder if you want
+its task data to stay together with the application.
+
+## Acknowledgements
+
+- The project is based on the
+  [SE-EDU Duke starter project and JavaFX tutorial](https://nus-cs2103-ay2627-s1.github.io/website/projectDuke/).
+- The interface bundles
+  [Source Serif 4](https://github.com/adobe-fonts/source-serif), licensed
+  under the SIL Open Font License 1.1. The full license is included with the
+  font files.
+- The Lizzy and Jane line-art portraits are original AI-assisted artwork
+  created for this project using OpenAI image generation.
