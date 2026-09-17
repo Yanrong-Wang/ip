@@ -32,6 +32,10 @@ public class ParserTest {
         assertInstanceOf(DeadlineCommand.class, Parser.parse("deadline submit work /by 2026-09-04"));
         assertInstanceOf(EventCommand.class,
                 Parser.parse("event consultation /from 2026-09-04 /to 2026-09-05"));
+        assertInstanceOf(EventCommand.class,
+                Parser.parse("event team meeting /on 2026-09-04"));
+        assertInstanceOf(EventCommand.class,
+                Parser.parse("event team meeting /on 2026-09-04 /from 14:00 /to 16:00"));
         assertInstanceOf(WithinPeriodCommand.class,
                 Parser.parse("within collect certificate /from 2026-09-04 /to 2026-09-05"));
         assertInstanceOf(FindCommand.class, Parser.parse("find notes"));
@@ -57,7 +61,7 @@ public class ParserTest {
         assertInstanceOf(DeadlineCommand.class,
                 Parser.parse("deadline leap-day task /by 2028-02-29"));
         assertInstanceOf(EventCommand.class,
-                Parser.parse("event interview /from 2026-09-04 /to 2026-09-04"));
+                Parser.parse("event interview /on 2026-09-04"));
         assertInstanceOf(WithinPeriodCommand.class,
                 Parser.parse("within collect form /from 2026-09-04 /to 2026-09-04"));
     }
@@ -84,9 +88,9 @@ public class ParserTest {
         assertParseFails("deadline /by 2026-09-04",
                 "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
         assertParseFails("event consultation /from 2026-09-04",
-                "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+                "An engagement requires a date or a date range.");
         assertParseFails("event /from 2026-09-04 /to 2026-09-05",
-                "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+                "An engagement requires a date or a date range.");
         assertParseFails("within collect certificate /from 2026-09-04",
                 "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("find", "Give me something to seek: find <keyword>.");
@@ -94,11 +98,23 @@ public class ParserTest {
 
     @Test
     void parse_invalidDatesAndEventRange_exceptionsRejectInvalidSchedules() {
+        assertParseFails("deadline submit work /by 17/09/2026",
+                "Please use yyyy-MM-dd—for example, 2019-10-15.");
         assertParseFails("deadline submit work /by 2026-02-29",
-                "Dates behave best as yyyy-MM-dd—for example, 2019-10-15.");
+                "the calendar refuses to acknowledge it.");
+        assertParseFails("event impossible date /on 2026-02-30",
+                "Choose a date that actually exists.");
         assertParseFails("on", "Name the day like this: on <yyyy-MM-dd>.");
         assertParseFails("event consultation /from 2026-09-05 /to 2026-09-04",
                 "Let time keep its proper order: choose an end date on or after the start date.");
+        assertParseFails("event meeting /on 2026-09-04 /from 16:00 /to 14:00",
+                "Choose an end time later than the start time.");
+        assertParseFails("event meeting /on 2026-09-04 /from 2pm /to 4pm",
+                "Please use HH:mm—for example, 14:30.");
+        assertParseFails("event meeting /on 2026-09-04 /from 25:00 /to 26:00",
+                "That time asks rather more of the clock than it can provide.");
+        assertParseFails("event meeting /on 2026-09-04 /from 14:00:00 /to 16:00:00",
+                "That time format is a little too mysterious for me to parse.");
         assertParseFails("within collect certificate /from 2026-09-05 /to 2026-09-04",
                 "Keep the interval sensible: choose an end date on or after the start date.");
     }
@@ -121,7 +137,7 @@ public class ParserTest {
         assertParseFails("deadline report /by 2026-09-04 /by 2026-09-05",
                 "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
         assertParseFails("event meeting /from 2026-09-04 /from 2026-09-05 /to 2026-09-06",
-                "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+                "An engagement requires a date or a date range.");
         assertParseFails("within task /from 2026-09-04 /to 2026-09-05 /to 2026-09-06",
                 "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
     }

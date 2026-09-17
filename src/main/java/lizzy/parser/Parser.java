@@ -1,6 +1,7 @@
 package lizzy.parser;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 import lizzy.command.Command;
@@ -34,13 +35,25 @@ public class Parser {
             "A deadline without both a duty and a date is merely suspense.\n"
                     + "Set it out like this: deadline <description> /by <yyyy-MM-dd>.";
     private static final String INVALID_EVENT_ERROR =
-            "An engagement without a beginning and an end is a mysterious affair.\n"
-                    + "Arrange it like this: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+            "An engagement requires a date or a date range.\n"
+                    + "Use: event <description> /on <yyyy-MM-dd> "
+                    + "[/from <HH:mm> /to <HH:mm>],\n"
+                    + "or: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
     private static final String INVALID_WITHIN_ERROR =
             "An interval, inconveniently, requires both a beginning and an end.\n"
                     + "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
-    private static final String INVALID_DATE_ERROR = "I couldn't understand that date.\n"
-            + "Dates behave best as yyyy-MM-dd—for example, 2019-10-15.";
+    private static final String INVALID_DATE_FORMAT_ERROR =
+            "That date format is a little too mysterious for me to parse.\n"
+                    + "Please use yyyy-MM-dd—for example, 2019-10-15.";
+    private static final String NONEXISTENT_DATE_ERROR =
+            "That date is admirably imaginative, but the calendar refuses to acknowledge it.\n"
+                    + "Choose a date that actually exists.";
+    private static final String INVALID_TIME_FORMAT_ERROR =
+            "That time format is a little too mysterious for me to parse.\n"
+                    + "Please use HH:mm—for example, 14:30.";
+    private static final String NONEXISTENT_TIME_ERROR =
+            "That time asks rather more of the clock than it can provide.\n"
+                    + "Choose a time from 00:00 to 23:59.";
 
     /**
      * Prevents instantiation because parsing is stateless.
@@ -122,6 +135,10 @@ public class Parser {
      * @throws LizzyException if the argument is incomplete, invalid, or ends before it begins.
      */
     private static Event parseEvent(String argument) throws LizzyException {
+        if (argument.matches("(?s).*\\s+/on\\s+.*")) {
+            return parseSingleDayEvent(argument);
+        }
+
         String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
         String[] timeParts = splitExactly(eventParts[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
         if (eventParts[0].isBlank() || timeParts[0].isBlank() || timeParts[1].isBlank()) {
@@ -134,6 +151,45 @@ public class Parser {
                     + "Let time keep its proper order: choose an end date on or after the start date.");
         }
         return new Event(eventParts[0].strip(), eventStartDate, eventEndDate);
+    }
+
+    /**
+     * Parses an all-day or timed event that occurs on one date.
+     *
+     * @param argument the event description, date, and optional time range
+     * @return a new incomplete single-day event
+     * @throws LizzyException if the date or optional time range is invalid
+     */
+    private static Event parseSingleDayEvent(String argument) throws LizzyException {
+        String[] eventParts = splitExactly(argument, "\\s+/on\\s+", INVALID_EVENT_ERROR);
+        if (eventParts[0].isBlank() || eventParts[1].isBlank()) {
+            throw new LizzyException(INVALID_EVENT_ERROR);
+        }
+
+        String schedule = eventParts[1];
+        boolean hasStartMarker = schedule.matches("(?s).*\\s+/from\\s+.*");
+        boolean hasEndMarker = schedule.matches("(?s).*\\s+/to\\s+.*");
+        if (!hasStartMarker && !hasEndMarker) {
+            LocalDate eventDate = parseDate(schedule);
+            return new Event(eventParts[0].strip(), eventDate, eventDate);
+        }
+        if (!hasStartMarker || !hasEndMarker) {
+            throw new LizzyException(INVALID_EVENT_ERROR);
+        }
+
+        String[] dateAndTimes = splitExactly(schedule, "\\s+/from\\s+", INVALID_EVENT_ERROR);
+        String[] times = splitExactly(dateAndTimes[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
+        if (dateAndTimes[0].isBlank() || times[0].isBlank() || times[1].isBlank()) {
+            throw new LizzyException(INVALID_EVENT_ERROR);
+        }
+        LocalDate eventDate = parseDate(dateAndTimes[0]);
+        LocalTime startTime = parseTime(times[0]);
+        LocalTime endTime = parseTime(times[1]);
+        if (!endTime.isAfter(startTime)) {
+            throw new LizzyException("An event must end after it begins.\n"
+                    + "Choose an end time later than the start time.");
+        }
+        return new Event(eventParts[0].strip(), eventDate, startTime, endTime);
     }
 
     /**
@@ -230,10 +286,33 @@ public class Parser {
      * @throws LizzyException if the text is not a valid ISO date.
      */
     private static LocalDate parseDate(String dateText) throws LizzyException {
+        String normalizedDate = dateText.strip();
+        if (!normalizedDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            throw new LizzyException(INVALID_DATE_FORMAT_ERROR);
+        }
         try {
-            return LocalDate.parse(dateText.strip());
+            return LocalDate.parse(normalizedDate);
         } catch (DateTimeParseException exception) {
-            throw new LizzyException(INVALID_DATE_ERROR);
+            throw new LizzyException(NONEXISTENT_DATE_ERROR);
+        }
+    }
+
+    /**
+     * Parses one 24-hour time.
+     *
+     * @param timeText the user-supplied time text
+     * @return the parsed time
+     * @throws LizzyException if the text is not a valid time in {@code HH:mm} format
+     */
+    private static LocalTime parseTime(String timeText) throws LizzyException {
+        String normalizedTime = timeText.strip();
+        if (!normalizedTime.matches("\\d{2}:\\d{2}")) {
+            throw new LizzyException(INVALID_TIME_FORMAT_ERROR);
+        }
+        try {
+            return LocalTime.parse(normalizedTime);
+        } catch (DateTimeParseException exception) {
+            throw new LizzyException(NONEXISTENT_TIME_ERROR);
         }
     }
 

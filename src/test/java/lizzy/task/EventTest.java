@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,5 +56,26 @@ public class EventTest {
         Event event = new Event("conference", LocalDate.of(2026, 9, 3), LocalDate.of(2026, 9, 3));
 
         assertTrue(event.occursOn(LocalDate.of(2026, 9, 3)));
+        assertEquals("[E][ ] conference (on: Sep 3 2026)", event.toString());
+    }
+
+    @Test
+    void timedEvent_validTimes_timeRangeDisplayedAndAvailable() {
+        Event event = new Event("team meeting", LocalDate.of(2026, 9, 3),
+                LocalTime.of(14, 0), LocalTime.of(16, 30));
+
+        assertEquals(LocalTime.of(14, 0), event.getStartTime().orElseThrow());
+        assertEquals(LocalTime.of(16, 30), event.getEndTime().orElseThrow());
+        assertEquals("[E][ ] team meeting (on: Sep 3 2026, 14:00 to 16:30)", event.toString());
+    }
+
+    @Test
+    void timedEvent_invalidOrIncompleteTimeRange_exceptionThrown() {
+        LocalDate date = LocalDate.of(2026, 9, 3);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Event("team meeting", date, LocalTime.of(16, 0), LocalTime.of(14, 0)));
+        assertThrows(IllegalArgumentException.class, () ->
+                new Event("team meeting", date, LocalTime.of(14, 0), LocalTime.of(14, 0)));
     }
 }

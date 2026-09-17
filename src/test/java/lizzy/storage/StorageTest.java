@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Base64;
 import java.util.List;
 
@@ -46,13 +47,15 @@ public class StorageTest {
         Deadline deadline = new Deadline("submit report", LocalDate.of(2026, 9, 10));
         Event event = new Event("project meeting", LocalDate.of(2026, 9, 11),
                 LocalDate.of(2026, 9, 12), true);
+        Event timedEvent = new Event("team meeting", LocalDate.of(2026, 9, 16),
+                LocalTime.of(14, 0), LocalTime.of(15, 30));
         WithinPeriodTask periodTask = new WithinPeriodTask("collect certificate", LocalDate.of(2026, 9, 13),
                 LocalDate.of(2026, 9, 15));
 
-        storage.save(List.of(todo, deadline, event, periodTask));
+        storage.save(List.of(todo, deadline, event, timedEvent, periodTask));
         List<Task> loadedTasks = storage.load();
 
-        assertEquals(4, loadedTasks.size());
+        assertEquals(5, loadedTasks.size());
         Todo loadedTodo = assertInstanceOf(Todo.class, loadedTasks.get(0));
         assertEquals("read | reference", loadedTodo.getDescription());
         assertTrue(loadedTodo.isDone());
@@ -66,7 +69,12 @@ public class StorageTest {
         assertEquals(LocalDate.of(2026, 9, 12), loadedEvent.getTo());
         assertTrue(loadedEvent.isDone());
 
-        WithinPeriodTask loadedPeriodTask = assertInstanceOf(WithinPeriodTask.class, loadedTasks.get(3));
+        Event loadedTimedEvent = assertInstanceOf(Event.class, loadedTasks.get(3));
+        assertEquals(LocalDate.of(2026, 9, 16), loadedTimedEvent.getFrom());
+        assertEquals(LocalTime.of(14, 0), loadedTimedEvent.getStartTime().orElseThrow());
+        assertEquals(LocalTime.of(15, 30), loadedTimedEvent.getEndTime().orElseThrow());
+
+        WithinPeriodTask loadedPeriodTask = assertInstanceOf(WithinPeriodTask.class, loadedTasks.get(4));
         assertEquals(LocalDate.of(2026, 9, 13), loadedPeriodTask.getFrom());
         assertEquals(LocalDate.of(2026, 9, 15), loadedPeriodTask.getTo());
         assertFalse(loadedPeriodTask.isDone());

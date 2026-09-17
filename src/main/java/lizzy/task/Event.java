@@ -1,8 +1,10 @@
 package lizzy.task;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Represents a task that starts and ends at specified times.
@@ -13,6 +15,8 @@ public class Event extends Task {
      */
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
+    private static final DateTimeFormatter DISPLAY_TIME_FORMAT =
+            DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
 
     /**
      * The event start date.
@@ -23,6 +27,16 @@ public class Event extends Task {
      * The event end date.
      */
     protected final LocalDate to;
+
+    /**
+     * The optional start time of a single-day event.
+     */
+    private final LocalTime startTime;
+
+    /**
+     * The optional end time of a single-day event.
+     */
+    private final LocalTime endTime;
 
     /**
      * Creates an incomplete event.
@@ -44,6 +58,39 @@ public class Event extends Task {
      * @param isDone whether the event has been completed
      */
     public Event(String description, LocalDate from, LocalDate to, boolean isDone) {
+        this(description, from, to, null, null, isDone);
+    }
+
+    /**
+     * Creates an incomplete single-day event with a start and end time.
+     *
+     * @param description the text describing the event
+     * @param date the date on which the event occurs
+     * @param startTime the event start time
+     * @param endTime the event end time
+     */
+    public Event(String description, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this(description, date, startTime, endTime, false);
+    }
+
+    /**
+     * Restores a timed single-day event with its saved completion state.
+     *
+     * @param description the text describing the event
+     * @param date the date on which the event occurs
+     * @param startTime the event start time
+     * @param endTime the event end time
+     * @param isDone whether the event has been completed
+     */
+    public Event(String description, LocalDate date, LocalTime startTime, LocalTime endTime, boolean isDone) {
+        this(description, date, date, startTime, endTime, isDone);
+    }
+
+    /**
+     * Creates an event after validating its dates and optional time range.
+     */
+    private Event(String description, LocalDate from, LocalDate to,
+                  LocalTime startTime, LocalTime endTime, boolean isDone) {
         super(description, isDone);
         if (from == null || to == null) {
             throw new IllegalArgumentException("Event dates cannot be null.");
@@ -51,8 +98,19 @@ public class Event extends Task {
         if (to.isBefore(from)) {
             throw new IllegalArgumentException("An event's end date cannot be before its start date.");
         }
+        if ((startTime == null) != (endTime == null)) {
+            throw new IllegalArgumentException("An event requires both a start and an end time.");
+        }
+        if (startTime != null && !from.equals(to)) {
+            throw new IllegalArgumentException("A timed event must occur on one date.");
+        }
+        if (startTime != null && !endTime.isAfter(startTime)) {
+            throw new IllegalArgumentException("An event's end time must be after its start time.");
+        }
         this.from = from;
         this.to = to;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     /**
@@ -65,7 +123,9 @@ public class Event extends Task {
     boolean hasSameDetails(Task other) {
         return super.hasSameDetails(other)
                 && from.equals(((Event) other).from)
-                && to.equals(((Event) other).to);
+                && to.equals(((Event) other).to)
+                && java.util.Objects.equals(startTime, ((Event) other).startTime)
+                && java.util.Objects.equals(endTime, ((Event) other).endTime);
     }
 
     /**
@@ -95,12 +155,38 @@ public class Event extends Task {
     }
 
     /**
+     * Returns the start time of a timed event.
+     *
+     * @return the start time, or an empty value for an all-day event
+     */
+    public Optional<LocalTime> getStartTime() {
+        return Optional.ofNullable(startTime);
+    }
+
+    /**
+     * Returns the end time of a timed event.
+     *
+     * @return the end time, or an empty value for an all-day event
+     */
+    public Optional<LocalTime> getEndTime() {
+        return Optional.ofNullable(endTime);
+    }
+
+    /**
      * Returns a display-ready representation of this event.
      *
      * @return the event type marker, completion status, description, and formatted date range.
      */
     @Override
     public String toString() {
+        if (startTime != null) {
+            return "[E]" + super.toString() + " (on: " + from.format(DISPLAY_DATE_FORMAT)
+                    + ", " + startTime.format(DISPLAY_TIME_FORMAT)
+                    + " to " + endTime.format(DISPLAY_TIME_FORMAT) + ")";
+        }
+        if (from.equals(to)) {
+            return "[E]" + super.toString() + " (on: " + from.format(DISPLAY_DATE_FORMAT) + ")";
+        }
         return "[E]" + super.toString() + " (from: " + from.format(DISPLAY_DATE_FORMAT)
                 + " to: " + to.format(DISPLAY_DATE_FORMAT) + ")";
     }

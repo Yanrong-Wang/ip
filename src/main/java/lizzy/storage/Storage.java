@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -114,8 +115,13 @@ public class Storage {
                     encode(deadline.getBy().toString()));
         }
         if (task instanceof Event event) {
-            return String.join(FIELD_SEPARATOR, EVENT_RECORD_TYPE, status, description,
-                    encode(event.getFrom().toString()), encode(event.getTo().toString()));
+            List<String> fields = new ArrayList<>(List.of(EVENT_RECORD_TYPE, status, description,
+                    encode(event.getFrom().toString()), encode(event.getTo().toString())));
+            event.getStartTime().ifPresent(time -> {
+                fields.add(encode(time.toString()));
+                fields.add(encode(event.getEndTime().orElseThrow().toString()));
+            });
+            return String.join(FIELD_SEPARATOR, fields);
         }
         return String.join(FIELD_SEPARATOR, TODO_RECORD_TYPE, status, description);
     }
@@ -137,8 +143,7 @@ public class Storage {
             return switch (fields[0]) {
                 case TODO_RECORD_TYPE -> new Todo(description, isDone);
                 case DEADLINE_RECORD_TYPE -> new Deadline(description, LocalDate.parse(decode(fields[3])), isDone);
-                case EVENT_RECORD_TYPE -> new Event(description, LocalDate.parse(decode(fields[3])),
-                        LocalDate.parse(decode(fields[4])), isDone);
+                case EVENT_RECORD_TYPE -> deserializeEvent(fields, description, isDone);
                 case WITHIN_PERIOD_RECORD_TYPE -> new WithinPeriodTask(description,
                         LocalDate.parse(decode(fields[3])), LocalDate.parse(decode(fields[4])), isDone);
                 default -> throw new IllegalArgumentException("Unknown task type");
@@ -163,13 +168,34 @@ public class Storage {
         int expectedFieldCount = switch (fields[0]) {
             case TODO_RECORD_TYPE -> 3;
             case DEADLINE_RECORD_TYPE -> 4;
-            case EVENT_RECORD_TYPE -> 5;
+            case EVENT_RECORD_TYPE -> fields.length == 7 ? 7 : 5;
             case WITHIN_PERIOD_RECORD_TYPE -> 5;
             default -> throw new IllegalArgumentException("Unknown task type");
         };
         if (fields.length != expectedFieldCount) {
             throw new IllegalArgumentException("Invalid field count");
         }
+    }
+
+    /**
+     * Restores an all-day or timed event from validated storage fields.
+     *
+     * @param fields the complete event record
+     * @param description the decoded event description
+     * @param isDone whether the event has been completed
+     * @return the restored event
+     */
+    private static Event deserializeEvent(String[] fields, String description, boolean isDone) {
+        LocalDate from = LocalDate.parse(decode(fields[3]));
+        LocalDate to = LocalDate.parse(decode(fields[4]));
+        if (fields.length == 5) {
+            return new Event(description, from, to, isDone);
+        }
+        if (!from.equals(to)) {
+            throw new IllegalArgumentException("A timed event must occur on one date");
+        }
+        return new Event(description, from, LocalTime.parse(decode(fields[5])),
+                LocalTime.parse(decode(fields[6])), isDone);
     }
 
     /**
