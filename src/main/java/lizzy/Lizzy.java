@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import lizzy.command.Command;
 import lizzy.exception.LizzyException;
@@ -22,8 +23,9 @@ public class Lizzy {
      *
      * @param text the response text to display
      * @param isError whether the response explains an invalid command
+     * @param isExit whether the response ends the current session
      */
-    public record Response(String text, boolean isError) {
+    public record Response(String text, boolean isError, boolean isExit) {
     }
 
     /**
@@ -115,6 +117,15 @@ public class Lizzy {
     }
 
     /**
+     * Returns the recoverable storage error encountered while loading saved tasks, if any.
+     *
+     * @return the startup error, or an empty value when task data loaded successfully
+     */
+    public Optional<String> getStartupError() {
+        return Optional.ofNullable(startupError);
+    }
+
+    /**
      * Executes one command and returns both its text and whether it is an error response.
      *
      * @param input the command entered through the graphical interface
@@ -128,7 +139,8 @@ public class Lizzy {
             commandStatus = executeCommand(input, responseUi);
         }
         String response = responseBytes.toString(StandardCharsets.UTF_8);
-        return new Response(response.replace("\r\n", "\n").stripTrailing(), commandStatus.isError());
+        return new Response(response.replace("\r\n", "\n").stripTrailing(),
+                commandStatus.isError(), commandStatus.isExit());
     }
 
     /**

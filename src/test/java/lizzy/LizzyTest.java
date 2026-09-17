@@ -51,6 +51,7 @@ public class LizzyTest {
 
         assertEquals("Your list is blissfully free of obligations.", response.text());
         assertFalse(response.isError());
+        assertFalse(response.isExit());
     }
 
     @Test
@@ -61,6 +62,28 @@ public class LizzyTest {
 
         assertTrue(response.text().startsWith("I'm afraid \"dance\" is quite beyond my acquaintance."));
         assertTrue(response.isError());
+        assertFalse(response.isExit());
+    }
+
+    @Test
+    void getResponseWithStatus_byeCommand_responseEndsSession() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+
+        Lizzy.Response response = lizzy.getResponseWithStatus("bye");
+
+        assertTrue(response.text().startsWith("Goodbye!"));
+        assertFalse(response.isError());
+        assertTrue(response.isExit());
+    }
+
+    @Test
+    void getStartupError_unreadableDataFile_errorAvailableAndEmptyListUsed() throws IOException {
+        Path directoryPath = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(directoryPath);
+        Lizzy lizzy = new Lizzy(directoryPath);
+
+        assertTrue(lizzy.getStartupError().orElseThrow().contains("couldn't read your saved tasks"));
+        assertEquals("Your list is blissfully free of obligations.", lizzy.getResponse("list"));
     }
 
     @Test
