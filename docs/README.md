@@ -43,6 +43,7 @@ Type a command in the box at the bottom, then press **Enter** or click
 | Mark a task complete | `mark <task number>` |
 | Mark a task incomplete | `unmark <task number>` |
 | Delete a task | `delete <task number>` |
+| Show command help | `help` |
 | Exit Lizzy | `bye` |
 
 ## Features
@@ -75,7 +76,9 @@ event Orientation /from 2026-09-17 /to 2026-09-19
 ```
 
 Times use 24-hour `HH:mm` format. A timed event must end later than it starts.
-For a multi-day event, the end date cannot be before the start date.
+If a date range begins and ends on the same date, Lizzy treats it as a
+one-day event and displays it using `on`. Prefer `/on` when entering such an
+event because it expresses the intention more clearly.
 Lizzy presents parsed dates in a friendlier form such as `Sep 17 2026`, while
 times remain in the same 24-hour form used in commands, such as `14:00`.
 
@@ -119,14 +122,32 @@ delete 3
 
 This permanently removes the selected task from the list.
 
+### Duplicate tasks
+
+Lizzy rejects a task when its type and all its details match a task already
+in the list. Completion status is ignored, so marking a task does not make it
+possible to add the same task again. Tasks with the same description but a
+different type, date, or time remain distinct and are accepted. Description
+comparison uses the exact text, including letter case.
+
 ### Finding tasks
 
 ```text
-find project
+find meet
 ```
 
-Lizzy searches task descriptions for the exact, case-sensitive keyword and
-keeps the original task numbers in the results.
+Lizzy searches for the keyword anywhere inside task descriptions, without
+regard to letter case. For example, `find meet` matches `Team meeting`.
+Matching results keep their original task numbers.
+
+### Viewing command help
+
+```text
+help
+```
+
+Lizzy gives a compact reminder of every command's format and purpose,
+including the required date and time formats.
 
 ### Viewing one day's schedule
 
