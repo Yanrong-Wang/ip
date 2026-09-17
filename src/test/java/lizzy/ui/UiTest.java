@@ -42,11 +42,15 @@ public class UiTest {
     void showSessionMessages_expectedTextWritten() {
         String welcome = captureOutput(Ui::showWelcome);
         String goodbye = captureOutput(Ui::showGoodbye);
+        String help = captureOutput(Ui::showHelp);
         String error = captureOutput(ui -> ui.showError("A recoverable error."));
         String divider = captureOutput(Ui::showDivider);
 
         assertTrue(welcome.contains("Hello! I'm Lizzy.\nWhat brings you here today?"));
         assertEquals("Goodbye! May your plans prosper—and leave you a little leisure.\n", goodbye);
+        assertTrue(help.contains("A brief guide, should memory prove uncooperative:"));
+        assertTrue(help.contains("event <description> /on <yyyy-MM-dd> — add a one-day event"));
+        assertTrue(help.contains("bye — close Lizzy"));
         assertEquals("A recoverable error.\n", error);
         assertEquals("____________________________________________________________\n", divider);
     }

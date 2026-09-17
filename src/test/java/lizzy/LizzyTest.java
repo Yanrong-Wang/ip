@@ -39,8 +39,20 @@ public class LizzyTest {
         String response = lizzy.getResponse("unknown");
 
         assertEquals("I'm afraid \"unknown\" is quite beyond my acquaintance.\n"
-                + "You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.",
+                + "You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, help, or bye.",
                 response);
+    }
+
+    @Test
+    void getResponse_helpCommand_formatsAndPurposesReturned() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+
+        String response = lizzy.getResponse("help");
+
+        assertTrue(response.startsWith("A brief guide, should memory prove uncooperative:"));
+        assertTrue(response.contains("todo <description> — add an undated task"));
+        assertTrue(response.contains("find <keyword> — partially search task descriptions"));
+        assertTrue(response.contains("Dates use yyyy-MM-dd; times use HH:mm."));
     }
 
     @Test

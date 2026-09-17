@@ -42,6 +42,51 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ```
 
+### Show command help
+- Aim: Verify that help gives a concise, in-character summary of every command's format and purpose.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  ```
+- Inputs:
+  ```text
+  help
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  ____________________________________________________________
+  ____________________________________________________________
+  A brief guide, should memory prove uncooperative:
+    todo <description> — add an undated task
+    deadline <description> /by <yyyy-MM-dd> — add a deadline
+    event <description> /on <yyyy-MM-dd> — add a one-day event
+    event <description> /on <yyyy-MM-dd> /from <HH:mm> /to <HH:mm> — add a timed event
+    event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a date-range event
+    within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a flexible period
+    list — show every task
+    find <keyword> — partially search task descriptions
+    on <yyyy-MM-dd> — show one day's schedule
+    mark <number> — complete a task
+    unmark <number> — reopen a task
+    delete <number> — remove a task
+    bye — close Lizzy
+  Dates use yyyy-MM-dd; times use HH:mm. A little precision saves much puzzlement.
+  ____________________________________________________________
+  ____________________________________________________________
+  Goodbye! May your plans prosper—and leave you a little leisure.
+  ____________________________________________________________
+  ```
+
 ### Reject duplicate and ambiguous command input
 - Aim: Verify that duplicate tasks, repeated date markers, and decorated task numbers are rejected without changing the valid task list.
 - Command:
@@ -393,7 +438,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   I'm afraid "blah" is quite beyond my acquaintance.
-  You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.
+  You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, help, or bye.
   ____________________________________________________________
   ____________________________________________________________
   A task with nothing to do is hardly a task at all.
@@ -523,7 +568,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   delete 1
   todo read book
   deadline submit report /by 2026-08-28
-  event project meeting /from 2026-08-06 /to 2026-08-06
+  event project meeting /on 2026-08-06
   mark 3
   delete 2
   list
@@ -700,7 +745,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
 - Aim: Verify that todos, deadlines, events, and completion state survive a restart.
 - Command:
   ```sh
-  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && printf 'todo read book\ndeadline return book /by 2026-06-06\nevent project meeting /from 2026-08-06 /to 2026-08-06\nmark 1\nbye\n' | java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy >/dev/null && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && printf 'todo read book\ndeadline return book /by 2026-06-06\nevent project meeting /on 2026-08-06\nmark 1\nbye\n' | java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy >/dev/null && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
   ```
 - Inputs:
   ```text
@@ -731,7 +776,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ```
 
 ### Add single-day and timed events
-- Aim: Verify that one-day events avoid repeated dates, optional 24-hour times are displayed clearly, date lookup includes timed events, and reversed times are rejected.
+- Aim: Verify that same-day date ranges become one-day events, valid times are displayed clearly, and reversed or zero-length time ranges are rejected.
 - Command:
   ```sh
   mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
@@ -741,6 +786,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   event team meeting /on 2026-09-17
   event study group /on 2026-09-18 /from 14:00 /to 16:30
   event invalid meeting /on 2026-09-18 /from 16:30 /to 14:00
+  event zero-length meeting /on 2026-09-18 /from 14:00 /to 14:00
+  event same-day range /from 2026-09-18 /to 2026-09-18
   event impossible date /on 2026-02-30
   event mysterious time /on 2026-09-18 /from 2pm /to 4pm
   event invalid time /on 2026-09-18 /from 25:00 /to 26:00
@@ -771,8 +818,17 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An event must end after it begins.
+  That event ends before it begins—a trick even time will not oblige.
   Choose an end time later than the start time.
+  ____________________________________________________________
+  ____________________________________________________________
+  An event that begins and ends at the same moment scarcely has time to occur.
+  Choose an end time later than the start time.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement! I've added it to your list:
+    [E][ ] same-day range (on: Sep 18 2026)
+  That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
   That date is admirably imaginative, but the calendar refuses to acknowledge it.
@@ -789,11 +845,13 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   On Sep 18 2026, these matters have designs upon your time:
   2.[E][ ] study group (on: Sep 18 2026, 14:00 to 16:30)
+  3.[E][ ] same-day range (on: Sep 18 2026)
   ____________________________________________________________
   ____________________________________________________________
   Let us see what presently claims your attention:
   1.[E][ ] team meeting (on: Sep 17 2026)
   2.[E][ ] study group (on: Sep 18 2026, 14:00 to 16:30)
+  3.[E][ ] same-day range (on: Sep 18 2026)
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -942,7 +1000,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   An event cannot end before it begins.
-  Let time keep its proper order: choose an end date on or after the start date.
+  Let time keep its proper order: choose an end date after the start date.
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
@@ -1098,7 +1156,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ```
 
 ### Find tasks by keyword
-- Aim: Verify that description search finds matching task types in original list order, retains task numbers and completion state, and handles no or missing keywords.
+- Aim: Verify that partial, case-insensitive description search finds matching task types in original list order, retains task numbers and completion state, and handles no or missing keywords.
 - Command:
   ```sh
   mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
@@ -1110,7 +1168,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   todo buy milk
   mark 1
   mark 2
-  find book
+  find OOK
   find pen
   find
   bye

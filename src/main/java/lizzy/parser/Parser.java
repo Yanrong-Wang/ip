@@ -10,6 +10,7 @@ import lizzy.command.DeleteCommand;
 import lizzy.command.EventCommand;
 import lizzy.command.ExitCommand;
 import lizzy.command.FindCommand;
+import lizzy.command.HelpCommand;
 import lizzy.command.ListCommand;
 import lizzy.command.MarkCommand;
 import lizzy.command.TodoCommand;
@@ -81,6 +82,10 @@ public class Parser {
                 requireNoArgument(argument, "A list requires no further instruction.", "list");
                 yield new ListCommand();
             }
+            case "help" -> {
+                requireNoArgument(argument, "A guide needs no embellishment.", "help");
+                yield new HelpCommand();
+            }
             case "on" -> new ViewScheduleCommand(parseOnDate(argument));
             case "todo" -> new TodoCommand(parseTodo(argument));
             case "deadline" -> new DeadlineCommand(parseDeadline(argument));
@@ -148,7 +153,7 @@ public class Parser {
         LocalDate eventEndDate = parseDate(timeParts[1]);
         if (eventEndDate.isBefore(eventStartDate)) {
             throw new LizzyException("An event cannot end before it begins.\n"
-                    + "Let time keep its proper order: choose an end date on or after the start date.");
+                    + "Let time keep its proper order: choose an end date after the start date.");
         }
         return new Event(eventParts[0].strip(), eventStartDate, eventEndDate);
     }
@@ -185,8 +190,12 @@ public class Parser {
         LocalDate eventDate = parseDate(dateAndTimes[0]);
         LocalTime startTime = parseTime(times[0]);
         LocalTime endTime = parseTime(times[1]);
-        if (!endTime.isAfter(startTime)) {
-            throw new LizzyException("An event must end after it begins.\n"
+        if (endTime.equals(startTime)) {
+            throw new LizzyException("An event that begins and ends at the same moment scarcely has time to occur.\n"
+                    + "Choose an end time later than the start time.");
+        }
+        if (endTime.isBefore(startTime)) {
+            throw new LizzyException("That event ends before it begins—a trick even time will not oblige.\n"
                     + "Choose an end time later than the start time.");
         }
         return new Event(eventParts[0].strip(), eventDate, startTime, endTime);
@@ -342,7 +351,7 @@ public class Parser {
      */
     private static LizzyException unknownCommand(String command) {
         return new LizzyException("I'm afraid \"" + command + "\" is quite beyond my acquaintance.\n"
-                + "You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, or bye.");
+                + "You may try: todo, deadline, event, within, list, find, on, mark, unmark, delete, help, or bye.");
     }
 
     /**

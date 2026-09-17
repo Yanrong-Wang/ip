@@ -2,6 +2,7 @@ package lizzy.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.IntStream;
 
 import lizzy.exception.LizzyException;
@@ -87,14 +88,17 @@ public class TaskList {
     }
 
     /**
-     * Returns one-based task numbers whose descriptions contain a case-sensitive keyword.
+     * Returns one-based task numbers whose descriptions contain a keyword, ignoring case.
      *
      * @param keyword the text to search for
      * @return the matching task numbers in task-list order
      */
     public List<Integer> findMatchingTaskNumbers(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         return IntStream.range(0, tasks.size())
-                .filter(index -> tasks.get(index).getDescription().contains(keyword))
+                .filter(index -> tasks.get(index).getDescription()
+                        .toLowerCase(Locale.ROOT)
+                        .contains(normalizedKeyword))
                 .map(index -> index + 1)
                 .boxed()
                 .toList();

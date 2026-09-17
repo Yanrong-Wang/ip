@@ -12,6 +12,7 @@ import lizzy.command.DeleteCommand;
 import lizzy.command.EventCommand;
 import lizzy.command.ExitCommand;
 import lizzy.command.FindCommand;
+import lizzy.command.HelpCommand;
 import lizzy.command.ListCommand;
 import lizzy.command.MarkCommand;
 import lizzy.command.TodoCommand;
@@ -27,6 +28,7 @@ public class ParserTest {
     @Test
     void parse_supportedCommands_correctCommandSubtypes() throws LizzyException {
         assertInstanceOf(ListCommand.class, Parser.parse("list"));
+        assertInstanceOf(HelpCommand.class, Parser.parse("help"));
         assertInstanceOf(ViewScheduleCommand.class, Parser.parse("on 2026-09-03"));
         assertInstanceOf(TodoCommand.class, Parser.parse("todo review notes"));
         assertInstanceOf(DeadlineCommand.class, Parser.parse("deadline submit work /by 2026-09-04"));
@@ -62,6 +64,8 @@ public class ParserTest {
                 Parser.parse("deadline leap-day task /by 2028-02-29"));
         assertInstanceOf(EventCommand.class,
                 Parser.parse("event interview /on 2026-09-04"));
+        assertInstanceOf(EventCommand.class,
+                Parser.parse("event consultation /from 2026-09-04 /to 2026-09-04"));
         assertInstanceOf(WithinPeriodCommand.class,
                 Parser.parse("within collect form /from 2026-09-04 /to 2026-09-04"));
     }
@@ -106,9 +110,11 @@ public class ParserTest {
                 "Choose a date that actually exists.");
         assertParseFails("on", "Name the day like this: on <yyyy-MM-dd>.");
         assertParseFails("event consultation /from 2026-09-05 /to 2026-09-04",
-                "Let time keep its proper order: choose an end date on or after the start date.");
+                "Let time keep its proper order: choose an end date after the start date.");
         assertParseFails("event meeting /on 2026-09-04 /from 16:00 /to 14:00",
-                "Choose an end time later than the start time.");
+                "That event ends before it begins—a trick even time will not oblige.");
+        assertParseFails("event meeting /on 2026-09-04 /from 14:00 /to 14:00",
+                "An event that begins and ends at the same moment scarcely has time to occur.");
         assertParseFails("event meeting /on 2026-09-04 /from 2pm /to 4pm",
                 "Please use HH:mm—for example, 14:30.");
         assertParseFails("event meeting /on 2026-09-04 /from 25:00 /to 26:00",
@@ -129,6 +135,7 @@ public class ParserTest {
         assertParseFails("delete 1 2", "Be precise: delete <task number>.");
         assertParseFails("delete 999999999999999999999", "Be precise: delete <task number>.");
         assertParseFails("list now", "A simple \"list\" will do.");
+        assertParseFails("help now", "A simple \"help\" will do.");
         assertParseFails("bye now", "A simple \"bye\" will do.");
     }
 

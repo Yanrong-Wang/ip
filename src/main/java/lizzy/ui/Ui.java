@@ -96,6 +96,27 @@ public class Ui {
     }
 
     /**
+     * Displays the supported command formats and their purposes.
+     */
+    public void showHelp() {
+        outputStream.println("A brief guide, should memory prove uncooperative:");
+        outputStream.println("  todo <description> — add an undated task");
+        outputStream.println("  deadline <description> /by <yyyy-MM-dd> — add a deadline");
+        outputStream.println("  event <description> /on <yyyy-MM-dd> — add a one-day event");
+        outputStream.println("  event <description> /on <yyyy-MM-dd> /from <HH:mm> /to <HH:mm> — add a timed event");
+        outputStream.println("  event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a date-range event");
+        outputStream.println("  within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a flexible period");
+        outputStream.println("  list — show every task");
+        outputStream.println("  find <keyword> — partially search task descriptions");
+        outputStream.println("  on <yyyy-MM-dd> — show one day's schedule");
+        outputStream.println("  mark <number> — complete a task");
+        outputStream.println("  unmark <number> — reopen a task");
+        outputStream.println("  delete <number> — remove a task");
+        outputStream.println("  bye — close Lizzy");
+        outputStream.println("Dates use yyyy-MM-dd; times use HH:mm. A little precision saves much puzzlement.");
+    }
+
+    /**
      * Displays a user-facing error message.
      *
      * @param message the message to display
