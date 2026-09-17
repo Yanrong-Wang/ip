@@ -189,11 +189,6 @@ its task data to stay together with the application.
 
 ## Acknowledgements
 
-- The project is based on the
-  [SE-EDU Duke starter project and JavaFX tutorial](https://nus-cs2103-ay2627-s1.github.io/website/projectDuke/).
-- The interface bundles
-  [Source Serif 4](https://github.com/adobe-fonts/source-serif), licensed
-  under the SIL Open Font License 1.1. The full license is included with the
-  font files.
-- The Lizzy and Jane line-art portraits are original AI-assisted artwork
-  created for this project using OpenAI image generation.
+See the
+[project acknowledgements](https://github.com/Yanrong-Wang/ip#acknowledgements)
+for AI-assistance, reused-work, asset-attribution, and licence details.

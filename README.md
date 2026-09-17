@@ -30,16 +30,36 @@ The output is `build/libs/lizzy.jar`. Run the full automated checks with:
 ./gradlew check
 ```
 
-## Credits and reuse
+## Acknowledgements
+
+### AI assistance
+
+Yanrong Wang used OpenAI Codex with GPT-5.6 Terra and GPT-5.6 Sol
+extensively as a learning aid during development. It provided explanations,
+design feedback, and code suggestions for selected Java, JavaFX, testing,
+documentation, Git, and user-interface work. This included task parsing and
+validation, error handling, automated tests, the JavaFX conversation
+interface, the User Guide, and product screenshots. The author reviewed,
+adapted, integrated, and tested the resulting changes.
+
+OpenAI image generation was also used to create the original Lizzy and Jane
+line-art portraits from user-directed visual references. The generated
+portraits were reviewed and refined for use in the interface.
+
+### Reused and adapted work
 
 - This repository began from the
-  [SE-EDU Duke starter project](https://github.com/se-edu/duke) and follows
-  its JavaFX tutorial structure. The original contributors remain listed in
-  [CONTRIBUTORS.md](CONTRIBUTORS.md).
+  [SE-EDU Duke starter project](https://github.com/se-edu/duke). Its initial
+  JavaFX chatbot structure and `DialogBox` approach were adapted from the
+  [SE-EDU JavaFX tutorial](https://se-education.org/guides/tutorials/javaFx.html).
+  The original contributors remain listed in
+  [CONTRIBUTORS.md](CONTRIBUTORS.md). Course-provided material is credited
+  here for transparency.
 - The bundled
   [Source Serif 4](https://github.com/adobe-fonts/source-serif) font is
   Copyright 2014–2023 Adobe and is distributed under the SIL Open Font
   License 1.1; its license is included at
   `src/main/resources/fonts/LICENSE.md`.
-- The Lizzy and Jane line-art portraits are original AI-assisted artwork
-  created for this project using OpenAI image generation.
+
+The bundled font and generated portraits are used subject to their respective
+licence and service terms.
