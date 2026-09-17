@@ -41,6 +41,7 @@
                 <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
             </padding>
             <TextField fx:id="userInput" accessibleText="Command input"
+                       minWidth="0.0"
                        onAction="#handleUserInput" promptText="What shall we attend to?"
                        HBox.hgrow="ALWAYS" />
             <Button fx:id="sendButton" defaultButton="true"

@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
@@ -41,14 +42,33 @@ public class Main extends Application {
         mainWindow.setLizzy(new Lizzy());
 
         stage.setTitle("Lizzy");
-        double availableScreenHeight = Screen.getPrimary().getVisualBounds().getHeight();
-        stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        double availableScreenWidth = visualBounds.getWidth();
+        double availableScreenHeight = visualBounds.getHeight();
+        stage.setMinWidth(Math.min(MINIMUM_WINDOW_WIDTH, availableScreenWidth));
         stage.setMinHeight(Math.min(MINIMUM_WINDOW_HEIGHT, availableScreenHeight));
+        stage.setMaxWidth(availableScreenWidth);
         stage.setMaxHeight(availableScreenHeight);
         stage.setResizable(true);
         stage.setScene(new Scene(root));
         stage.show();
+        fitWithinVisualBounds(stage, visualBounds);
         mainWindow.focusInput();
+    }
+
+    /**
+     * Keeps the complete initial window inside the usable area of its screen.
+     *
+     * @param stage the window to resize and position
+     * @param visualBounds the screen area excluding system bars and docks
+     */
+    private static void fitWithinVisualBounds(Stage stage, Rectangle2D visualBounds) {
+        double fittedWidth = Math.min(stage.getWidth(), visualBounds.getWidth());
+        double fittedHeight = Math.min(stage.getHeight(), visualBounds.getHeight());
+        stage.setWidth(fittedWidth);
+        stage.setHeight(fittedHeight);
+        stage.setX(visualBounds.getMinX() + (visualBounds.getWidth() - fittedWidth) / 2);
+        stage.setY(visualBounds.getMinY() + (visualBounds.getHeight() - fittedHeight) / 2);
     }
 
     /**

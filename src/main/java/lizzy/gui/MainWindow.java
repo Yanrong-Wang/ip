@@ -1,6 +1,10 @@
 package lizzy.gui;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +18,8 @@ import lizzy.Lizzy;
  * Handles user interaction in Lizzy's main window.
  */
 public class MainWindow {
-    private static final Duration EXIT_DELAY = Duration.seconds(1.0);
+    private static final Duration EXIT_DELAY = Duration.seconds(2.0);
+    private static final Duration SCROLL_DURATION = Duration.millis(180.0);
 
     @FXML
     private ScrollPane scrollPane;
@@ -25,18 +30,13 @@ public class MainWindow {
     @FXML
     private Button sendButton;
     /**
+     * Animates the conversation toward its newest message.
+     */
+    private Timeline scrollAnimation;
+    /**
      * Generates responses for commands entered in the window.
      */
     private Lizzy lizzy;
-
-    /**
-     * Keeps the newest dialog visible as the conversation grows.
-     */
-    @FXML
-    private void initialize() {
-        dialogContainer.heightProperty().addListener(
-                observable -> scrollPane.setVvalue(1.0));
-    }
 
     /**
      * Connects the window to a chatbot session and displays its greeting.
@@ -46,9 +46,11 @@ public class MainWindow {
     public void setLizzy(Lizzy lizzy) {
         this.lizzy = lizzy;
         dialogContainer.getChildren().add(
-                DialogBox.getLizzyDialog("Hello! I'm Lizzy.\nWhat brings you here today?"));
+                DialogBox.getLizzyDialog("Hello! I'm Lizzy.\nWhat brings you here today?\n"
+                        + "Type help whenever you would like a quick command guide."));
         lizzy.getStartupError().ifPresent(error ->
                 dialogContainer.getChildren().add(DialogBox.getErrorDialog(error)));
+        scrollToLatestMessage();
     }
 
     /**
@@ -74,6 +76,7 @@ public class MainWindow {
                 ? DialogBox.getErrorDialog(response.text())
                 : DialogBox.getLizzyDialog(response.text());
         dialogContainer.getChildren().add(responseDialog);
+        scrollToLatestMessage();
         userInput.clear();
         if (response.isExit()) {
             closeAfterFarewell();
@@ -91,5 +94,20 @@ public class MainWindow {
         PauseTransition exitDelay = new PauseTransition(EXIT_DELAY);
         exitDelay.setOnFinished(event -> Platform.exit());
         exitDelay.play();
+    }
+
+    /**
+     * Smoothly reveals the latest exchange after JavaFX has laid out the new dialog boxes.
+     */
+    private void scrollToLatestMessage() {
+        Platform.runLater(() -> {
+            if (scrollAnimation != null) {
+                scrollAnimation.stop();
+            }
+            KeyValue scrollToBottom = new KeyValue(
+                    scrollPane.vvalueProperty(), 1.0, Interpolator.EASE_OUT);
+            scrollAnimation = new Timeline(new KeyFrame(SCROLL_DURATION, scrollToBottom));
+            scrollAnimation.play();
+        });
     }
 }
