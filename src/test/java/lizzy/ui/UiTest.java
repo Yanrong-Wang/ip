@@ -46,10 +46,17 @@ public class UiTest {
         String error = captureOutput(ui -> ui.showError("A recoverable error."));
         String divider = captureOutput(Ui::showDivider);
 
-        assertTrue(welcome.contains("Hello! I'm Lizzy.\nWhat brings you here today?"));
+        assertTrue(welcome.contains("Hello! I'm Lizzy.\nWhat brings you here today?\n"
+                + "Type help whenever you would like a quick command guide."));
         assertEquals("Goodbye! May your plans prosper—and leave you a little leisure.\n", goodbye);
         assertTrue(help.contains("A brief guide, should memory prove uncooperative:"));
-        assertTrue(help.contains("event <description> /on <yyyy-MM-dd> — add a one-day event"));
+        assertTrue(help.contains("Add tasks:\n  • todo <description> — undated task"));
+        assertTrue(help.contains("View tasks:\n  • list — show every task"));
+        assertTrue(help.contains("Manage tasks:\n  • mark <number> — complete a task"));
+        assertTrue(help.contains("event <description> /on <yyyy-MM-dd> — one-day event"));
+        assertTrue(help.contains("within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>"
+                + " — flexible-period task"));
+        assertTrue(help.contains("Dates use yyyy-MM-dd (for example, 2026-09-10)"));
         assertTrue(help.contains("bye — close Lizzy"));
         assertEquals("A recoverable error.\n", error);
         assertEquals("____________________________________________________________\n", divider);
@@ -65,7 +72,7 @@ public class UiTest {
         String populatedOutput = captureOutput(ui -> ui.showTaskList(populatedTasks));
 
         assertEquals("Your list is blissfully free of obligations.\n", emptyOutput);
-        assertEquals("Let us see what presently claims your attention:\n"
+        assertEquals("Let us see what has found its way onto your list:\n"
                 + "1.[T][ ] read chapter\n"
                 + "2.[D][ ] submit report (by: Sep 20 2026)\n", populatedOutput);
     }
@@ -112,7 +119,7 @@ public class UiTest {
 
         assertEquals("Very good! That is one matter settled:\n  [T][X] read chapter\n", markedOutput);
         assertEquals("Ah, it seems this matter is not quite settled:\n  [T][ ] read chapter\n", unmarkedOutput);
-        assertEquals("That matter is off the list:\n  [T][ ] read chapter\n"
+        assertEquals("And away it goes—one less matter on the list:\n  [T][ ] read chapter\n"
                 + "That makes 0 tasks awaiting your attention.\n", deletedOutput);
     }
 
@@ -126,7 +133,7 @@ public class UiTest {
         String matchingOutput = captureOutput(ui -> ui.showTasksOnDate(tasks, LocalDate.of(2026, 9, 20)));
         String emptyOutput = captureOutput(ui -> ui.showTasksOnDate(tasks, LocalDate.of(2026, 9, 22)));
 
-        assertEquals("On Sep 20 2026, these matters have designs upon your time:\n"
+        assertEquals("On Sep 20 2026, your schedule has the following in store:\n"
                 + "2.[D][ ] submit report (by: Sep 20 2026)\n"
                 + "3.[E][ ] conference (from: Sep 19 2026 to: Sep 21 2026)\n", matchingOutput);
         assertEquals("Sep 22 2026 appears to make no demands upon you.\n", emptyOutput);

@@ -36,6 +36,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -64,23 +65,30 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   A brief guide, should memory prove uncooperative:
-    todo <description> — add an undated task
-    deadline <description> /by <yyyy-MM-dd> — add a deadline
-    event <description> /on <yyyy-MM-dd> — add a one-day event
-    event <description> /on <yyyy-MM-dd> /from <HH:mm> /to <HH:mm> — add a timed event
-    event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a date-range event
-    within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a flexible period
-    list — show every task
-    find <keyword> — partially search task descriptions
-    on <yyyy-MM-dd> — show one day's schedule
-    mark <number> — complete a task
-    unmark <number> — reopen a task
-    delete <number> — remove a task
-    bye — close Lizzy
-  Dates use yyyy-MM-dd; times use HH:mm. A little precision saves much puzzlement.
+  Add tasks:
+    • todo <description> — undated task
+    • deadline <description> /by <yyyy-MM-dd> — task due on a date
+    • event <description> /on <yyyy-MM-dd> — one-day event
+    • event <description> /on <yyyy-MM-dd> /from <HH:mm> /to <HH:mm> — timed event
+    • event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — date-range event
+    • within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — flexible-period task
+
+  View tasks:
+    • list — show every task
+    • find <keyword> — partially search descriptions
+    • on <yyyy-MM-dd> — show one day's schedule
+
+  Manage tasks:
+    • mark <number> — complete a task
+    • unmark <number> — reopen a task
+    • delete <number> — remove a task
+    • bye — close Lizzy
+  Dates use yyyy-MM-dd (for example, 2026-09-10); times use HH:mm (for example, 14:30).
+  A little precision saves much puzzlement.
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.
@@ -115,6 +123,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -126,24 +135,23 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Even a worthy matter need not be introduced twice.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline without both a duty and a date is merely suspense.
-  Set it out like this: deadline <description> /by <yyyy-MM-dd>.
+  A deadline is easier to keep when its due date is stated clearly.
+  Write it as: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement requires a date or a date range.
-  Use: event <description> /on <yyyy-MM-dd> [/from <HH:mm> /to <HH:mm>],
-  or: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
-  ____________________________________________________________
-  ____________________________________________________________
-  I'm afraid that will not quite do; I need a proper task number.
-  Be precise: mark <task number>.
+  An engagement may be mysterious, but not about when.
+  Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.
   ____________________________________________________________
   ____________________________________________________________
   I'm afraid that will not quite do; I need a proper task number.
   Be precise: mark <task number>.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  I'm afraid that will not quite do; I need a proper task number.
+  Be precise: mark <task number>.
+  ____________________________________________________________
+  ____________________________________________________________
+  Let us see what has found its way onto your list:
   1.[T][ ] read chapter
   ____________________________________________________________
   ____________________________________________________________
@@ -174,6 +182,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -181,7 +190,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] read book
   ____________________________________________________________
   ____________________________________________________________
@@ -215,6 +224,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
@@ -235,7 +245,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
     [D][ ] submit report (by: Aug 30 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[D][ ] submit report (by: Aug 30 2026)
   2.[E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   ____________________________________________________________
@@ -266,6 +276,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Your list is blissfully free of obligations.
@@ -301,6 +312,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -320,7 +332,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
     [T][ ] revise notes
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] revise notes
   ____________________________________________________________
   ____________________________________________________________
@@ -329,7 +341,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ```
 
 ### Preserve valid tasks around malformed dated commands
-- Aim: Verify that malformed deadline and event commands are rejected and do not consume task-list positions between valid commands.
+- Aim: Verify that missing descriptions, missing or unmarked schedule markers, and incomplete event ranges are rejected without consuming task-list positions between valid commands.
 - Command:
   ```sh
   mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
@@ -338,8 +350,14 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ```text
   todo review lecture
   deadline submit assignment
+  deadline submit assignment by 2026-09-10
+  deadline /by 2026-09-10
   todo prepare slides
   event consultation /from Tue 2pm
+  event consultation on 2026-09-10
+  event /on 2026-09-10
+  event meeting /on 2026-09-10 /from 14:00
+  event meeting /on 2026-09-10 14:00 to 16:00
   deadline submit assignment /by 2026-08-28
   list
   bye
@@ -355,6 +373,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -362,8 +381,16 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline without both a duty and a date is merely suspense.
-  Set it out like this: deadline <description> /by <yyyy-MM-dd>.
+  A deadline is easier to keep when its due date is stated clearly.
+  Write it as: deadline <description> /by <yyyy-MM-dd>.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline is easier to keep when its due date is stated clearly.
+  Write it as: deadline <description> /by <yyyy-MM-dd>.
+  ____________________________________________________________
+  ____________________________________________________________
+  A deadline with nothing to accomplish would be all suspense and no substance.
+  Give it a duty: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -371,9 +398,24 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement requires a date or a date range.
-  Use: event <description> /on <yyyy-MM-dd> [/from <HH:mm> /to <HH:mm>],
-  or: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
+  An engagement may be mysterious, but not about when.
+  Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement may be mysterious, but not about when.
+  Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement without a description leaves rather too much to guess.
+  Tell me what it is: event <description> /on <yyyy-MM-dd>.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement may be mysterious, but not about when.
+  Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.
+  ____________________________________________________________
+  ____________________________________________________________
+  An engagement may be mysterious, but not about when.
+  Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
@@ -381,7 +423,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] review lecture
   2.[T][ ] prepare slides
   3.[D][ ] submit assignment (by: Aug 28 2026)
@@ -426,6 +468,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Silence may be elegant, but it gives me very little to work with.
@@ -445,8 +488,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Give it some substance: todo <description>.
   ____________________________________________________________
   ____________________________________________________________
-  A deadline without both a duty and a date is merely suspense.
-  Set it out like this: deadline <description> /by <yyyy-MM-dd>.
+  A deadline is easier to keep when its due date is stated clearly.
+  Write it as: deadline <description> /by <yyyy-MM-dd>.
   ____________________________________________________________
   ____________________________________________________________
   A deadline, then. We'd better not keep it waiting.
@@ -454,9 +497,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  An engagement requires a date or a date range.
-  Use: event <description> /on <yyyy-MM-dd> [/from <HH:mm> /to <HH:mm>],
-  or: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.
+  An engagement may be mysterious, but not about when.
+  Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.
   ____________________________________________________________
   ____________________________________________________________
   An engagement! I've added it to your list:
@@ -484,7 +526,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   A simple "bye" will do.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] read book
   2.[D][ ] submit report (by: Aug 28 2026)
   3.[E][ ] meeting (from: Aug 29 2026 to: Aug 30 2026)
@@ -522,6 +564,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Ambitious—but there is nothing to mark while your list is empty.
@@ -549,7 +592,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
     [T][X] write report
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][X] write report
   ____________________________________________________________
   ____________________________________________________________
@@ -589,6 +632,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Ambitious—but there is nothing to delete while your list is empty.
@@ -614,12 +658,12 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
     [E][X] project meeting (on: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
-  That matter is off the list:
+  And away it goes—one less matter on the list:
     [D][ ] submit report (by: Aug 28 2026)
   That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] read book
   2.[E][X] project meeting (on: Aug 6 2026)
   ____________________________________________________________
@@ -632,12 +676,12 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Be precise: delete <task number>.
   ____________________________________________________________
   ____________________________________________________________
-  That matter is off the list:
+  And away it goes—one less matter on the list:
     [T][ ] read book
   That makes 1 task awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[E][X] project meeting (on: Aug 6 2026)
   ____________________________________________________________
   ____________________________________________________________
@@ -671,6 +715,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -688,12 +733,12 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 3 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  That matter is off the list:
+  And away it goes—one less matter on the list:
     [D][ ] submit report (by: Aug 28 2026)
   That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] read book
   2.[E][ ] project meeting (from: Aug 31 2026 to: Sep 1 2026)
   ____________________________________________________________
@@ -725,6 +770,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -763,9 +809,10 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][X] read book
   2.[D][ ] return book (by: Jun 6 2026)
   3.[E][ ] project meeting (on: Aug 6 2026)
@@ -806,6 +853,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   An engagement! I've added it to your list:
@@ -843,12 +891,12 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Choose a time from 00:00 to 23:59.
   ____________________________________________________________
   ____________________________________________________________
-  On Sep 18 2026, these matters have designs upon your time:
+  On Sep 18 2026, your schedule has the following in store:
   2.[E][ ] study group (on: Sep 18 2026, 14:00 to 16:30)
   3.[E][ ] same-day range (on: Sep 18 2026)
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[E][ ] team meeting (on: Sep 17 2026)
   2.[E][ ] study group (on: Sep 18 2026, 14:00 to 16:30)
   3.[E][ ] same-day range (on: Sep 18 2026)
@@ -880,6 +928,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -914,6 +963,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   I couldn't understand the saved task data at line 1.
   Starting with an empty task list for this session.
@@ -949,12 +999,13 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   I updated your task list, but couldn't save it to _temp/ui-test-data/not-a-folder/lizzy.txt.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[T][ ] keep working
   ____________________________________________________________
   ____________________________________________________________
@@ -989,10 +1040,11 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   That date format is a little too mysterious for me to parse.
-  Please use yyyy-MM-dd—for example, 2019-10-15.
+  Please use yyyy-MM-dd—for example, 2026-09-10.
   ____________________________________________________________
   ____________________________________________________________
   That date is admirably imaginative, but the calendar refuses to acknowledge it.
@@ -1013,7 +1065,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   That makes 2 tasks awaiting your attention.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[D][ ] return book (by: Dec 2 2019)
   2.[E][ ] workshop (from: Dec 2 2019 to: Dec 3 2019)
   ____________________________________________________________
@@ -1052,6 +1104,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:
@@ -1079,15 +1132,15 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   ____________________________________________________________
   That date format is a little too mysterious for me to parse.
-  Please use yyyy-MM-dd—for example, 2019-10-15.
+  Please use yyyy-MM-dd—for example, 2026-09-10.
   ____________________________________________________________
   ____________________________________________________________
-  On Sep 1 2026, these matters have designs upon your time:
+  On Sep 1 2026, your schedule has the following in store:
   2.[D][ ] submit report (by: Sep 1 2026)
   3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
   ____________________________________________________________
   ____________________________________________________________
-  On Sep 2 2026, these matters have designs upon your time:
+  On Sep 2 2026, your schedule has the following in store:
   3.[E][ ] conference (from: Sep 1 2026 to: Sep 3 2026)
   ____________________________________________________________
   ____________________________________________________________
@@ -1125,6 +1178,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   A period to work within—I've added it to your list:
@@ -1136,18 +1190,18 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Keep the interval sensible: choose an end date on or after the start date.
   ____________________________________________________________
   ____________________________________________________________
-  On Sep 10 2026, these matters have designs upon your time:
+  On Sep 10 2026, your schedule has the following in store:
   1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
-  On Sep 11 2026, these matters have designs upon your time:
+  On Sep 11 2026, your schedule has the following in store:
   1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
   Sep 13 2026 appears to make no demands upon you.
   ____________________________________________________________
   ____________________________________________________________
-  Let us see what presently claims your attention:
+  Let us see what has found its way onto your list:
   1.[W][ ] collect certificate (within: Sep 10 2026 to: Sep 12 2026)
   ____________________________________________________________
   ____________________________________________________________
@@ -1184,6 +1238,7 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
                     /____/
   Hello! I'm Lizzy.
   What brings you here today?
+  Type help whenever you would like a quick command guide.
   ____________________________________________________________
   ____________________________________________________________
   Here comes another matter to keep track of:

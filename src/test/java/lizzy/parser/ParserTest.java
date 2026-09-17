@@ -88,13 +88,21 @@ public class ParserTest {
     void parse_missingTaskDetails_exceptionsExplainRequiredSyntax() {
         assertParseFails("todo", "Give it some substance: todo <description>.");
         assertParseFails("deadline submit work",
-                "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
+                "A deadline is easier to keep when its due date is stated clearly.");
+        assertParseFails("deadline submit work /by",
+                "Write it as: deadline <description> /by <yyyy-MM-dd>.");
         assertParseFails("deadline /by 2026-09-04",
-                "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
+                "Give it a duty: deadline <description> /by <yyyy-MM-dd>.");
+        assertParseFails("event consultation",
+                "An engagement may be mysterious, but not about when.");
         assertParseFails("event consultation /from 2026-09-04",
-                "An engagement requires a date or a date range.");
+                "Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.");
+        assertParseFails("event consultation /on",
+                "An engagement may be mysterious, but not about when.");
         assertParseFails("event /from 2026-09-04 /to 2026-09-05",
-                "An engagement requires a date or a date range.");
+                "An engagement without a description leaves rather too much to guess.");
+        assertParseFails("event meeting /on 2026-09-04 /from 14:00",
+                "Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.");
         assertParseFails("within collect certificate /from 2026-09-04",
                 "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
         assertParseFails("find", "Give me something to seek: find <keyword>.");
@@ -103,7 +111,9 @@ public class ParserTest {
     @Test
     void parse_invalidDatesAndEventRange_exceptionsRejectInvalidSchedules() {
         assertParseFails("deadline submit work /by 17/09/2026",
-                "Please use yyyy-MM-dd—for example, 2019-10-15.");
+                "Please use yyyy-MM-dd—for example, 2026-09-10.");
+        assertParseFails("event consultation /on 10/09/2026",
+                "Please use yyyy-MM-dd—for example, 2026-09-10.");
         assertParseFails("deadline submit work /by 2026-02-29",
                 "the calendar refuses to acknowledge it.");
         assertParseFails("event impossible date /on 2026-02-30",
@@ -142,11 +152,25 @@ public class ParserTest {
     @Test
     void parse_repeatedDateMarkers_exceptionsExplainRequiredSyntax() {
         assertParseFails("deadline report /by 2026-09-04 /by 2026-09-05",
-                "Set it out like this: deadline <description> /by <yyyy-MM-dd>.");
+                "Write it as: deadline <description> /by <yyyy-MM-dd>.");
         assertParseFails("event meeting /from 2026-09-04 /from 2026-09-05 /to 2026-09-06",
-                "An engagement requires a date or a date range.");
+                "Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.");
         assertParseFails("within task /from 2026-09-04 /to 2026-09-05 /to 2026-09-06",
                 "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.");
+    }
+
+    @Test
+    void parse_missingOrUnmarkedScheduleMarkers_exceptionsExplainCommandStructure() {
+        assertParseFails("deadline submit work 2026-09-04",
+                "A deadline is easier to keep when its due date is stated clearly.");
+        assertParseFails("deadline submit work by 2026-09-04",
+                "Write it as: deadline <description> /by <yyyy-MM-dd>.");
+        assertParseFails("event consultation 2026-09-04",
+                "An engagement may be mysterious, but not about when.");
+        assertParseFails("event consultation on 2026-09-04",
+                "Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.");
+        assertParseFails("event meeting /on 2026-09-04 14:00 to 16:00",
+                "An engagement may be mysterious, but not about when.");
     }
 
     private static void assertParseFails(String input, String expectedMessage) {

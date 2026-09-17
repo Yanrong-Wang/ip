@@ -32,20 +32,24 @@ public class Parser {
                     + "A little direction will do: todo <description>, list, or another command.";
     private static final String INVALID_TODO_ERROR = "A task with nothing to do is hardly a task at all.\n"
             + "Give it some substance: todo <description>.";
-    private static final String INVALID_DEADLINE_ERROR =
-            "A deadline without both a duty and a date is merely suspense.\n"
-                    + "Set it out like this: deadline <description> /by <yyyy-MM-dd>.";
-    private static final String INVALID_EVENT_ERROR =
-            "An engagement requires a date or a date range.\n"
-                    + "Use: event <description> /on <yyyy-MM-dd> "
-                    + "[/from <HH:mm> /to <HH:mm>],\n"
-                    + "or: event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
+    private static final String MISSING_DEADLINE_DESCRIPTION_ERROR =
+            "A deadline with nothing to accomplish would be all suspense and no substance.\n"
+                    + "Give it a duty: deadline <description> /by <yyyy-MM-dd>.";
+    private static final String INVALID_DEADLINE_SCHEDULE_ERROR =
+            "A deadline is easier to keep when its due date is stated clearly.\n"
+                    + "Write it as: deadline <description> /by <yyyy-MM-dd>.";
+    private static final String MISSING_EVENT_DESCRIPTION_ERROR =
+            "An engagement without a description leaves rather too much to guess.\n"
+                    + "Tell me what it is: event <description> /on <yyyy-MM-dd>.";
+    private static final String INVALID_EVENT_SCHEDULE_ERROR =
+            "An engagement may be mysterious, but not about when.\n"
+                    + "Use /on <yyyy-MM-dd>, or write the full range with both /from and /to.";
     private static final String INVALID_WITHIN_ERROR =
             "An interval, inconveniently, requires both a beginning and an end.\n"
                     + "Give it proper bounds: within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>.";
     private static final String INVALID_DATE_FORMAT_ERROR =
             "That date format is a little too mysterious for me to parse.\n"
-                    + "Please use yyyy-MM-dd—for example, 2019-10-15.";
+                    + "Please use yyyy-MM-dd—for example, 2026-09-10.";
     private static final String NONEXISTENT_DATE_ERROR =
             "That date is admirably imaginative, but the calendar refuses to acknowledge it.\n"
                     + "Choose a date that actually exists.";
@@ -125,9 +129,17 @@ public class Parser {
      * @throws LizzyException if the argument is incomplete or its date is invalid.
      */
     private static Deadline parseDeadline(String argument) throws LizzyException {
-        String[] deadlineParts = splitExactly(argument, "\\s+/by\\s+", INVALID_DEADLINE_ERROR);
-        if (deadlineParts[0].isBlank() || deadlineParts[1].isBlank()) {
-            throw new LizzyException(INVALID_DEADLINE_ERROR);
+        if (argument.isBlank() || argument.matches("/by(?:\\s+.*)?")) {
+            throw new LizzyException(MISSING_DEADLINE_DESCRIPTION_ERROR);
+        }
+        if (!containsMarker(argument, "/by")) {
+            throw new LizzyException(INVALID_DEADLINE_SCHEDULE_ERROR);
+        }
+        String[] deadlineParts = splitExactly(argument, "\\s+/by(?:\\s+|$)",
+                INVALID_DEADLINE_SCHEDULE_ERROR);
+        if (deadlineParts[0].isBlank() || deadlineParts[1].isBlank()
+                || containsScheduleMarker(deadlineParts[1])) {
+            throw new LizzyException(INVALID_DEADLINE_SCHEDULE_ERROR);
         }
         return new Deadline(deadlineParts[0].strip(), parseDate(deadlineParts[1]));
     }
@@ -140,14 +152,32 @@ public class Parser {
      * @throws LizzyException if the argument is incomplete, invalid, or ends before it begins.
      */
     private static Event parseEvent(String argument) throws LizzyException {
-        if (argument.matches("(?s).*\\s+/on\\s+.*")) {
-            return parseSingleDayEvent(argument);
+        if (argument.isBlank() || startsWithScheduleMarker(argument)) {
+            throw new LizzyException(MISSING_EVENT_DESCRIPTION_ERROR);
         }
 
-        String[] eventParts = splitExactly(argument, "\\s+/from\\s+", INVALID_EVENT_ERROR);
-        String[] timeParts = splitExactly(eventParts[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
+        boolean hasDateMarker = containsMarker(argument, "/on");
+        boolean hasStartMarker = containsMarker(argument, "/from");
+        boolean hasEndMarker = containsMarker(argument, "/to");
+        if (!hasDateMarker && !hasStartMarker && !hasEndMarker) {
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
+        }
+        if (hasDateMarker) {
+            return parseSingleDayEvent(argument);
+        }
+        if (!hasStartMarker || !hasEndMarker) {
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
+        }
+
+        String[] eventParts = splitExactly(argument, "\\s+/from(?:\\s+|$)",
+                INVALID_EVENT_SCHEDULE_ERROR);
+        String[] timeParts = splitExactly(eventParts[1], "\\s+/to(?:\\s+|$)",
+                INVALID_EVENT_SCHEDULE_ERROR);
         if (eventParts[0].isBlank() || timeParts[0].isBlank() || timeParts[1].isBlank()) {
-            throw new LizzyException(INVALID_EVENT_ERROR);
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
+        }
+        if (containsScheduleMarker(timeParts[0]) || containsScheduleMarker(timeParts[1])) {
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
         }
         LocalDate eventStartDate = parseDate(timeParts[0]);
         LocalDate eventEndDate = parseDate(timeParts[1]);
@@ -166,26 +196,39 @@ public class Parser {
      * @throws LizzyException if the date or optional time range is invalid
      */
     private static Event parseSingleDayEvent(String argument) throws LizzyException {
-        String[] eventParts = splitExactly(argument, "\\s+/on\\s+", INVALID_EVENT_ERROR);
-        if (eventParts[0].isBlank() || eventParts[1].isBlank()) {
-            throw new LizzyException(INVALID_EVENT_ERROR);
+        String[] eventParts = splitExactly(argument, "\\s+/on(?:\\s+|$)",
+                INVALID_EVENT_SCHEDULE_ERROR);
+        if (eventParts[0].isBlank()) {
+            throw new LizzyException(MISSING_EVENT_DESCRIPTION_ERROR);
+        }
+        if (eventParts[1].isBlank() || containsScheduleMarker(eventParts[0])) {
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
         }
 
         String schedule = eventParts[1];
-        boolean hasStartMarker = schedule.matches("(?s).*\\s+/from\\s+.*");
-        boolean hasEndMarker = schedule.matches("(?s).*\\s+/to\\s+.*");
+        boolean hasStartMarker = containsMarker(schedule, "/from");
+        boolean hasEndMarker = containsMarker(schedule, "/to");
         if (!hasStartMarker && !hasEndMarker) {
+            if (hasUnmarkedTimeDetail(schedule)) {
+                throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
+            }
             LocalDate eventDate = parseDate(schedule);
             return new Event(eventParts[0].strip(), eventDate, eventDate);
         }
         if (!hasStartMarker || !hasEndMarker) {
-            throw new LizzyException(INVALID_EVENT_ERROR);
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
         }
 
-        String[] dateAndTimes = splitExactly(schedule, "\\s+/from\\s+", INVALID_EVENT_ERROR);
-        String[] times = splitExactly(dateAndTimes[1], "\\s+/to\\s+", INVALID_EVENT_ERROR);
+        String[] dateAndTimes = splitExactly(schedule, "\\s+/from(?:\\s+|$)",
+                INVALID_EVENT_SCHEDULE_ERROR);
+        String[] times = splitExactly(dateAndTimes[1], "\\s+/to(?:\\s+|$)",
+                INVALID_EVENT_SCHEDULE_ERROR);
         if (dateAndTimes[0].isBlank() || times[0].isBlank() || times[1].isBlank()) {
-            throw new LizzyException(INVALID_EVENT_ERROR);
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
+        }
+        if (containsScheduleMarker(dateAndTimes[0]) || containsScheduleMarker(times[0])
+                || containsScheduleMarker(times[1])) {
+            throw new LizzyException(INVALID_EVENT_SCHEDULE_ERROR);
         }
         LocalDate eventDate = parseDate(dateAndTimes[0]);
         LocalTime startTime = parseTime(times[0]);
@@ -341,6 +384,49 @@ public class Parser {
             throw new LizzyException(errorMessage);
         }
         return parts;
+    }
+
+    /**
+     * Returns whether an argument contains a complete command marker token.
+     *
+     * @param argument the command argument to inspect
+     * @param marker the marker token, including its leading slash
+     * @return {@code true} if the marker occurs as a separate token
+     */
+    private static boolean containsMarker(String argument, String marker) {
+        return argument.matches("(?s).*(^|\\s)" + marker + "($|\\s).*");
+    }
+
+    /**
+     * Returns whether an event argument begins with a scheduling marker instead of a description.
+     *
+     * @param argument the event argument to inspect
+     * @return {@code true} if the first token is {@code /on}, {@code /from}, or {@code /to}
+     */
+    private static boolean startsWithScheduleMarker(String argument) {
+        return argument.matches("/(?:on|from|to)(?:\\s+.*)?");
+    }
+
+    /**
+     * Returns whether text contains any event or deadline scheduling marker.
+     *
+     * @param text the text to inspect
+     * @return {@code true} if a supported slash marker occurs as a separate token
+     */
+    private static boolean containsScheduleMarker(String text) {
+        return containsMarker(text, "/by") || containsMarker(text, "/on")
+                || containsMarker(text, "/from") || containsMarker(text, "/to");
+    }
+
+    /**
+     * Detects a time-like value supplied without the required slash markers.
+     *
+     * @param schedule the text following an event's {@code /on} marker
+     * @return {@code true} if the schedule appears to contain an unmarked time range
+     */
+    private static boolean hasUnmarkedTimeDetail(String schedule) {
+        return schedule.matches("(?s).*\\s+(?:on|from|to)(?:\\s+.*|$)")
+                || schedule.matches("(?s).*\\s+\\d{1,2}:\\d{2}(?:\\s+.*|$)");
     }
 
     /**

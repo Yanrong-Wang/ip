@@ -60,6 +60,7 @@ public class Ui {
         outputStream.print(banner);
         outputStream.println("Hello! I'm Lizzy.");
         outputStream.println("What brings you here today?");
+        outputStream.println("Type help whenever you would like a quick command guide.");
         showDivider();
     }
 
@@ -100,20 +101,28 @@ public class Ui {
      */
     public void showHelp() {
         outputStream.println("A brief guide, should memory prove uncooperative:");
-        outputStream.println("  todo <description> — add an undated task");
-        outputStream.println("  deadline <description> /by <yyyy-MM-dd> — add a deadline");
-        outputStream.println("  event <description> /on <yyyy-MM-dd> — add a one-day event");
-        outputStream.println("  event <description> /on <yyyy-MM-dd> /from <HH:mm> /to <HH:mm> — add a timed event");
-        outputStream.println("  event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a date-range event");
-        outputStream.println("  within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — add a flexible period");
-        outputStream.println("  list — show every task");
-        outputStream.println("  find <keyword> — partially search task descriptions");
-        outputStream.println("  on <yyyy-MM-dd> — show one day's schedule");
-        outputStream.println("  mark <number> — complete a task");
-        outputStream.println("  unmark <number> — reopen a task");
-        outputStream.println("  delete <number> — remove a task");
-        outputStream.println("  bye — close Lizzy");
-        outputStream.println("Dates use yyyy-MM-dd; times use HH:mm. A little precision saves much puzzlement.");
+        outputStream.println("Add tasks:");
+        outputStream.println("  • todo <description> — undated task");
+        outputStream.println("  • deadline <description> /by <yyyy-MM-dd> — task due on a date");
+        outputStream.println("  • event <description> /on <yyyy-MM-dd> — one-day event");
+        outputStream.println("  • event <description> /on <yyyy-MM-dd> /from <HH:mm> /to <HH:mm> — timed event");
+        outputStream.println("  • event <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd> — date-range event");
+        outputStream.println("  • within <description> /from <yyyy-MM-dd> /to <yyyy-MM-dd>"
+                + " — flexible-period task");
+        outputStream.println();
+        outputStream.println("View tasks:");
+        outputStream.println("  • list — show every task");
+        outputStream.println("  • find <keyword> — partially search descriptions");
+        outputStream.println("  • on <yyyy-MM-dd> — show one day's schedule");
+        outputStream.println();
+        outputStream.println("Manage tasks:");
+        outputStream.println("  • mark <number> — complete a task");
+        outputStream.println("  • unmark <number> — reopen a task");
+        outputStream.println("  • delete <number> — remove a task");
+        outputStream.println("  • bye — close Lizzy");
+        outputStream.println("Dates use yyyy-MM-dd (for example, 2026-09-10); times use HH:mm"
+                + " (for example, 14:30).");
+        outputStream.println("A little precision saves much puzzlement.");
     }
 
     /**
@@ -136,7 +145,7 @@ public class Ui {
             return;
         }
 
-        outputStream.println("Let us see what presently claims your attention:");
+        outputStream.println("Let us see what has found its way onto your list:");
         for (int i = 0; i < tasks.size(); i++) {
             outputStream.println((i + 1) + "." + tasks.get(i));
         }
@@ -235,7 +244,7 @@ public class Ui {
      * @param numberOfTasks the number of tasks remaining in the list
      */
     public void showTaskDeleted(Task task, int numberOfTasks) {
-        outputStream.println("That matter is off the list:");
+        outputStream.println("And away it goes—one less matter on the list:");
         outputStream.println("  " + task);
         showTaskCount(numberOfTasks);
     }
@@ -252,7 +261,7 @@ public class Ui {
             if (tasks.get(i).occursOn(date)) {
                 if (!hasFoundTask) {
                     outputStream.println("On " + date.format(DISPLAY_DATE_FORMAT)
-                            + ", these matters have designs upon your time:");
+                            + ", your schedule has the following in store:");
                     hasFoundTask = true;
                 }
                 outputStream.println((i + 1) + "." + tasks.get(i));

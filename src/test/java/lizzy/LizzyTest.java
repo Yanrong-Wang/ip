@@ -28,7 +28,7 @@ public class LizzyTest {
         assertEquals("Here comes another matter to keep track of:\n"
                 + "  [T][ ] test the GUI\n"
                 + "That makes 1 task awaiting your attention.", addResponse);
-        assertEquals("Let us see what presently claims your attention:\n"
+        assertEquals("Let us see what has found its way onto your list:\n"
                 + "1.[T][ ] test the GUI", listResponse);
     }
 
@@ -50,9 +50,10 @@ public class LizzyTest {
         String response = lizzy.getResponse("help");
 
         assertTrue(response.startsWith("A brief guide, should memory prove uncooperative:"));
-        assertTrue(response.contains("todo <description> — add an undated task"));
-        assertTrue(response.contains("find <keyword> — partially search task descriptions"));
-        assertTrue(response.contains("Dates use yyyy-MM-dd; times use HH:mm."));
+        assertTrue(response.contains("• todo <description> — undated task"));
+        assertTrue(response.contains("find <keyword> — partially search descriptions"));
+        assertTrue(response.contains("Dates use yyyy-MM-dd (for example, 2026-09-10);"
+                + " times use HH:mm (for example, 14:30)."));
     }
 
     @Test
@@ -108,7 +109,7 @@ public class LizzyTest {
 
         assertTrue(duplicateResponse.text().contains("already keeping its place"));
         assertTrue(duplicateResponse.isError());
-        assertEquals("Let us see what presently claims your attention:\n"
+        assertEquals("Let us see what has found its way onto your list:\n"
                 + "1.[T][ ] read chapter", listResponse);
     }
 
