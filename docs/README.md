@@ -22,7 +22,8 @@ searchable list, and remembers them between sessions.
 
 Type a command in the box at the bottom, then press **Enter** or click
 **Send**. Command words are lowercase. Dates use `yyyy-MM-dd`, for example
-`2026-09-18`.
+`2026-09-18`. Times, where supported, use 24-hour `HH:mm`, for example
+`14:00`.
 
 > **Command notation:** words in angle brackets such as `<description>` are
 > values you supply. Do not type the angle brackets.
@@ -165,6 +166,9 @@ bye
 ```
 
 Lizzy says goodbye and closes the application.
+In the graphical interface, the command field is disabled and the window
+closes automatically after a brief pause, so no further manual close is
+needed.
 
 ## If something goes wrong
 

@@ -5,8 +5,27 @@ tasks with flexible completion periods. Its JavaFX conversation interface
 offers concise command guidance, persistent storage, schedule lookup, and a
 warm, lightly witty personality.
 
-See the [Lizzy User Guide](docs/README.md) for installation and every user
-command.
+<p align="center">
+  <img src="docs/Ui.png" alt="Lizzy's JavaFX conversation interface"
+       width="540">
+</p>
+
+## Highlights
+
+- Manage todos, deadlines, one-day or timed events, and flexible completion
+  periods from one conversation.
+- Search task descriptions with case-insensitive partial matching, or view
+  everything scheduled on a chosen date.
+- Recover gracefully from invalid commands, impossible dates and times,
+  duplicate tasks, and missing or unreadable data files.
+- Keep tasks between sessions with automatic local storage.
+- Use the same focused command workflow in the JavaFX or console interface.
+
+## User Guide
+
+Read the published [Lizzy User Guide](https://yanrong-wang.github.io/ip/) for
+setup instructions, every command, examples, and error guidance. Its
+[Markdown source](docs/README.md) is maintained in this repository.
 
 ## Development setup
 
