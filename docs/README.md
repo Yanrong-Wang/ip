@@ -6,7 +6,11 @@ Lizzy is a desktop task manager with a warm, lightly witty personality. She
 keeps todos, deadlines, events, and flexible completion periods in one
 searchable list, and remembers them between sessions.
 
-![The Lizzy desktop application showing a realistic task list](Ui.png)
+<p align="center">
+  <img src="Ui.png"
+       alt="The Lizzy desktop application showing a realistic task list"
+       width="420">
+</p>
 
 ## Quick start
 
