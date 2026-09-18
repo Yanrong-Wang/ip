@@ -1,10 +1,6 @@
 package lizzy.gui;
 
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,7 +15,6 @@ import lizzy.Lizzy;
  */
 public class MainWindow {
     private static final Duration EXIT_DELAY = Duration.seconds(2.0);
-    private static final Duration SCROLL_DURATION = Duration.millis(180.0);
 
     @FXML
     private ScrollPane scrollPane;
@@ -29,10 +24,6 @@ public class MainWindow {
     private TextField userInput;
     @FXML
     private Button sendButton;
-    /**
-     * Animates the conversation toward its newest message.
-     */
-    private Timeline scrollAnimation;
     /**
      * Generates responses for commands entered in the window.
      */
@@ -97,17 +88,9 @@ public class MainWindow {
     }
 
     /**
-     * Smoothly reveals the latest exchange after JavaFX has laid out the new dialog boxes.
+     * Reveals the latest exchange after JavaFX has laid out the new dialog boxes.
      */
     private void scrollToLatestMessage() {
-        Platform.runLater(() -> {
-            if (scrollAnimation != null) {
-                scrollAnimation.stop();
-            }
-            KeyValue scrollToBottom = new KeyValue(
-                    scrollPane.vvalueProperty(), 1.0, Interpolator.EASE_OUT);
-            scrollAnimation = new Timeline(new KeyFrame(SCROLL_DURATION, scrollToBottom));
-            scrollAnimation.play();
-        });
+        Platform.runLater(() -> scrollPane.setVvalue(1.0));
     }
 }
