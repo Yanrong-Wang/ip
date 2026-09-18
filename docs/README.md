@@ -181,7 +181,8 @@ format. Extra spaces around words are accepted, but required markers such as
 `/by`, `/from`, and `/to` must appear exactly once and in the order shown.
 Formatting mistakes such as `17/09/2026` receive syntax guidance, while
 well-formed but impossible values such as `2026-02-30` or `25:00` receive a
-separate calendar or clock error.
+separate calendar or clock error. A valid date remains valid even when it is
+in the past; Lizzy does not assume that every task must describe future work.
 
 If the data file is missing, Lizzy starts with an empty task list and creates
 the file when the first task is saved. If the file cannot be read or contains
