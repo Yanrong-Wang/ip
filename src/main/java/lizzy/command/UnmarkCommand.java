@@ -30,6 +30,10 @@ public class UnmarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         Task task = tasks.getTask(taskNumber, "unmark");
+        if (!task.isDone()) {
+            throw new LizzyException("That matter is already waiting to be done.\n"
+                    + "There is nothing to reopen just yet.");
+        }
         task.markAsNotDone();
         storage.save(tasks.asList());
         ui.showTaskUnmarked(task);

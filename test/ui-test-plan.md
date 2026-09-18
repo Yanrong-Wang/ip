@@ -514,8 +514,8 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   Choose a task number from 1 to 3.
   ____________________________________________________________
   ____________________________________________________________
-  Ah, it seems this matter is not quite settled:
-    [D][ ] submit report (by: Aug 28 2026)
+  That matter is already waiting to be done.
+  There is nothing to reopen just yet.
   ____________________________________________________________
   ____________________________________________________________
   A list requires no further instruction.
@@ -594,6 +594,70 @@ The invalid-input cases below define the expected validation behaviour: Lizzy sh
   ____________________________________________________________
   Let us see what has found its way onto your list:
   1.[T][X] write report
+  ____________________________________________________________
+  ____________________________________________________________
+  Goodbye! May your plans prosper—and leave you a little leisure.
+  ____________________________________________________________
+  ```
+
+### Reject redundant task status updates
+- Aim: Verify that marking a complete task or unmarking an incomplete task is rejected without changing its state.
+- Command:
+  ```sh
+  mkdir -p _temp/ui-test-data && rm -f _temp/ui-test-data/current.txt && javac -d _temp/ui-test-classes $(find src/main/java -name '*.java' ! -path '*/gui/*') && java -Dlizzy.data.path=_temp/ui-test-data/current.txt -cp _temp/ui-test-classes lizzy.Lizzy
+  ```
+- Inputs:
+  ```text
+  todo read chapter
+  unmark 1
+  mark 1
+  mark 1
+  unmark 1
+  unmark 1
+  list
+  bye
+  ```
+- Expected output:
+  ```text
+  ____________________________________________________________
+      __    _
+     / /   (_)_______  __  __
+    / /   / /_  /_  / / / / /
+   / /___/ / / /_/ /_/ /_/ /
+  /_____/_/ /___/___/\__, /
+                    /____/
+  Hello! I'm Lizzy.
+  What brings you here today?
+  Type help whenever you would like a quick command guide.
+  ____________________________________________________________
+  ____________________________________________________________
+  Here comes another matter to keep track of:
+    [T][ ] read chapter
+  That makes 1 task awaiting your attention.
+  ____________________________________________________________
+  ____________________________________________________________
+  That matter is already waiting to be done.
+  There is nothing to reopen just yet.
+  ____________________________________________________________
+  ____________________________________________________________
+  Very good! That is one matter settled:
+    [T][X] read chapter
+  ____________________________________________________________
+  ____________________________________________________________
+  That matter is already settled.
+  Even diligence need not do the same work twice.
+  ____________________________________________________________
+  ____________________________________________________________
+  Ah, it seems this matter is not quite settled:
+    [T][ ] read chapter
+  ____________________________________________________________
+  ____________________________________________________________
+  That matter is already waiting to be done.
+  There is nothing to reopen just yet.
+  ____________________________________________________________
+  ____________________________________________________________
+  Let us see what has found its way onto your list:
+  1.[T][ ] read chapter
   ____________________________________________________________
   ____________________________________________________________
   Goodbye! May your plans prosper—and leave you a little leisure.

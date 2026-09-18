@@ -30,6 +30,10 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws LizzyException {
         Task task = tasks.getTask(taskNumber, "mark");
+        if (task.isDone()) {
+            throw new LizzyException("That matter is already settled.\n"
+                    + "Even diligence need not do the same work twice.");
+        }
         task.markAsDone();
         storage.save(tasks.asList());
         ui.showTaskMarked(task);

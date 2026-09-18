@@ -114,6 +114,22 @@ public class LizzyTest {
     }
 
     @Test
+    void getResponse_redundantStatusUpdate_errorReturnedWithoutChangingTask() {
+        Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
+        lizzy.getResponse("todo read chapter");
+
+        Lizzy.Response unmarkResponse = lizzy.getResponseWithStatus("unmark 1");
+        lizzy.getResponse("mark 1");
+        Lizzy.Response markResponse = lizzy.getResponseWithStatus("mark 1");
+
+        assertTrue(unmarkResponse.text().contains("already waiting to be done"));
+        assertTrue(unmarkResponse.isError());
+        assertTrue(markResponse.text().contains("already settled"));
+        assertTrue(markResponse.isError());
+        assertTrue(lizzy.getResponse("list").contains("1.[T][X] read chapter"));
+    }
+
+    @Test
     void getResponse_nullInput_friendlyErrorReturned() {
         Lizzy lizzy = new Lizzy(temporaryDirectory.resolve("lizzy.txt"));
 
